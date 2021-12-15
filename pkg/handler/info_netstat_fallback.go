@@ -1,3 +1,4 @@
+//go:build !windows
 // +build !windows
 
 /*
@@ -18,7 +19,7 @@
    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package server
+package handler
 
 import "github.com/shirou/gopsutil/v3/net"
 

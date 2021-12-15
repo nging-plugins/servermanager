@@ -1,4 +1,4 @@
-package server
+package handler
 
 import (
 	"github.com/webx-top/com"

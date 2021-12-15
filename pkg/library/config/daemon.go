@@ -49,7 +49,7 @@ func init() {
 		if config.DefaultConfig == nil {
 			return nil
 		}
-		config.DefaultConfig.unregisterExtend(data.String(`name`))
+		config.DefaultConfig.UnregisterExtend(data.String(`name`))
 		return nil
 	})
 }

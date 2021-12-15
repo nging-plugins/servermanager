@@ -1,3 +1,4 @@
+//go:build windows
 // +build windows
 
 // Package server Copyright 2016 Wenhui Shen <www.webx.top>
@@ -16,7 +17,7 @@
 
 */
 
-package server
+package handler
 
 import (
 	"encoding/binary"

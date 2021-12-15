@@ -16,7 +16,7 @@
    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package server
+package handler
 
 import (
 	"fmt"
@@ -29,8 +29,8 @@ import (
 
 	"github.com/admpub/nging/v4/application/handler"
 	"github.com/admpub/nging/v4/application/library/common"
-	"github.com/admpub/nging/v4/application/library/config"
 
+	conf "github.com/nging-plugins/servermanager/pkg/library/config"
 	"github.com/nging-plugins/servermanager/pkg/model"
 )
 
@@ -42,7 +42,7 @@ func DaemonIndex(ctx echo.Context) error {
 	configs := m.Objects()
 	for _, c := range configs {
 		if c.Disabled == `N` {
-			p := config.Daemon.Child(fmt.Sprint(c.Id))
+			p := conf.Daemon.Child(fmt.Sprint(c.Id))
 			if p != nil {
 				c.Status = p.Status
 				if len(c.Error) == 0 && p.Error() != nil {
@@ -66,7 +66,7 @@ func DaemonAdd(ctx echo.Context) error {
 			_, err = m.Add()
 			if err == nil {
 				if m.Disabled == `N` {
-					config.AddDaemon(m.NgingForeverProcess, true)
+					conf.AddDaemon(m.NgingForeverProcess, true)
 				}
 			}
 			if err == nil {
@@ -111,13 +111,13 @@ func DaemonEdit(ctx echo.Context) error {
 			err = m.Edit(nil, db.Cond{`id`: id})
 			if err == nil {
 				if oldName != m.Name {
-					config.Daemon.StopChild(m.Name)
-					config.AddDaemon(m.NgingForeverProcess, true)
+					conf.Daemon.StopChild(m.Name)
+					conf.AddDaemon(m.NgingForeverProcess, true)
 				} else if disabled != m.Disabled {
 					if m.Disabled == `N` {
-						config.AddDaemon(m.NgingForeverProcess, true)
+						conf.AddDaemon(m.NgingForeverProcess, true)
 					} else {
-						config.Daemon.StopChild(fmt.Sprint(m.Id))
+						conf.Daemon.StopChild(fmt.Sprint(m.Id))
 					}
 				}
 			}
@@ -139,18 +139,18 @@ func DaemonEdit(ctx echo.Context) error {
 			procsName := fmt.Sprint(m.Id)
 			if disabled != m.Disabled {
 				if m.Disabled == `N` {
-					procs := config.AddDaemon(m.NgingForeverProcess)
+					procs := conf.AddDaemon(m.NgingForeverProcess)
 					<-goforever.RunProcess(procsName, procs)
 					err = procs.Error()
 					if err != nil {
 						return ctx.JSON(data.SetError(err))
 					}
 				} else {
-					config.Daemon.StopChild(procsName)
+					conf.Daemon.StopChild(procsName)
 				}
 			}
 			data.SetInfo(ctx.T(`操作成功`))
-			procs := config.Daemon.Child(procsName)
+			procs := conf.Daemon.Child(procsName)
 			if procs != nil {
 				data.SetData(procs.Status)
 			} else {
@@ -177,7 +177,7 @@ func DaemonDelete(ctx echo.Context) error {
 		err = m.Delete(nil, db.Cond{`id`: id})
 	}
 	if err == nil {
-		config.Daemon.StopChild(fmt.Sprint(m.Id))
+		conf.Daemon.StopChild(fmt.Sprint(m.Id))
 	}
 	if err == nil {
 		handler.SendOk(ctx, ctx.T(`操作成功`))
@@ -189,7 +189,7 @@ func DaemonDelete(ctx echo.Context) error {
 }
 
 func DaemonRestart(ctx echo.Context) error {
-	config.RestartDaemon()
+	conf.RestartDaemon()
 	data := ctx.Data()
 	data.SetInfo(ctx.T(`操作成功`))
 	return ctx.JSON(data)

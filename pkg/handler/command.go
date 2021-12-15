@@ -16,7 +16,7 @@
    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package server
+package handler
 
 import (
 	"github.com/webx-top/db"
@@ -25,6 +25,7 @@ import (
 	"github.com/admpub/nging/v4/application/handler"
 
 	"github.com/nging-plugins/servermanager/pkg/model"
+	sshmodel "github.com/nging-plugins/sshmanager/pkg/model"
 )
 
 func Command(ctx echo.Context) error {
@@ -59,7 +60,7 @@ func CommandAdd(ctx echo.Context) error {
 		}
 	}
 	ctx.Set(`activeURL`, `/server/command`)
-	sshUser := model.NewSshUser(ctx)
+	sshUser := sshmodel.NewSshUser(ctx)
 	_, err = sshUser.ListByOffset(nil, func(r db.Result) db.Result {
 		return r.OrderBy(`-id`)
 	}, 0, -1)
@@ -102,7 +103,7 @@ func CommandEdit(ctx echo.Context) error {
 
 	echo.StructToForm(ctx, m.NgingCommand, ``, echo.LowerCaseFirstLetter)
 	ctx.Set(`activeURL`, `/server/command`)
-	sshUser := model.NewSshUser(ctx)
+	sshUser := sshmodel.NewSshUser(ctx)
 	_, err = sshUser.ListByOffset(nil, func(r db.Result) db.Result {
 		return r.OrderBy(`-id`)
 	}, 0, -1)

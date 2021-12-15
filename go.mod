@@ -4,15 +4,18 @@ go 1.17
 
 replace github.com/admpub/nging/v4 => ../../admpub/nging
 
+replace github.com/nging-plugins/sshmanager => ../sshmanager
+
 require (
 	github.com/admpub/goforever v0.1.1
 	github.com/admpub/log v1.3.2
 	github.com/admpub/nging/v4 v4.0.0-00010101000000-000000000000
 	github.com/admpub/sockjs-go/v3 v3.0.1
 	github.com/admpub/websocket v1.0.4
+	github.com/nging-plugins/sshmanager v0.0.0-00010101000000-000000000000
 	github.com/shirou/gopsutil/v3 v3.21.11
 	github.com/webx-top/com v0.3.5
-	github.com/webx-top/db v1.18.3
+	github.com/webx-top/db v1.18.4
 	github.com/webx-top/echo v2.23.4+incompatible
 )
 
@@ -37,6 +40,7 @@ require (
 	github.com/admpub/go-pretty/v6 v6.0.3 // indirect
 	github.com/admpub/go-ps v0.0.1 // indirect
 	github.com/admpub/go-reuseport v0.0.4 // indirect
+	github.com/admpub/go-sshclient v0.0.1 // indirect
 	github.com/admpub/go-utility v0.0.1 // indirect
 	github.com/admpub/godotenv v1.4.2 // indirect
 	github.com/admpub/humanize v0.0.0-20190501023926-5f826e92c8ca // indirect
@@ -141,7 +145,7 @@ require (
 	github.com/webx-top/tagfast v0.0.0-20161020041435-9a2065ce3dd2 // indirect
 	github.com/webx-top/validation v0.0.3 // indirect
 	github.com/yusufpapurcu/wmi v1.2.2 // indirect
-	golang.org/x/crypto v0.0.0-20211202192323-5770296d904e // indirect
+	golang.org/x/crypto v0.0.0-20211209193657-4570a0811e8b // indirect
 	golang.org/x/image v0.0.0-20211028202545-6944b10bf410 // indirect
 	golang.org/x/net v0.0.0-20211208012354-db4efeb81f4b // indirect
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c // indirect

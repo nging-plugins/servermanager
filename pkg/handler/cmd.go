@@ -16,7 +16,7 @@
    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package server
+package handler
 
 import (
 	"context"
@@ -41,7 +41,9 @@ import (
 	"github.com/admpub/nging/v4/application/library/cron"
 
 	"github.com/nging-plugins/servermanager/pkg/dbschema"
+	conf "github.com/nging-plugins/servermanager/pkg/library/config"
 	"github.com/nging-plugins/servermanager/pkg/model"
+	sshmodel "github.com/nging-plugins/sshmanager/pkg/model"
 )
 
 func Cmd(ctx echo.Context) error {
@@ -109,7 +111,7 @@ func CmdSendBySockJS(c sockjs.Session) error {
 						continue
 					}
 					workdir = m.WorkDirectory
-					env = config.ParseEnvSlice(m.Env)
+					env = conf.ParseEnvSlice(m.Env)
 					command = m.Command
 				} else {
 					return errors.New(`Invalid ID: ` + command[1:])
@@ -302,7 +304,7 @@ func CmdSendByWebsocket(c *websocket.Conn, ctx echo.Context) error {
 						continue
 					}
 					workdir = m.WorkDirectory
-					env = config.ParseEnvSlice(m.Env)
+					env = conf.ParseEnvSlice(m.Env)
 					command = m.Command
 				} else {
 					err := errors.New(`Invalid ID: ` + command[1:])
@@ -356,7 +358,7 @@ func ExecCommand(id uint) (*dbschema.NgingCommand, string, error) {
 		if m.NgingCommand.SshAccountId < 1 {
 			return m.NgingCommand, "", errors.New("Error, you did not choose ssh account")
 		}
-		sshUser := model.NewSshUser(nil)
+		sshUser := sshmodel.NewSshUser(nil)
 		err = sshUser.Get(nil, `id`, m.NgingCommand.SshAccountId)
 		if err != nil {
 			if err == db.ErrNoMoreRows {
