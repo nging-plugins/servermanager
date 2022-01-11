@@ -12,11 +12,11 @@ require (
 	github.com/admpub/nging/v4 v4.0.0-00010101000000-000000000000
 	github.com/admpub/sockjs-go/v3 v3.0.1
 	github.com/admpub/websocket v1.0.4
-	github.com/nging-plugins/sshmanager v0.0.2
+	github.com/nging-plugins/sshmanager v0.0.3
 	github.com/shirou/gopsutil/v3 v3.21.11
 	github.com/webx-top/com v0.3.5
 	github.com/webx-top/db v1.18.4
-	github.com/webx-top/echo v2.23.8+incompatible
+	github.com/webx-top/echo v2.23.11+incompatible
 )
 
 require (
@@ -82,7 +82,6 @@ require (
 	github.com/disintegration/imaging v1.6.2 // indirect
 	github.com/dsoprea/go-logging v0.0.0-20200710184922-b02d349568dd // indirect
 	github.com/dustin/go-humanize v1.0.0 // indirect
-	github.com/fatih/color v1.13.0 // indirect
 	github.com/fcjr/aia-transport-go v1.2.2 // indirect
 	github.com/francoispqt/gojay v1.2.13 // indirect
 	github.com/friendsofgo/errors v0.9.2 // indirect
@@ -138,7 +137,7 @@ require (
 	github.com/volatiletech/strmangle v0.0.1 // indirect
 	github.com/webx-top/captcha v0.0.1 // indirect
 	github.com/webx-top/chardet v0.0.1 // indirect
-	github.com/webx-top/client v0.3.9 // indirect
+	github.com/webx-top/client v0.4.1 // indirect
 	github.com/webx-top/codec v0.1.1 // indirect
 	github.com/webx-top/image v0.0.9 // indirect
 	github.com/webx-top/pagination v0.1.1 // indirect
