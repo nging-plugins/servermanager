@@ -19,6 +19,7 @@
 package handler
 
 import (
+	"path/filepath"
 	"strings"
 
 	"github.com/admpub/log"
@@ -48,14 +49,18 @@ func Service(ctx echo.Context) error {
 			default:
 				v = ctx.T(`%s日志`, strings.Title(k))
 			}
-			logCategories.Add(k, v)
+			logFilename, _ := config.DefaultConfig.Log.LogFilename(k)
+			if len(logFilename) > 0 {
+				logFilename = filepath.Base(logFilename)
+			}
+			logCategories.Add(k, v, echo.KVOptHKV(`logFilename`, logFilename))
 		}
 	} else {
 		ctx.Set(`logWithCategory`, false)
 	}
 	ctx.Set(`logCategories`, logCategories)
 	ctx.SetFunc(`HasService`, cmder.Has)
-	ctx.SetFunc(`ServiceConrols`, func() dashboard.Buttons {
+	ctx.SetFunc(`ServiceControls`, func() dashboard.Buttons {
 		buttons := registry.ServiceControls
 		buttons.Ready(ctx)
 		return buttons
