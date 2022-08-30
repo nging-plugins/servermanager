@@ -5,7 +5,7 @@ import (
 
 	"github.com/admpub/nging/v4/application/library/config"
 	"github.com/admpub/nging/v4/application/library/config/cmder"
-	conf "github.com/nging-plugins/servermanager/pkg/library/config"
+	conf "github.com/nging-plugins/servermanager/application/library/config"
 )
 
 func init() {

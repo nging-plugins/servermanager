@@ -30,7 +30,7 @@ import (
 
 	"github.com/admpub/nging/v4/application/handler"
 
-	"github.com/nging-plugins/servermanager/pkg/library/system"
+	"github.com/nging-plugins/servermanager/application/library/system"
 )
 
 func InfoBySockJS(c sockjs.Session) error {

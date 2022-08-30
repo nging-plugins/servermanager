@@ -26,7 +26,7 @@ import (
 
 	"github.com/admpub/nging/v4/application/handler"
 
-	"github.com/nging-plugins/servermanager/pkg/library/hosts"
+	"github.com/nging-plugins/servermanager/application/library/hosts"
 )
 
 func Hosts(ctx echo.Context) error {

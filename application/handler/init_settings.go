@@ -9,7 +9,7 @@ import (
 	"github.com/admpub/nging/v4/application/library/config"
 	"github.com/admpub/nging/v4/application/registry/settings"
 
-	"github.com/nging-plugins/servermanager/pkg/library/system"
+	"github.com/nging-plugins/servermanager/application/library/system"
 )
 
 var configDefaults = map[string]map[string]*dbschema.NgingConfig{

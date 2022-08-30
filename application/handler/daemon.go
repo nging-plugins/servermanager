@@ -30,8 +30,8 @@ import (
 	"github.com/admpub/nging/v4/application/handler"
 	"github.com/admpub/nging/v4/application/library/common"
 
-	conf "github.com/nging-plugins/servermanager/pkg/library/config"
-	"github.com/nging-plugins/servermanager/pkg/model"
+	conf "github.com/nging-plugins/servermanager/application/library/config"
+	"github.com/nging-plugins/servermanager/application/model"
 )
 
 func DaemonIndex(ctx echo.Context) error {

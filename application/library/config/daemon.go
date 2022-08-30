@@ -34,7 +34,7 @@ import (
 	ngingdbschema "github.com/admpub/nging/v4/application/dbschema"
 	"github.com/admpub/nging/v4/application/library/config"
 	"github.com/admpub/nging/v4/application/library/cron"
-	"github.com/nging-plugins/servermanager/pkg/dbschema"
+	"github.com/nging-plugins/servermanager/application/dbschema"
 )
 
 var (

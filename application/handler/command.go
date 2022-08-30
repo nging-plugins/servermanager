@@ -24,8 +24,8 @@ import (
 
 	"github.com/admpub/nging/v4/application/handler"
 
-	"github.com/nging-plugins/servermanager/pkg/model"
-	sshmodel "github.com/nging-plugins/sshmanager/pkg/model"
+	"github.com/nging-plugins/servermanager/application/model"
+	sshmodel "github.com/nging-plugins/sshmanager/application/model"
 )
 
 func Command(ctx echo.Context) error {

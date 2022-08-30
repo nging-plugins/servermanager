@@ -40,10 +40,10 @@ import (
 	"github.com/admpub/nging/v4/application/library/config"
 	"github.com/admpub/nging/v4/application/library/cron"
 
-	"github.com/nging-plugins/servermanager/pkg/dbschema"
-	conf "github.com/nging-plugins/servermanager/pkg/library/config"
-	"github.com/nging-plugins/servermanager/pkg/model"
-	sshmodel "github.com/nging-plugins/sshmanager/pkg/model"
+	"github.com/nging-plugins/servermanager/application/dbschema"
+	conf "github.com/nging-plugins/servermanager/application/library/config"
+	"github.com/nging-plugins/servermanager/application/model"
+	sshmodel "github.com/nging-plugins/sshmanager/application/model"
 )
 
 func Cmd(ctx echo.Context) error {

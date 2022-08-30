@@ -29,7 +29,7 @@ import (
 	"github.com/admpub/nging/v4/application/library/config/cmder"
 	"github.com/admpub/nging/v4/application/registry/dashboard"
 
-	"github.com/nging-plugins/servermanager/pkg/registry"
+	"github.com/nging-plugins/servermanager/application/registry"
 )
 
 func addLogCategory(logCategories *echo.KVList, k, v string) {

@@ -38,7 +38,7 @@ import (
 
 	"github.com/admpub/log"
 	"github.com/admpub/nging/v4/application/handler"
-	"github.com/nging-plugins/servermanager/pkg/library/system"
+	"github.com/nging-plugins/servermanager/application/library/system"
 )
 
 func Info(ctx echo.Context) error {

@@ -13,11 +13,11 @@ require (
 	github.com/admpub/nging/v4 v4.0.0-00010101000000-000000000000
 	github.com/admpub/sockjs-go/v3 v3.0.1
 	github.com/admpub/websocket v1.0.4
-	github.com/nging-plugins/sshmanager v0.6.0
+	github.com/nging-plugins/sshmanager v0.8.0
 	github.com/shirou/gopsutil/v3 v3.22.7
 	github.com/webx-top/com v0.6.1
 	github.com/webx-top/db v1.22.2
-	github.com/webx-top/echo v2.26.12+incompatible
+	github.com/webx-top/echo v2.26.13+incompatible
 )
 
 require (

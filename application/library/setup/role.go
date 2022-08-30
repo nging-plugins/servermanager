@@ -4,7 +4,7 @@ import (
 	"github.com/webx-top/echo"
 
 	"github.com/admpub/nging/v4/application/library/role"
-	"github.com/nging-plugins/servermanager/pkg/model"
+	"github.com/nging-plugins/servermanager/application/model"
 )
 
 func init() {

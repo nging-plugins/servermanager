@@ -21,7 +21,7 @@ package handler
 import (
 	"github.com/webx-top/echo"
 
-	"github.com/nging-plugins/servermanager/pkg/library/system"
+	"github.com/nging-plugins/servermanager/application/library/system"
 )
 
 func Status(ctx echo.Context) error {
