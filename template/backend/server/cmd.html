@@ -20,12 +20,15 @@
 				<div class="chat-in">
 					<form action="" method="post" name="cmdform" id="cmd-form">
 						<button class="btn btn-success pull-right" type="submit">{{"执行"|T}}</button>
+						{{- if eq $id 0 -}}
+						<a href="/public/assets/backend/js/xterm/pty.html" class="btn btn-success pull-right">{{`控制台`|T}}</a>
+						{{- end -}}
 						<div class="input">
 							{{- if gt $id 0 -}}
 							<input type="text" disabled="disabled" value="{{Stored.cmd}}">
-							<input placeholder="{{"系统命令"|T}}" id="system_cmd" name="system_cmd" type="hidden" value=">{{$id}}">
+							<input placeholder="{{`系统命令`|T}}" id="system_cmd" name="system_cmd" type="hidden" value=">{{$id}}">
 							{{- else -}}
-							<input placeholder="{{"系统命令"|T}}" id="system_cmd" name="system_cmd" type="text" autofocus>
+							<input placeholder="{{`系统命令`|T}}" id="system_cmd" name="system_cmd" type="text" autofocus>
 							{{- end -}}
 						</div>
 						<div class="chat-tools">
