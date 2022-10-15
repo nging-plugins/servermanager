@@ -120,8 +120,8 @@ github.com/admpub/godotenv v1.4.2/go.mod h1:W8zOql4lSgnK6zfI6Le+GXlAaz5ZCj4kZI2w
 github.com/admpub/goforever v0.1.1 h1:kIEWABV4h/NHGrpkRvvNqj34LMDbcZ1grZok8Q41QZU=
 github.com/admpub/goforever v0.1.1/go.mod h1:TOAs26M89nElKNzgVQmBzDKLPvN4tsQPTsKhfbuqtd0=
 github.com/admpub/gohttp v0.0.0-20190322032039-b55c707b8f1e h1:PRSuHQW/9klTd5kzSWa9tjjq0bVlxUdBSNhouK1A91c=
-github.com/admpub/gopty v0.0.3 h1:wMbAaEB79cuk4vTrpMQl8Mix3/+d6/CKzq+psJzXKgQ=
-github.com/admpub/gopty v0.0.3/go.mod h1:WSYCNuDjB2HHkBnUpkHO2pHkLm7USBxy1729FoTAT5Y=
+github.com/admpub/gopty v0.1.0 h1:wNNLZlkq3jK+thHZ7fgEm7U8mIgKOC2bqGESo68QxfY=
+github.com/admpub/gopty v0.1.0/go.mod h1:WSYCNuDjB2HHkBnUpkHO2pHkLm7USBxy1729FoTAT5Y=
 github.com/admpub/humanize v0.0.0-20190501023926-5f826e92c8ca h1:9mfauR3d9p41BFnAoXmHc2z8yHcgg+3+jT1hbnQrtXo=
 github.com/admpub/humanize v0.0.0-20190501023926-5f826e92c8ca/go.mod h1:eHL6IsGOvDKqPc9Zp0d0NNayoEYoJ+UC+vj6zG0lGCY=
 github.com/admpub/i18n v0.1.1 h1:jC0g++R5xxKUludEiX94dSbSUFd/xsSFcV1850VCWYQ=

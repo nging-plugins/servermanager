@@ -9,7 +9,7 @@ replace github.com/nging-plugins/sshmanager => ../sshmanager
 require (
 	github.com/admpub/events v1.3.5
 	github.com/admpub/goforever v0.1.1
-	github.com/admpub/gopty v0.0.3
+	github.com/admpub/gopty v0.1.0
 	github.com/admpub/log v1.3.3
 	github.com/admpub/nging/v4 v4.0.0-00010101000000-000000000000
 	github.com/admpub/sockjs-go/v3 v3.0.1
