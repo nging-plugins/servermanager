@@ -14,17 +14,17 @@ require (
 	github.com/admpub/nging/v5 v5.0.0-00010101000000-000000000000
 	github.com/admpub/sockjs-go/v3 v3.0.1
 	github.com/admpub/websocket v1.0.4
-	github.com/nging-plugins/sshmanager v1.1.5
-	github.com/shirou/gopsutil/v3 v3.22.12
-	github.com/webx-top/com v0.8.3
+	github.com/nging-plugins/sshmanager v1.1.6
+	github.com/shirou/gopsutil/v3 v3.23.1
+	github.com/webx-top/com v0.9.1
 	github.com/webx-top/db v1.23.13
-	github.com/webx-top/echo v2.33.0+incompatible
+	github.com/webx-top/echo v2.33.1+incompatible
 )
 
 require (
 	github.com/abh/errorutil v0.0.0-20130729183701-f9bd360d00b9 // indirect
 	github.com/admpub/ccs-gm v0.0.3 // indirect
-	github.com/admpub/checksum v1.0.1 // indirect
+	github.com/admpub/checksum v1.1.0 // indirect
 	github.com/admpub/color v1.8.1 // indirect
 	github.com/admpub/confl v0.2.2 // indirect
 	github.com/admpub/conpty v0.2.0 // indirect
@@ -46,7 +46,7 @@ require (
 	github.com/admpub/go-utility v0.0.1 // indirect
 	github.com/admpub/godotenv v1.4.2 // indirect
 	github.com/admpub/humanize v0.0.0-20190501023926-5f826e92c8ca // indirect
-	github.com/admpub/i18n v0.1.3 // indirect
+	github.com/admpub/i18n v0.2.1 // indirect
 	github.com/admpub/identicon v1.0.2 // indirect
 	github.com/admpub/imageproxy v0.9.3 // indirect
 	github.com/admpub/imaging v1.5.0 // indirect
@@ -56,7 +56,7 @@ require (
 	github.com/admpub/mahonia v0.0.0-20151019004008-c528b747d92d // indirect
 	github.com/admpub/mail v0.0.0-20170408110349-d63147b0317b // indirect
 	github.com/admpub/marmot v0.0.0-20200702042226-2170d9ff59f5 // indirect
-	github.com/admpub/mysql-schema-sync v0.2.1 // indirect
+	github.com/admpub/mysql-schema-sync v0.2.3 // indirect
 	github.com/admpub/null v8.0.4+incompatible // indirect
 	github.com/admpub/once v0.0.1 // indirect
 	github.com/admpub/pester v0.0.0-20200411024648-005672a2bd48 // indirect
@@ -74,7 +74,7 @@ require (
 	github.com/aymerick/douceur v0.2.0 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
-	github.com/coscms/forms v1.12.0 // indirect
+	github.com/coscms/forms v1.12.1 // indirect
 	github.com/creack/pty v1.1.18 // indirect
 	github.com/disintegration/imaging v1.6.2 // indirect
 	github.com/dsoprea/go-logging v0.0.0-20200710184922-b02d349568dd // indirect
@@ -85,11 +85,11 @@ require (
 	github.com/go-errors/errors v1.4.2 // indirect
 	github.com/go-ole/go-ole v1.2.6 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
-	github.com/go-playground/universal-translator v0.18.0 // indirect
-	github.com/go-playground/validator/v10 v10.11.1 // indirect
+	github.com/go-playground/universal-translator v0.18.1 // indirect
+	github.com/go-playground/validator/v10 v10.11.2 // indirect
 	github.com/go-sql-driver/mysql v1.7.0 // indirect
 	github.com/goccy/go-json v0.10.0 // indirect
-	github.com/gofrs/uuid v4.3.1+incompatible // indirect
+	github.com/gofrs/uuid v4.4.0+incompatible // indirect
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/gorilla/css v1.0.0 // indirect
@@ -98,14 +98,14 @@ require (
 	github.com/h2non/filetype v1.1.3 // indirect
 	github.com/iamacarpet/go-winpty v1.0.4 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
-	github.com/klauspost/compress v1.15.14 // indirect
+	github.com/klauspost/compress v1.15.15 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
-	github.com/lufia/plan9stats v0.0.0-20220913051719-115f729f3c8c // indirect
+	github.com/lufia/plan9stats v0.0.0-20230110061619-bbe2e5e100de // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.17 // indirect
 	github.com/mattn/go-runewidth v0.0.14 // indirect
 	github.com/matttproud/golang_protobuf_extensions v1.0.4 // indirect
-	github.com/microcosm-cc/bluemonday v1.0.21 // indirect
+	github.com/microcosm-cc/bluemonday v1.0.22 // indirect
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
@@ -128,7 +128,7 @@ require (
 	github.com/volatiletech/strmangle v0.0.4 // indirect
 	github.com/webx-top/captcha v0.1.0 // indirect
 	github.com/webx-top/chardet v0.0.1 // indirect
-	github.com/webx-top/client v0.7.1 // indirect
+	github.com/webx-top/client v0.8.8 // indirect
 	github.com/webx-top/codec v0.2.1 // indirect
 	github.com/webx-top/image v0.0.9 // indirect
 	github.com/webx-top/pagination v0.2.1 // indirect
@@ -138,12 +138,12 @@ require (
 	github.com/webx-top/validation v0.0.3 // indirect
 	github.com/webx-top/validator v0.2.0 // indirect
 	github.com/yusufpapurcu/wmi v1.2.2 // indirect
-	golang.org/x/crypto v0.5.0 // indirect
-	golang.org/x/image v0.3.0 // indirect
-	golang.org/x/net v0.5.0 // indirect
+	golang.org/x/crypto v0.6.0 // indirect
+	golang.org/x/image v0.4.0 // indirect
+	golang.org/x/net v0.6.0 // indirect
 	golang.org/x/sync v0.1.0 // indirect
-	golang.org/x/sys v0.4.0 // indirect
-	golang.org/x/text v0.6.0 // indirect
+	golang.org/x/sys v0.5.0 // indirect
+	golang.org/x/text v0.7.0 // indirect
 	golang.org/x/xerrors v0.0.0-20220907171357-04be3eba64a2 // indirect
 	google.golang.org/protobuf v1.28.1 // indirect
 	gopkg.in/tomb.v1 v1.0.0-20141024135613-dd632973f1e7 // indirect
