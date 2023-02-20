@@ -11,7 +11,7 @@ require (
 	github.com/admpub/goforever v0.1.1
 	github.com/admpub/gopty v0.1.2
 	github.com/admpub/log v1.3.3
-	github.com/admpub/nging/v5 v5.0.0-00010101000000-000000000000
+	github.com/admpub/nging/v5 v5.0.0
 	github.com/admpub/sockjs-go/v3 v3.0.1
 	github.com/admpub/websocket v1.0.4
 	github.com/nging-plugins/sshmanager v1.1.6
@@ -56,7 +56,7 @@ require (
 	github.com/admpub/mahonia v0.0.0-20151019004008-c528b747d92d // indirect
 	github.com/admpub/mail v0.0.0-20170408110349-d63147b0317b // indirect
 	github.com/admpub/marmot v0.0.0-20200702042226-2170d9ff59f5 // indirect
-	github.com/admpub/mysql-schema-sync v0.2.3 // indirect
+	github.com/admpub/mysql-schema-sync v0.2.4 // indirect
 	github.com/admpub/null v8.0.4+incompatible // indirect
 	github.com/admpub/once v0.0.1 // indirect
 	github.com/admpub/pester v0.0.0-20200411024648-005672a2bd48 // indirect
@@ -70,7 +70,7 @@ require (
 	github.com/admpub/sonyflake v0.0.1 // indirect
 	github.com/admpub/tail v1.1.0 // indirect
 	github.com/admpub/timeago v1.2.1 // indirect
-	github.com/andybalholm/brotli v1.0.4 // indirect
+	github.com/andybalholm/brotli v1.0.5 // indirect
 	github.com/aymerick/douceur v0.2.0 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
