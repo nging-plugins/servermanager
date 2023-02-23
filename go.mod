@@ -17,7 +17,7 @@ require (
 	github.com/nging-plugins/sshmanager v1.1.6
 	github.com/shirou/gopsutil/v3 v3.23.1
 	github.com/webx-top/com v0.9.1
-	github.com/webx-top/db v1.23.13
+	github.com/webx-top/db v1.23.14
 	github.com/webx-top/echo v2.33.1+incompatible
 )
 
@@ -115,9 +115,9 @@ require (
 	github.com/power-devops/perfstat v0.0.0-20221212215047-62379fc7944b // indirect
 	github.com/prometheus/client_golang v1.14.0 // indirect
 	github.com/prometheus/client_model v0.3.0 // indirect
-	github.com/prometheus/common v0.39.0 // indirect
+	github.com/prometheus/common v0.40.0 // indirect
 	github.com/prometheus/procfs v0.9.0 // indirect
-	github.com/rivo/uniseg v0.4.3 // indirect
+	github.com/rivo/uniseg v0.4.4 // indirect
 	github.com/rwcarlsen/goexif v0.0.0-20190401172101-9e8deecbddbd // indirect
 	github.com/segmentio/fasthash v1.0.3 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
