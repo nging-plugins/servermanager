@@ -14,11 +14,11 @@ require (
 	github.com/admpub/nging/v5 v5.0.0
 	github.com/admpub/sockjs-go/v3 v3.0.1
 	github.com/admpub/websocket v1.0.4
-	github.com/nging-plugins/sshmanager v1.3.0
+	github.com/nging-plugins/sshmanager v1.3.1
 	github.com/shirou/gopsutil/v3 v3.23.4
 	github.com/webx-top/com v0.9.4
 	github.com/webx-top/db v1.23.17
-	github.com/webx-top/echo v2.35.2+incompatible
+	github.com/webx-top/echo v2.35.3+incompatible
 )
 
 require (
@@ -118,7 +118,7 @@ require (
 	github.com/prometheus/client_golang v1.15.1 // indirect
 	github.com/prometheus/client_model v0.4.0 // indirect
 	github.com/prometheus/common v0.44.0 // indirect
-	github.com/prometheus/procfs v0.10.0 // indirect
+	github.com/prometheus/procfs v0.10.1 // indirect
 	github.com/rivo/uniseg v0.4.4 // indirect
 	github.com/rwcarlsen/goexif v0.0.0-20190401172101-9e8deecbddbd // indirect
 	github.com/segmentio/fasthash v1.0.3 // indirect
