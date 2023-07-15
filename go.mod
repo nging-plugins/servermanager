@@ -18,7 +18,7 @@ require (
 	github.com/shirou/gopsutil/v3 v3.23.6
 	github.com/webx-top/com v0.9.5
 	github.com/webx-top/db v1.24.3
-	github.com/webx-top/echo v2.37.0+incompatible
+	github.com/webx-top/echo v2.37.1+incompatible
 )
 
 require (
