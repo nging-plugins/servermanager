@@ -119,7 +119,7 @@ func DaemonAdd(ctx echo.Context) error {
 END:
 	ctx.Set(`activeURL`, `/server/daemon_index`)
 	ctx.Set(`isWindows`, com.IsWindows)
-	ctx.Set(`isWindows`, true)
+	//ctx.Set(`isWindows`, true)
 	return ctx.Render(`server/daemon_edit`, err)
 }
 
@@ -217,7 +217,7 @@ func DaemonEdit(ctx echo.Context) error {
 END:
 	ctx.Set(`activeURL`, `/server/daemon_index`)
 	ctx.Set(`isWindows`, com.IsWindows)
-	ctx.Set(`isWindows`, true)
+	//ctx.Set(`isWindows`, true)
 	return ctx.Render(`server/daemon_edit`, err)
 }
 
