@@ -119,8 +119,8 @@ github.com/admpub/go-utility v0.0.1 h1:/nja86vknCoMYJtMCm8nV+vuBiOf5PU45I5w7XAJU
 github.com/admpub/go-utility v0.0.1/go.mod h1:QZ/OrlUkHyD7Hg8Jj/iPkT6RZuMfYUOp0S4NsaQzRnA=
 github.com/admpub/godotenv v1.4.3 h1:yxoRSi0rVWLNLC1c3v1MBw3At6fBTvTwGrVY/44huaA=
 github.com/admpub/godotenv v1.4.3/go.mod h1:W8zOql4lSgnK6zfI6Le+GXlAaz5ZCj4kZI2wgcjar18=
-github.com/admpub/goforever v0.2.7 h1:uiVuKSt8MBi8+GcxBpEedzdrYAfXx1W2gzgmV2FVbH0=
-github.com/admpub/goforever v0.2.7/go.mod h1:qYQjvzpUPaLZB4Xg+fBX+BH9UKf6Q5QuSKmjocggI/w=
+github.com/admpub/goforever v0.2.8 h1:lJpRjklqpIRrIXp25Mz+aFn5jkYZkSZ8OyHorsPnzp8=
+github.com/admpub/goforever v0.2.8/go.mod h1:qYQjvzpUPaLZB4Xg+fBX+BH9UKf6Q5QuSKmjocggI/w=
 github.com/admpub/gohttp v0.0.0-20190322032039-b55c707b8f1e h1:PRSuHQW/9klTd5kzSWa9tjjq0bVlxUdBSNhouK1A91c=
 github.com/admpub/gopty v0.1.2 h1:RNR6coEgWqceKVZw82FshqMCQw/Aid58lmtLOR9pYho=
 github.com/admpub/gopty v0.1.2/go.mod h1:6GLVpkrW0aPDXfS3g1vyN9Jyk6NdrFcbSsiep3hq988=
