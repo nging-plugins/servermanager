@@ -8,7 +8,7 @@ replace github.com/nging-plugins/sshmanager => ../sshmanager
 
 require (
 	github.com/admpub/events v1.3.5
-	github.com/admpub/goforever v0.2.4
+	github.com/admpub/goforever v0.2.6
 	github.com/admpub/gopty v0.1.2
 	github.com/admpub/log v1.3.4
 	github.com/admpub/nging/v5 v5.0.0
