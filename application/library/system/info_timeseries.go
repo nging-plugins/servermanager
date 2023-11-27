@@ -198,7 +198,12 @@ func (r *RealTimeStatus) Listen(ctx context.Context) *RealTimeStatus {
 	r.status = `started`
 	info := &DynamicInformation{}
 	t := time.NewTicker(r.interval)
-	defer t.Stop()
+	defer func() {
+		if e := recover(); e != nil {
+			log.Errorf(`RealTimeStatus: %v`, e)
+		}
+		t.Stop()
+	}()
 	for {
 		select {
 		case <-ctx.Done():
