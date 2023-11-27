@@ -1,8 +1,6 @@
 module github.com/nging-plugins/servermanager
 
-go 1.21.0
-
-toolchain go1.21.1
+go 1.21.4
 
 replace github.com/admpub/nging/v5 => ../../admpub/nging
 
@@ -18,9 +16,9 @@ require (
 	github.com/admpub/websocket v1.0.4
 	github.com/nging-plugins/sshmanager v1.4.1
 	github.com/shirou/gopsutil/v3 v3.23.10
-	github.com/webx-top/com v1.2.6
+	github.com/webx-top/com v1.2.10
 	github.com/webx-top/db v1.27.1
-	github.com/webx-top/echo v2.42.6+incompatible
+	github.com/webx-top/echo v2.42.8+incompatible
 )
 
 require (
@@ -79,7 +77,7 @@ require (
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
 	github.com/coscms/forms v1.12.2 // indirect
-	github.com/creack/pty v1.1.20 // indirect
+	github.com/creack/pty v1.1.21 // indirect
 	github.com/disintegration/imaging v1.6.2 // indirect
 	github.com/dsoprea/go-logging v0.0.0-20200710184922-b02d349568dd // indirect
 	github.com/fcjr/aia-transport-go v1.2.2 // indirect

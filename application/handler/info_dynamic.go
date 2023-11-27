@@ -35,17 +35,29 @@ import (
 
 func InfoBySockJS(c sockjs.Session) error {
 	send := make(chan interface{})
+	safePush := func() (err error) {
+		defer func() {
+			if e := recover(); e != nil {
+				handler.WebSocketLogger.Errorf(`JSONEncode error: %v`, e)
+			}
+		}()
+		var b []byte
+		b, err = com.JSONEncode(<-send)
+		if err != nil {
+			handler.WebSocketLogger.Error(`Push error: `, err.Error())
+			return nil
+		}
+		message := com.Bytes2str(b)
+		err = c.Send(message)
+		if err != nil {
+			handler.WebSocketLogger.Error(`Push error: `, err.Error())
+		}
+		return
+	}
 	//push(writer)
 	go func() {
 		for {
-			b, err := com.JSONEncode(<-send)
-			if err != nil {
-				handler.WebSocketLogger.Error(`Push error: `, err.Error())
-				continue
-			}
-			message := string(b)
-			if err := c.Send(message); err != nil {
-				handler.WebSocketLogger.Error(`Push error: `, err.Error())
+			if err := safePush(); err != nil {
 				return
 			}
 		}
@@ -81,12 +93,23 @@ func InfoBySockJS(c sockjs.Session) error {
 
 func InfoByWebsocket(c *websocket.Conn, ctx echo.Context) error {
 	send := make(chan interface{})
+	safePush := func() (err error) {
+		defer func() {
+			if e := recover(); e != nil {
+				handler.WebSocketLogger.Errorf(`WriteJSON error: %v`, e)
+			}
+		}()
+		message := <-send
+		err = c.WriteJSON(message)
+		if err != nil {
+			handler.WebSocketLogger.Error(`Push error: `, err.Error())
+		}
+		return err
+	}
 	//push(writer)
 	go func() {
 		for {
-			message := <-send
-			if err := c.WriteJSON(message); err != nil {
-				handler.WebSocketLogger.Error(`Push error: `, err.Error())
+			if err := safePush(); err != nil {
 				return
 			}
 		}
