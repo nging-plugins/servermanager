@@ -16,6 +16,7 @@ require (
 	github.com/admpub/websocket v1.0.4
 	github.com/nging-plugins/sshmanager v1.4.1
 	github.com/shirou/gopsutil/v3 v3.23.10
+	github.com/stretchr/testify v1.8.4
 	github.com/webx-top/com v1.2.10
 	github.com/webx-top/db v1.27.1
 	github.com/webx-top/echo v2.42.8+incompatible
@@ -78,6 +79,7 @@ require (
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
 	github.com/coscms/forms v1.12.2 // indirect
 	github.com/creack/pty v1.1.21 // indirect
+	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/disintegration/imaging v1.6.2 // indirect
 	github.com/dsoprea/go-logging v0.0.0-20200710184922-b02d349568dd // indirect
 	github.com/fcjr/aia-transport-go v1.2.2 // indirect
@@ -115,6 +117,7 @@ require (
 	github.com/muesli/smartcrop v0.3.0 // indirect
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
+	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/power-devops/perfstat v0.0.0-20221212215047-62379fc7944b // indirect
 	github.com/prometheus/client_golang v1.17.0 // indirect
 	github.com/prometheus/client_model v0.5.0 // indirect

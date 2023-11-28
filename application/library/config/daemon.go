@@ -194,7 +194,7 @@ func ParseArgsSlice(a string) []string {
 		for _, row := range strings.Split(a, "\n") {
 			row = strings.TrimSpace(row)
 			if len(row) > 0 {
-				args = append(args, row)
+				args = append(args, com.ParseArgs(row)...)
 			}
 		}
 	}
