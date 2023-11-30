@@ -2,6 +2,7 @@ package handler
 
 import (
 	"context"
+	"errors"
 	"time"
 
 	"github.com/admpub/nging/v5/application/library/charset"
@@ -16,13 +17,18 @@ import (
 // CommandJob 计划任务调用方式
 func CommandJob(id string) cron.Runner {
 	return func(timeout time.Duration) (out string, runingErr string, onErr error, isTimeout bool) {
-		m, result, err := ExecCommand(param.AsUint(id))
+		idN := param.AsUint(id)
+		if idN < 1 {
+			onErr = errors.New(`Invalid ID: ` + id)
+			return
+		}
+		m, result, err := ExecCommand(idN)
 		if err != nil {
 			runingErr += err.Error() + "\n\n"
 		} else {
 			out += result + "\n\n"
 		}
-		if m.Remote == `Y` {
+		if m.Remote == `Y` || m.Id == 0 {
 			return
 		}
 
@@ -60,6 +66,7 @@ func CommandJob(id string) cron.Runner {
 			return nil
 		}}
 		if e := cmd.Run(); e != nil {
+			isTimeout = errors.Is(e, context.DeadlineExceeded)
 			noticeSender(e.Error(), 0)
 		}
 		out += wOut.String()

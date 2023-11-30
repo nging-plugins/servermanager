@@ -113,6 +113,9 @@ func CmdSendBySockJS(c sockjs.Session) error {
 						send <- result
 						continue
 					}
+					if m.Remote == `A` {
+						send <- result
+					}
 					workdir = m.WorkDirectory
 					env = conf.ParseEnvSlice(m.Env)
 					command = m.Command
