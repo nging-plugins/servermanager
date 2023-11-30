@@ -25,6 +25,7 @@ import (
 	"os"
 	"os/exec"
 	"strings"
+	"sync/atomic"
 	"time"
 
 	"github.com/admpub/sockjs-go/v3/sockjs"
@@ -106,15 +107,15 @@ func CmdSendBySockJS(c sockjs.Session) error {
 				if id > 0 {
 					m, result, err := ExecCommand(id)
 					if err != nil {
-						send <- err.Error()
+						send <- remoteCmdResultPrefix() + err.Error()
 						continue
 					}
 					if m.Remote == `Y` {
-						send <- result
+						send <- remoteCmdResultPrefix() + result
 						continue
 					}
 					if m.Remote == `A` {
-						send <- result
+						send <- remoteCmdResultPrefix() + result
 					}
 					workdir = m.WorkDirectory
 					env = conf.ParseEnvSlice(m.Env)
@@ -151,12 +152,17 @@ func CmdSendBySockJS(c sockjs.Session) error {
 
 func cmdRunner(workdir string, env []string, command string, send chan string, onEnd func(), timeout time.Duration, ctx context.Context) (w io.WriteCloser, cmd *exec.Cmd, err error) {
 	params := cron.CmdParams(command)
+	var prefixSended atomic.Bool
 	output := func(b []byte) (e error) {
 		if com.IsWindows {
 			b, e = charset.Convert(`gbk`, `utf-8`, b)
 			if e != nil {
 				return e
 			}
+		}
+		if !prefixSended.Swap(true) {
+			send <- localCmdResultPrefix() + string(b)
+			return nil
 		}
 		send <- string(b)
 		return nil
@@ -308,15 +314,15 @@ func CmdSendByWebsocket(c *websocket.Conn, ctx echo.Context) error {
 					}
 					m, result, err := ExecCommand(id)
 					if err != nil {
-						send <- err.Error()
+						send <- remoteCmdResultPrefix() + err.Error()
 						continue
 					}
 					if m.Remote == `Y` {
-						send <- result
+						send <- remoteCmdResultPrefix() + result
 						continue
 					}
 					if m.Remote == `A` {
-						send <- result
+						send <- remoteCmdResultPrefix() + result
 					}
 					workdir = m.WorkDirectory
 					env = conf.ParseEnvSlice(m.Env)
@@ -405,7 +411,7 @@ func ExecCommand(id uint) (*dbschema.NgingCommand, string, error) {
 		w := cron.NewCmdRec(1000)
 		for idx, row := range rows {
 			row.SetContext(ctx)
-			resultTitle := `=== ` + row.Name + ` (` + row.Host + `) ===`
+			resultTitle := `###### ` + row.Name + ` (` + row.Host + `) #####`
 			err := sshExecCmd(row, cmdList, w)
 			if err != nil {
 				results[idx] = resultTitle + com.StrLF + err.Error()
@@ -414,7 +420,7 @@ func ExecCommand(id uint) (*dbschema.NgingCommand, string, error) {
 			}
 			w.Reset()
 		}
-		return m.NgingCommand, strings.Join(results, "\n\n"), nil
+		return m.NgingCommand, strings.Join(results, com.StrLF+com.StrLF), nil
 	}
 	return m.NgingCommand, "", err
 }
@@ -423,4 +429,18 @@ func sshExecCmd(sshUser *sshdbschema.NgingSshUser, cmdList []string, w io.Writer
 	sshUser.Passphrase = config.FromFile().Decode(sshUser.Passphrase)
 	sshUser.Password = config.FromFile().Decode(sshUser.Password)
 	return sshmodel.ExecMultiCMD(sshUser, w, cmdList...)
+}
+
+func remoteCmdResultPrefix() string {
+	out := "================================================\n"
+	out += "==================[REMOTE]======================\n"
+	out += "================================================\n"
+	return out
+}
+
+func localCmdResultPrefix() string {
+	out := "================================================\n"
+	out += "===================[LOCAL]======================\n"
+	out += "================================================\n"
+	return out
 }

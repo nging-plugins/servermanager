@@ -25,9 +25,12 @@ func CommandJob(id string) cron.Runner {
 		m, result, err := ExecCommand(idN)
 		if err != nil {
 			onErr = err
+			runingErr = remoteCmdResultPrefix() + err.Error()
 			return
 		}
-		out += result + "\n\n"
+		if len(result) > 0 {
+			out += remoteCmdResultPrefix() + result + com.StrLF + com.StrLF
+		}
 		if m.Remote == `Y` || m.Id == 0 {
 			return
 		}
@@ -69,7 +72,7 @@ func CommandJob(id string) cron.Runner {
 			isTimeout = errors.Is(e, context.DeadlineExceeded)
 			noticeSender(e.Error(), 0)
 		}
-		out += wOut.String()
+		out += localCmdResultPrefix() + wOut.String()
 		runingErr += wErr.String()
 		return
 	}
