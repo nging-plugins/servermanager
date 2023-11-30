@@ -24,10 +24,10 @@ func CommandJob(id string) cron.Runner {
 		}
 		m, result, err := ExecCommand(idN)
 		if err != nil {
-			runingErr += err.Error() + "\n\n"
-		} else {
-			out += result + "\n\n"
+			onErr = err
+			return
 		}
+		out += result + "\n\n"
 		if m.Remote == `Y` || m.Id == 0 {
 			return
 		}

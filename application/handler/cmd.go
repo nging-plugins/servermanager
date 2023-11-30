@@ -359,7 +359,8 @@ func CmdSendByWebsocket(c *websocket.Conn, ctx echo.Context) error {
 }
 
 func ExecCommand(id uint) (*dbschema.NgingCommand, string, error) {
-	m := model.NewCommand(nil)
+	ctx := defaults.NewMockContext()
+	m := model.NewCommand(ctx)
 	err := m.Get(nil, `id`, id)
 	if err != nil {
 		return m.NgingCommand, "", err
@@ -388,7 +389,6 @@ func ExecCommand(id uint) (*dbschema.NgingCommand, string, error) {
 			}
 		}
 		cmdList = append(cmdList, m.NgingCommand.Command)
-		ctx := defaults.NewMockContext()
 		sshUser := sshmodel.NewSshUser(ctx)
 		_, err = sshUser.ListByOffset(nil, nil, 0, -1, `id`, db.In(accountIDs))
 		if err != nil {
