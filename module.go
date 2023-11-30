@@ -2,6 +2,7 @@ package servermanager
 
 import (
 	"github.com/admpub/nging/v5/application/library/config/cmder"
+	"github.com/admpub/nging/v5/application/library/cron"
 	"github.com/admpub/nging/v5/application/library/module"
 
 	"github.com/nging-plugins/servermanager/application/handler"
@@ -23,5 +24,13 @@ var Module = module.Module{
 	SQLCollection: setup.RegisterSQL,
 	Navigate:      RegisterNavigate,
 	Route:         handler.RegisterRoute,
-	DBSchemaVer:   0.3000,
+	CronJobs: []*cron.Jobx{
+		{
+			Name:         `command`,
+			Example:      ">command:commandId",
+			Description:  ``,
+			RunnerGetter: handler.CommandJob,
+		},
+	},
+	DBSchemaVer: 0.3000,
 }

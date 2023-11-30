@@ -148,7 +148,7 @@ func CmdSendBySockJS(c sockjs.Session) error {
 
 func cmdRunner(workdir string, env []string, command string, send chan string, onEnd func(), timeout time.Duration, ctx context.Context) (w io.WriteCloser, cmd *exec.Cmd, err error) {
 	params := cron.CmdParams(command)
-	cmd = com.CreateCmd(params, func(b []byte) (e error) {
+	output := func(b []byte) (e error) {
 		if com.IsWindows {
 			b, e = charset.Convert(`gbk`, `utf-8`, b)
 			if e != nil {
@@ -157,7 +157,9 @@ func cmdRunner(workdir string, env []string, command string, send chan string, o
 		}
 		send <- string(b)
 		return nil
-	})
+	}
+	cmd = com.CreateCmd(params, output)
+	cmd.Stderr = com.CmdResultCapturer{Do: output}
 	if len(workdir) > 0 {
 		cmd.Dir = workdir
 	}
@@ -397,29 +399,25 @@ func ExecCommand(id uint) (*dbschema.NgingCommand, string, error) {
 			return m.NgingCommand, "", errors.New("The specified ssh account does not exist")
 		}
 		results := make([]string, len(rows))
+		w := cron.NewCmdRec(1000)
 		for idx, row := range rows {
 			row.SetContext(ctx)
 			resultTitle := `=== ` + row.Name + ` (` + row.Host + `) ===`
-			result, err := sshExecCmd(row, cmdList)
+			err := sshExecCmd(row, cmdList, w)
 			if err != nil {
 				results[idx] = resultTitle + com.StrLF + err.Error()
 			} else {
-				results[idx] = resultTitle + com.StrLF + result
+				results[idx] = resultTitle + com.StrLF + w.String()
 			}
+			w.Reset()
 		}
 		return m.NgingCommand, strings.Join(results, "\n\n"), nil
 	}
 	return m.NgingCommand, "", err
 }
 
-func sshExecCmd(sshUser *sshdbschema.NgingSshUser, cmdList []string) (string, error) {
+func sshExecCmd(sshUser *sshdbschema.NgingSshUser, cmdList []string, w io.Writer) error {
 	sshUser.Passphrase = config.FromFile().Decode(sshUser.Passphrase)
 	sshUser.Password = config.FromFile().Decode(sshUser.Password)
-	w := cron.NewCmdRec(1000)
-	err := sshmodel.ExecMultiCMD(sshUser, w, cmdList...)
-	if err != nil {
-		return "", err
-	}
-	//panic(echo.Dump(w.String(), false))
-	return w.String(), nil
+	return sshmodel.ExecMultiCMD(sshUser, w, cmdList...)
 }

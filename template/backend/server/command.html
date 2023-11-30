@@ -54,6 +54,7 @@
 								</div>
 							</td>
 							<td class="text-center">
+							<a data-toggle="tooltip" title="{{`定时执行`|$.T}}" class="label label-success" href="{{BackendURL}}/task/add?command={{`>command:`}}{{$v.Id}}&name={{$.T `执行指令:%v` $v.Name}}"><i class="fa fa-clock-o"></i></a>
 							<a class="label label-danger" href="{{BackendURL}}/server/cmd?id={{$v.Id}}" data-toggle="tooltip" title="{{`执行`|$.T}}"><i class="fa fa-play"></i></a>
 							<a class="label label-default" href="{{BackendURL}}/server/command_add?copyId={{$v.Id}}" title="{{`复制`|$.T}}"><i class="fa fa-copy"></i></a>
 							<a class="label label-success" href="{{BackendURL}}/server/command_edit?id={{$v.Id}}"><i class="fa fa-pencil"></i></a> 

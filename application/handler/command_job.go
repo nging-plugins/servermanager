@@ -1,0 +1,69 @@
+package handler
+
+import (
+	"context"
+	"time"
+
+	"github.com/admpub/nging/v5/application/library/charset"
+	"github.com/admpub/nging/v5/application/library/cron"
+	"github.com/admpub/nging/v5/application/library/notice"
+	"github.com/webx-top/com"
+	"github.com/webx-top/echo/param"
+
+	conf "github.com/nging-plugins/servermanager/application/library/config"
+)
+
+// CommandJob 计划任务调用方式
+func CommandJob(id string) cron.Runner {
+	return func(timeout time.Duration) (out string, runingErr string, onErr error, isTimeout bool) {
+		m, result, err := ExecCommand(param.AsUint(id))
+		if err != nil {
+			runingErr += err.Error() + "\n\n"
+		} else {
+			out += result + "\n\n"
+		}
+		if m.Remote == `Y` {
+			return
+		}
+
+		wOut := cron.NewOutputWriter()
+		wErr := cron.NewOutputWriter()
+		noticeSender := notice.CustomOutputNoticer(wOut, wErr)
+		env := conf.ParseEnvSlice(m.Env)
+		ctx, cancel := context.WithTimeout(context.Background(), timeout)
+		defer cancel()
+		params := cron.CmdParams(m.Command)
+		cmd := com.CreateCmdWithContext(ctx, params, func(b []byte) (e error) {
+			if com.IsWindows {
+				b, e = charset.Convert(`gbk`, `utf-8`, b)
+				if e != nil {
+					return e
+				}
+			}
+			noticeSender(string(b), 1)
+			return nil
+		})
+		if len(m.WorkDirectory) > 0 {
+			cmd.Dir = m.WorkDirectory
+		}
+		if len(env) > 0 {
+			cmd.Env = env
+		}
+		cmd.Stderr = com.CmdResultCapturer{Do: func(b []byte) (e error) {
+			if com.IsWindows {
+				b, e = charset.Convert(`gbk`, `utf-8`, b)
+				if e != nil {
+					return e
+				}
+			}
+			noticeSender(string(b), 0)
+			return nil
+		}}
+		if e := cmd.Run(); e != nil {
+			noticeSender(e.Error(), 0)
+		}
+		out += wOut.String()
+		runingErr += wErr.String()
+		return
+	}
+}
