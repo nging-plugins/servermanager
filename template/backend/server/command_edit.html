@@ -19,39 +19,36 @@
                 <div class="col-sm-8">
                   {{$v := $.Form "remote"}}
                   <div class="radio radio-success radio-inline">
-                      <input type="radio" value="N" name="remote" id="remote-N"{{if or (eq $v "N") (eq $v "")}} checked{{end}} onclick="$('#sshAccountIdBox').addClass('hidden')"> <label for="remote-N">{{"本地命令"|$.T}}</label>
+                      <input type="radio" value="N" name="remote" id="remote-N"{{if eq $v `N` ``}} checked{{end}} onclick="$('#sshAccountIdBox').addClass('hidden')"> <label for="remote-N">{{"本地命令"|$.T}}</label>
                   </div>
                   <div class="radio radio-success radio-inline">
-                    <input type="radio" value="Y" name="remote" id="remote-Y"{{if eq $v "Y"}} checked{{end}} onclick="$('#sshAccountIdBox').removeClass('hidden')"> <label for="remote-Y">{{"远程命令"|$.T}}</label>
+                    <input type="radio" value="Y" name="remote" id="remote-Y"{{if eq $v `Y`}} checked{{end}} onclick="$('#sshAccountIdBox').removeClass('hidden')"> <label for="remote-Y">{{"远程命令"|$.T}}</label>
+                  </div>
+                  <div class="radio radio-success radio-inline">
+                    <input type="radio" value="A" name="remote" id="remote-A"{{if eq $v `A`}} checked{{end}} onclick="$('#sshAccountIdBox').removeClass('hidden')"> <label for="remote-A">{{"本地和远程都执行"|$.T}}</label>
                   </div>
                   <div class="help-block">
                     {{"本地命令用于在本服务器上执行；远程命令通过SSH连接到远程服务器执行"|$.T}}
                   </div>
                 </div>
               </div>
-              <div class="form-group{{if ne $v "Y"}} hidden{{end}}" id="sshAccountIdBox">
+              <div class="form-group{{if eq $v `N`}} hidden{{end}}" id="sshAccountIdBox">
                 <label class="col-sm-2 control-label">{{"SSH账号"|$.T}}</label>
-                <div class="col-sm-8">
-                  {{$sshAccountId := ($.Formx "sshAccountId").Uint}}
-                  <select name="sshAccountId" class="form-control" id="sshAccountId">
-                    <option value="">- {{"请选择"|$.T}} -</option>
-                    {{range $k, $v := $.Stored.sshAccountList}}
-                    <option value="{{$v.Id}}"{{if eq $v.Id $sshAccountId}} selected{{end}}>{{$v.Name}}</option>
-                    {{end}}
-                  </select>
+                <div class="col-sm-8">{{$sshAccountId := $.Form "sshAccountId"}}
+                  <input name="sshAccountId" class="form-control" id="sshAccountId" value="{{$sshAccountId}}" data-init="{{$sshAccountId}}">
                 </div>
                 <div class="col-sm-2"><a href="{{BackendURL}}/term/account_add" target="account_add_by_command">{{"添加账号"|$.T}}</a></div>
               </div>
               <div class="form-group">
                 <label class="col-sm-2 control-label">{{"名称"|$.T}}</label>
                 <div class="col-sm-8">
-                    <input type="text" class="form-control" required name="name" value="{{$.Form "name"}}">
+                    <input type="text" class="form-control" required name="name" value="{{$.Form `name`}}">
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-sm-2 control-label">{{"命令"|$.T}}</label>
                 <div class="col-sm-8">
-                  <input class="form-control" required name="command" value="{{$.Form "command"}}" placeholder="ls -l" />
+                  <input class="form-control" required name="command" value="{{$.Form `command`}}" placeholder="ls -l" />
                 </div>
               </div>
               <div class="form-group">
@@ -64,7 +61,7 @@
               <div class="form-group">
                 <label class="col-sm-2 control-label">{{"工作目录"|$.T}}</label>
                 <div class="col-sm-8">
-                  <input id="cmd-work-dir" class="form-control typeahead" data-provide="typeahead" name="workDirectory" value="{{$.Form "workDirectory"}}" />
+                  <input id="cmd-work-dir" class="form-control typeahead" data-provide="typeahead" name="workDirectory" value="{{$.Form `workDirectory`}}" />
                   <div class="help-block">{{"如果不填，则使用默认"|$.T}}</div>
                 </div>
               </div>
@@ -76,16 +73,15 @@
               </div>
               <div class="form-group">
                 <label class="col-sm-2 control-label">{{"状态"|$.T}}</label>
-                <div class="col-sm-8">
-                  {{$v := $.Form "disabled"}}
+                <div class="col-sm-8">{{$v := $.Form "disabled"}}
                   <div class="radio radio-success radio-inline">
-                    <input type="radio" value="N" name="disabled" id="disabled-N"{{if or (eq $v "N") (eq $v "")}} checked{{end}}> 
+                    <input type="radio" value="N" name="disabled" id="disabled-N"{{if eq $v `N` ``}} checked{{end}}> 
                     <label for="disabled-N">
                       {{"启用"|$.T}}
                     </label>
                   </div>
                   <div class="radio radio-danger radio-inline">
-                    <input type="radio" value="Y" name="disabled" id="disabled-Y"{{if eq $v "Y"}} checked{{end}}> 
+                    <input type="radio" value="Y" name="disabled" id="disabled-Y"{{if eq $v `Y`}} checked{{end}}> 
                     <label for="disabled-Y">
                       {{"禁用"|$.T}}
                     </label>
@@ -105,18 +101,19 @@
 </div>
 {{/Block}}
 {{Block "footer"}}
+<script src="{{AssetsURL}}/js/loader/loader.min.js?t={{BuildTime}}"></script>
+<script src="{{AssetsURL}}/js/editor/editor.min.js?t={{BuildTime}}"></script>
 <script>
 function sshAccountAdded(value,text){
   $('#sshAccountId').append('<option value="'+value+'" selected>'+text+'</option>');
 }
 $(function(){
 App.searchFS('#cmd-work-dir',10,'dir',null,function(data){
-  if($('#remote-Y:checked').length<1) return data;
-  var sshAccountId=$('#sshAccountId').val();
-  data['sshAccountId']=sshAccountId;
-  return data;
+  if($('#remote-Y:checked,#remote-A:checked').length<1) return data;
+  return false;
 });
-if($('#remote-Y:checked').length>0) $('#sshAccountIdBox').removeClass('hidden');
+if($('#remote-Y:checked,#remote-A:checked').length>0) $('#sshAccountIdBox').removeClass('hidden');
+App.editor.selectPage('#sshAccountId',{data:window.location.href,multiple:true,params:function(){return {'op':'selectSshAccounts'}}})
 });
 </script>
 {{/Block}}

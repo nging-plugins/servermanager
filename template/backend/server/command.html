@@ -38,14 +38,19 @@
 							<td>
 								{{- if eq $v.Remote "Y" -}}
 								<span class="text-primary"><i class="fa fa-cloud"></i>{{"远程命令"|$.T}}</span>
+								{{- else if eq $v.Remote "A" -}}
+								<span class="text-orange"><span class="fa-stack fa-lg">
+									<i class="fa fa-cloud fa-stack-1x" style="margin-top:-2px"></i>
+									<i class="fa fa-desktop fa-stack-2x"></i>
+								  </span>{{"远程+本地"|$.T}}</span>
 								{{- else -}}
-								<span class="text-success"><i class="fa fa- fa-desktop"></i>{{"本地命令"|$.T}}</span>
+								<span class="text-success"><i class="fa fa-desktop"></i>{{"本地命令"|$.T}}</span>
 								{{- end -}}
 							</td>
 							<td>{{$v.Description}}</td>
 							<td>
 								<div class="checkbox checkbox-success no-margin-y">
-									<input id="checkbox-{{$k}}" class="styled switch-disabled" type="checkbox" data-id="{{$v.Id}}"{{if eq $v.Disabled "N"}} checked="checked"{{end}} value="N" /><label for="checkbox-{{$k}}">{{"启用"|$.T}}</label>
+									<input id="checkbox-{{$k}}" class="styled switch-disabled" type="checkbox" data-id="{{$v.Id}}"{{if eq $v.Disabled `N`}} checked="checked"{{end}} value="N" /><label for="checkbox-{{$k}}">{{"启用"|$.T}}</label>
 								</div>
 							</td>
 							<td class="text-center">

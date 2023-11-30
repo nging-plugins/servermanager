@@ -32,6 +32,7 @@ import (
 	"github.com/webx-top/com"
 	"github.com/webx-top/db"
 	"github.com/webx-top/echo"
+	"github.com/webx-top/echo/defaults"
 	"github.com/webx-top/echo/param"
 
 	"github.com/admpub/gopty"
@@ -44,6 +45,7 @@ import (
 	"github.com/nging-plugins/servermanager/application/dbschema"
 	conf "github.com/nging-plugins/servermanager/application/library/config"
 	"github.com/nging-plugins/servermanager/application/model"
+	sshdbschema "github.com/nging-plugins/sshmanager/application/dbschema"
 	sshmodel "github.com/nging-plugins/sshmanager/application/model"
 )
 
@@ -308,6 +310,9 @@ func CmdSendByWebsocket(c *websocket.Conn, ctx echo.Context) error {
 						send <- result
 						continue
 					}
+					if m.Remote == `A` {
+						send <- result
+					}
 					workdir = m.WorkDirectory
 					env = conf.ParseEnvSlice(m.Env)
 					command = m.Command
@@ -359,21 +364,12 @@ func ExecCommand(id uint) (*dbschema.NgingCommand, string, error) {
 	}
 	//m.NgingCommand.Remote = `Y`
 	//m.NgingCommand.SshAccountId = 4
-	if m.NgingCommand.Remote == `Y` {
-		if m.NgingCommand.SshAccountId < 1 {
+	if m.NgingCommand.Remote == `Y` || m.NgingCommand.Remote == `A` {
+		if len(m.NgingCommand.SshAccountId) < 1 {
 			return m.NgingCommand, "", errors.New("Error, you did not choose ssh account")
 		}
-		sshUser := sshmodel.NewSshUser(nil)
-		err = sshUser.Get(nil, `id`, m.NgingCommand.SshAccountId)
-		if err != nil {
-			if err == db.ErrNoMoreRows {
-				return m.NgingCommand, "", errors.New("The specified ssh account does not exist")
-			}
-			return m.NgingCommand, "", err
-		}
-		sshUser.Passphrase = config.FromFile().Decode(sshUser.Passphrase)
-		sshUser.Password = config.FromFile().Decode(sshUser.Password)
-		cmdList := []string{}
+		accountIDs := param.Split(m.NgingCommand.SshAccountId, `,`).Uint(param.IsGreaterThanZeroElement[uint])
+		var cmdList []string
 		if len(m.WorkDirectory) > 0 {
 			cmdList = append(cmdList, `cd `+m.WorkDirectory)
 		}
@@ -387,13 +383,43 @@ func ExecCommand(id uint) (*dbschema.NgingCommand, string, error) {
 			}
 		}
 		cmdList = append(cmdList, m.NgingCommand.Command)
-		w := cron.NewCmdRec(1000)
-		err = sshUser.ExecMultiCMD(w, cmdList...)
+		ctx := defaults.NewMockContext()
+		sshUser := sshmodel.NewSshUser(ctx)
+		_, err = sshUser.ListByOffset(nil, nil, 0, -1, `id`, db.In(accountIDs))
 		if err != nil {
+			if err == db.ErrNoMoreRows {
+				return m.NgingCommand, "", errors.New("The specified ssh account does not exist")
+			}
 			return m.NgingCommand, "", err
 		}
-		//panic(echo.Dump(w.String(), false))
-		return m.NgingCommand, w.String(), nil
+		rows := sshUser.Objects()
+		if len(rows) == 0 {
+			return m.NgingCommand, "", errors.New("The specified ssh account does not exist")
+		}
+		results := make([]string, len(rows))
+		for idx, row := range rows {
+			row.SetContext(ctx)
+			resultTitle := `=== ` + row.Name + ` (` + row.Host + `) ===`
+			result, err := sshExecCmd(row, cmdList)
+			if err != nil {
+				results[idx] = resultTitle + com.StrLF + err.Error()
+			} else {
+				results[idx] = resultTitle + com.StrLF + result
+			}
+		}
+		return m.NgingCommand, strings.Join(results, "\n\n"), nil
 	}
 	return m.NgingCommand, "", err
+}
+
+func sshExecCmd(sshUser *sshdbschema.NgingSshUser, cmdList []string) (string, error) {
+	sshUser.Passphrase = config.FromFile().Decode(sshUser.Passphrase)
+	sshUser.Password = config.FromFile().Decode(sshUser.Password)
+	w := cron.NewCmdRec(1000)
+	err := sshmodel.ExecMultiCMD(sshUser, w, cmdList...)
+	if err != nil {
+		return "", err
+	}
+	//panic(echo.Dump(w.String(), false))
+	return w.String(), nil
 }

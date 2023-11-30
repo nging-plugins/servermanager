@@ -25,6 +25,7 @@ import (
 
 	"github.com/admpub/nging/v5/application/handler"
 	"github.com/admpub/nging/v5/application/library/common"
+	"github.com/webx-top/db/lib/factory/pagination"
 
 	"github.com/nging-plugins/servermanager/application/model"
 	sshmodel "github.com/nging-plugins/sshmanager/application/model"
@@ -40,6 +41,9 @@ func Command(ctx echo.Context) error {
 }
 
 func CommandAdd(ctx echo.Context) error {
+	if ctx.Form(`op`) == `selectSshAccounts` {
+		return ajaxSelectSSHAccounts(ctx)
+	}
 	var err error
 	m := model.NewCommand(ctx)
 	if ctx.IsPost() {
@@ -62,15 +66,28 @@ func CommandAdd(ctx echo.Context) error {
 		}
 	}
 	ctx.Set(`activeURL`, `/server/command`)
-	sshUser := sshmodel.NewSshUser(ctx)
-	_, err = sshUser.ListByOffset(nil, func(r db.Result) db.Result {
-		return r.OrderBy(`-id`)
-	}, 0, -1)
-	ctx.Set(`sshAccountList`, sshUser.Objects())
 	return ctx.Render(`server/command_edit`, handler.Err(ctx, err))
 }
 
+func ajaxSelectSSHAccounts(ctx echo.Context) error {
+	sshUser := sshmodel.NewSshUser(ctx)
+	cond := db.NewCompounds()
+	common.SelectPageCond(ctx, cond)
+	_, err := pagination.NewLister(sshUser, nil, func(r db.Result) db.Result {
+		return r.Select(`id`, `name`).OrderBy(`-id`)
+	}, cond.And()).Paging(ctx)
+	data := ctx.Data()
+	if err != nil {
+		return ctx.JSON(data.SetError(err))
+	}
+	ctx.Set(`listData`, sshUser.Objects())
+	return ctx.JSON(data.SetData(ctx.Stored()))
+}
+
 func CommandEdit(ctx echo.Context) error {
+	if ctx.Form(`op`) == `selectSshAccounts` {
+		return ajaxSelectSSHAccounts(ctx)
+	}
 	id := ctx.Formx(`id`).Uint()
 	m := model.NewCommand(ctx)
 	err := m.Get(nil, `id`, id)
@@ -108,11 +125,6 @@ func CommandEdit(ctx echo.Context) error {
 
 	echo.StructToForm(ctx, m.NgingCommand, ``, echo.LowerCaseFirstLetter)
 	ctx.Set(`activeURL`, `/server/command`)
-	sshUser := sshmodel.NewSshUser(ctx)
-	_, err = sshUser.ListByOffset(nil, func(r db.Result) db.Result {
-		return r.OrderBy(`-id`)
-	}, 0, -1)
-	ctx.Set(`sshAccountList`, sshUser.Objects())
 	return ctx.Render(`server/command_edit`, handler.Err(ctx, err))
 }
 

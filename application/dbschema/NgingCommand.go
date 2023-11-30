@@ -111,8 +111,8 @@ type NgingCommand struct {
 	Created       uint   `db:"created" bson:"created" comment:"添加时间" json:"created" xml:"created"`
 	Updated       uint   `db:"updated" bson:"updated" comment:"修改时间" json:"updated" xml:"updated"`
 	Disabled      string `db:"disabled" bson:"disabled" comment:"是否禁用" json:"disabled" xml:"disabled"`
-	Remote        string `db:"remote" bson:"remote" comment:"是否执行远程SSH命令" json:"remote" xml:"remote"`
-	SshAccountId  uint   `db:"ssh_account_id" bson:"ssh_account_id" comment:"SSH账号ID" json:"ssh_account_id" xml:"ssh_account_id"`
+	Remote        string `db:"remote" bson:"remote" comment:"是否(Y/N)执行远程SSH命令(A表示两者同时支持)" json:"remote" xml:"remote"`
+	SshAccountId  string `db:"ssh_account_id" bson:"ssh_account_id" comment:"SSH账号ID(多个用逗号分隔)" json:"ssh_account_id" xml:"ssh_account_id"`
 }
 
 // - base function
@@ -630,7 +630,7 @@ func (a *NgingCommand) Reset() *NgingCommand {
 	a.Updated = 0
 	a.Disabled = ``
 	a.Remote = ``
-	a.SshAccountId = 0
+	a.SshAccountId = ``
 	return a
 }
 
@@ -703,7 +703,7 @@ func (a *NgingCommand) FromRow(row map[string]interface{}) {
 		case "remote":
 			a.Remote = param.AsString(value)
 		case "ssh_account_id":
-			a.SshAccountId = param.AsUint(value)
+			a.SshAccountId = param.AsString(value)
 		}
 	}
 }
@@ -749,7 +749,7 @@ func (a *NgingCommand) Set(key interface{}, value ...interface{}) {
 		case "Remote":
 			a.Remote = param.AsString(vv)
 		case "SshAccountId":
-			a.SshAccountId = param.AsUint(vv)
+			a.SshAccountId = param.AsString(vv)
 		}
 	}
 }
