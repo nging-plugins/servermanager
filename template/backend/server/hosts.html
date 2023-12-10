@@ -50,7 +50,7 @@
 <script type="text/javascript">
 $(function(){
     $('#hosts-form').off().on('submit',function(e){
-        e.preventDefault();
+        e.preventDefault();$("#hosts").data('codemirror').save();
         $.post(window.location.href,$(this).serialize(),function(r){
             App.message({title: App.i18n.SYS_INFO, text: r.Info, class_name: r.Code==1?"success":"danger"});
         },'json');
