@@ -17,7 +17,7 @@
               <div class="form-group">
                 <label class="col-sm-2 control-label">{{"类型"|$.T}}</label>
                 <div class="col-sm-8">
-                  {{$v := $.Form "remote"}}
+                  {{$v := $.Form "remote" "N"}}
                   <div class="radio radio-success radio-inline">
                       <input type="radio" value="N" name="remote" id="remote-N"{{if eq $v `N` ``}} checked{{end}} onclick="$('#sshAccountIdBox').addClass('hidden')"> <label for="remote-N">{{"本地命令"|$.T}}</label>
                   </div>
