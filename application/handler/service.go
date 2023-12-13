@@ -23,6 +23,7 @@ import (
 	"strings"
 
 	"github.com/admpub/log"
+	"github.com/webx-top/com"
 	"github.com/webx-top/echo"
 
 	"github.com/admpub/nging/v5/application/library/config"
@@ -54,7 +55,7 @@ func Service(ctx echo.Context) error {
 			case `echo`:
 				v = ctx.T(`Web框架日志`)
 			default:
-				v = ctx.T(`%s日志`, strings.Title(k))
+				v = ctx.T(`%s日志`, com.Title(k))
 			}
 			addLogCategory(logCategories, k, v)
 		}
