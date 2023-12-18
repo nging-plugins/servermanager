@@ -154,6 +154,20 @@ func cmdRunner(workdir string, env []string, command string, send chan string, o
 	params := cron.CmdParams(command)
 	var prefixSended atomic.Bool
 	output := func(b []byte) (e error) {
+		defer func() {
+			if re := recover(); re != nil {
+				if cmd == nil {
+					return
+				}
+				if cmd.Process == nil {
+					return
+				}
+				err := cmd.Process.Kill()
+				if err != nil {
+					log.Error(err)
+				}
+			}
+		}()
 		if com.IsWindows {
 			b, e = charset.Convert(`gbk`, `utf-8`, b)
 			if e != nil {
