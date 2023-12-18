@@ -14,7 +14,7 @@ require (
 	github.com/admpub/nging/v5 v5.0.0
 	github.com/admpub/sockjs-go/v3 v3.0.1
 	github.com/admpub/websocket v1.0.4
-	github.com/nging-plugins/sshmanager v1.4.2
+	github.com/nging-plugins/sshmanager v1.4.6
 	github.com/shirou/gopsutil/v3 v3.23.11
 	github.com/stretchr/testify v1.8.4
 	github.com/webx-top/com v1.2.10
@@ -85,6 +85,7 @@ require (
 	github.com/fcjr/aia-transport-go v1.2.2 // indirect
 	github.com/francoispqt/gojay v1.2.13 // indirect
 	github.com/friendsofgo/errors v0.9.2 // indirect
+	github.com/fynelabs/selfupdate v0.2.0 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.3 // indirect
 	github.com/garyburd/redigo v1.6.4 // indirect
 	github.com/go-errors/errors v1.5.1 // indirect
