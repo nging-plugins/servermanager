@@ -19,7 +19,7 @@
         {{$v.Ppid}}
     </td>
 	<td>
-        <a href="javascript:;" onclick="$(this).next('div').toggleClass('hidden')" class="text-success text-bold">{{$v.Name}}</a>
+        <div class="wrap"><a href="javascript:;" onclick="$(this).parent().next('div').toggleClass('hidden')" class="text-success text-bold">{{$v.Name}}</a></div>
         <div class="label-group hidden xs-margin-top wrap">
             <span class="label label-success">{{`完整路径`|$.T}}</span> {{$v.Exe}}<br />
             <span class="label label-black">{{`启动命令`|$.T}}</span> {{$v.Cmdline}}<br />
@@ -38,7 +38,7 @@
 	<td class="wrap-only">{{Join $v.Status `, `}}</td>
 	<td class="text-center">
         {{- if gt $v.Pid 0 -}}
-		<a class="label label-danger" data-toggle="tooltip" href="javascript:;" onclick="kill('{{$v.Pid}}','{{$v.Name}}')" title="{{"关闭"|$.T}}">
+		<a class="label label-danger" data-toggle="tooltip" href="javascript:;" onclick="kill('{{$v.Pid}}','{{$v.Name}}')" title="{{`关闭`|$.T}}">
 		<i class="fa fa-times"></i>
 		</a>
         {{- end -}}
