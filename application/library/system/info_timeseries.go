@@ -362,7 +362,7 @@ func (r *RealTimeStatus) sendAlarm(alarmThreshold, value float64, typ string, su
 	}
 	err := cron.SendMail(r.reportEmail[0], `administrator`, title, content, cc...)
 	if err != nil {
-		log.Error(err)
+		log.Errorf(`failed to cron.SendMail: %v`, err)
 	}
 	return r
 }

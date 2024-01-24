@@ -116,7 +116,7 @@ func RunDaemon() {
 	processM := dbschema.NewNgingForeverProcess(nil)
 	_, err := processM.ListByOffset(nil, nil, 0, -1, `disabled`, `N`)
 	if err != nil {
-		log.Error(err)
+		log.Errorf(`failed to query nging_forever_process list: %s`, err.Error())
 		return
 	}
 	for _, p := range processM.Objects() {
@@ -148,7 +148,7 @@ func AddDaemon(p *dbschema.NgingForeverProcess, run ...bool) *goforever.Process 
 		err := json.Unmarshal(b, &data)
 		if err != nil {
 			err = common.JSONBytesParseError(err, b)
-			log.Error(err)
+			log.Errorf(`failed to decode json: %v`, err)
 		} else {
 			for k, v := range data {
 				goforever.SetOption(procs.Options, k, v)
@@ -165,7 +165,7 @@ func AddDaemon(p *dbschema.NgingForeverProcess, run ...bool) *goforever.Process 
 	pidFile := filepath.Join(echo.Wd(), `data/pid/daemon`)
 	err := com.MkdirAll(pidFile, os.ModePerm)
 	if err != nil {
-		log.Error(err)
+		log.Errorf(`%v: %s`, err.Error(), pidFile)
 	}
 	pidFile = filepath.Join(pidFile, fmt.Sprintf(`%d.pid`, p.Id))
 	procs.Pidfile = goforever.Pidfile(pidFile)

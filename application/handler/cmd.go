@@ -164,7 +164,7 @@ func cmdRunner(workdir string, env []string, command string, send chan string, o
 				}
 				err := cmd.Process.Kill()
 				if err != nil {
-					log.Error(err)
+					log.Warn(err)
 				}
 			}
 		}()
@@ -228,7 +228,7 @@ func cmdRunner(workdir string, env []string, command string, send chan string, o
 				log.Info(`[command] timeout: `, command)
 				err := cmd.Process.Kill()
 				if err != nil {
-					log.Error(err)
+					log.Warn(err)
 				}
 				return
 			case <-ctx.Done():
@@ -242,7 +242,7 @@ func cmdRunner(workdir string, env []string, command string, send chan string, o
 				log.Info(`[command] request is cancelled: `, command)
 				err := cmd.Process.Kill()
 				if err != nil {
-					log.Error(err)
+					log.Warn(err)
 				}
 				return
 			}

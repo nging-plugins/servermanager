@@ -45,46 +45,46 @@ func Info(ctx echo.Context) error {
 	var err error
 	cpuInfo, err := cpu.Info()
 	if err != nil {
-		log.Error(err)
+		log.Warn(err)
 	}
 	partitions, err := disk.Partitions(false)
 	if err != nil {
-		log.Error(err)
+		log.Warn(err)
 	}
 	/*
 		ioCounter, err := disk.IOCounters()
 		if err != nil {
-			log.Error(err)
+			log.Warn(err)
 		}
 	*/
 	hostInfo, err := host.Info()
 	if err != nil {
-		log.Error(err)
+		log.Warn(err)
 	}
 	/*
 		avgLoad, err := load.Avg()
 		if err != nil {
-			log.Error(err)
+			log.Warn(err)
 		}
 	*/
 	virtualMem, err := mem.VirtualMemory()
 	if err != nil {
-		log.Error(err)
+		log.Warn(err)
 	}
 	swapMem, err := mem.SwapMemory()
 	if err != nil {
-		log.Error(err)
+		log.Warn(err)
 	}
 	if swapMem.UsedPercent == 0 {
 		swapMem.UsedPercent = (float64(swapMem.Used) / float64(swapMem.Total)) * 100
 	}
 	netIOCounter, err := net.IOCounters(false)
 	if err != nil {
-		log.Error(err)
+		log.Warn(err)
 	}
 	cpuPercent, err := cpu.Percent(0, true)
 	if err != nil {
-		log.Error(err)
+		log.Warn(err)
 	}
 	info := &system.SystemInformation{
 		CPU:        cpuInfo,
@@ -101,7 +101,7 @@ func Info(ctx echo.Context) error {
 	for k, v := range info.Partitions {
 		usageStat, err := disk.Usage(v.Mountpoint)
 		if err != nil {
-			log.Error(err)
+			log.Warn(err)
 			continue
 		}
 		info.DiskUsages[k] = usageStat
@@ -251,7 +251,7 @@ func ProcessList(ctx echo.Context) error {
 				defer cancel()
 				list, err = system.ProcessList(stdCtx)
 				if err != nil {
-					log.Error(err)
+					log.Warn(err)
 				}
 				cp := getCachedProc()
 				cp.processList = list
