@@ -440,8 +440,6 @@ func ExecCommand(id uint) (*dbschema.NgingCommand, string, error) {
 }
 
 func sshExecCmd(sshUser *sshdbschema.NgingSshUser, cmdList []string, w io.Writer) error {
-	sshUser.Passphrase = config.FromFile().Decode(sshUser.Passphrase)
-	sshUser.Password = config.FromFile().Decode(sshUser.Password)
 	return sshmodel.ExecMultiCMD(sshUser, w, cmdList...)
 }
 
