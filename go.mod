@@ -8,17 +8,17 @@ replace github.com/nging-plugins/sshmanager => ../sshmanager
 
 require (
 	github.com/admpub/events v1.3.5
-	github.com/admpub/goforever v0.3.0
+	github.com/admpub/goforever v0.3.1
 	github.com/admpub/gopty v0.1.2
 	github.com/admpub/log v1.3.6
 	github.com/admpub/nging/v5 v5.0.0
 	github.com/admpub/sockjs-go/v3 v3.0.1
 	github.com/admpub/websocket v1.0.4
-	github.com/nging-plugins/sshmanager v1.5.3
+	github.com/nging-plugins/sshmanager v1.5.4
 	github.com/shirou/gopsutil/v3 v3.24.1
 	github.com/stretchr/testify v1.8.4
 	github.com/webx-top/com v1.2.12
-	github.com/webx-top/db v1.27.3
+	github.com/webx-top/db v1.27.4
 	github.com/webx-top/echo v2.42.35+incompatible
 )
 
