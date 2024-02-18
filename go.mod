@@ -7,19 +7,19 @@ replace github.com/admpub/nging/v5 => ../../admpub/nging
 replace github.com/nging-plugins/sshmanager => ../sshmanager
 
 require (
-	github.com/admpub/events v1.3.5
+	github.com/admpub/events v1.3.6
 	github.com/admpub/goforever v0.3.1
 	github.com/admpub/gopty v0.1.2
 	github.com/admpub/log v1.3.6
-	github.com/admpub/nging/v5 v5.0.0
+	github.com/admpub/nging/v5 v5.3.1
 	github.com/admpub/sockjs-go/v3 v3.0.1
 	github.com/admpub/websocket v1.0.4
-	github.com/nging-plugins/sshmanager v1.5.4
+	github.com/nging-plugins/sshmanager v1.5.5
 	github.com/shirou/gopsutil/v3 v3.24.1
 	github.com/stretchr/testify v1.8.4
 	github.com/webx-top/com v1.2.12
-	github.com/webx-top/db v1.27.4
-	github.com/webx-top/echo v2.42.35+incompatible
+	github.com/webx-top/db v1.27.5
+	github.com/webx-top/echo v1.6.1
 )
 
 require (
@@ -50,7 +50,7 @@ require (
 	github.com/admpub/godotenv v1.4.3 // indirect
 	github.com/admpub/goth v0.0.1 // indirect
 	github.com/admpub/humanize v0.0.0-20190501023926-5f826e92c8ca // indirect
-	github.com/admpub/i18n v0.2.6 // indirect
+	github.com/admpub/i18n v0.3.0 // indirect
 	github.com/admpub/identicon v1.0.2 // indirect
 	github.com/admpub/imageproxy v0.9.3 // indirect
 	github.com/admpub/imaging v1.5.0 // indirect
@@ -66,7 +66,7 @@ require (
 	github.com/admpub/pester v0.0.0-20200411024648-005672a2bd48 // indirect
 	github.com/admpub/pp v0.0.7 // indirect
 	github.com/admpub/randomize v0.0.2 // indirect
-	github.com/admpub/realip v0.0.1 // indirect
+	github.com/admpub/realip v0.1.1 // indirect
 	github.com/admpub/redistore v1.2.1 // indirect
 	github.com/admpub/resty/v2 v2.7.1 // indirect
 	github.com/admpub/securecookie v1.3.0 // indirect
@@ -75,7 +75,7 @@ require (
 	github.com/admpub/sonyflake v0.0.1 // indirect
 	github.com/admpub/tail v1.1.0 // indirect
 	github.com/admpub/timeago v1.2.1 // indirect
-	github.com/admpub/web-terminal v0.1.1 // indirect
+	github.com/admpub/web-terminal v0.2.0 // indirect
 	github.com/andybalholm/brotli v1.1.0 // indirect
 	github.com/aymerick/douceur v0.2.0 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
@@ -129,8 +129,8 @@ require (
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/power-devops/perfstat v0.0.0-20221212215047-62379fc7944b // indirect
 	github.com/prometheus/client_golang v1.18.0 // indirect
-	github.com/prometheus/client_model v0.5.0 // indirect
-	github.com/prometheus/common v0.46.0 // indirect
+	github.com/prometheus/client_model v0.6.0 // indirect
+	github.com/prometheus/common v0.47.0 // indirect
 	github.com/prometheus/procfs v0.12.0 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/rwcarlsen/goexif v0.0.0-20190401172101-9e8deecbddbd // indirect
@@ -153,7 +153,7 @@ require (
 	github.com/webx-top/restyclient v0.0.4 // indirect
 	github.com/webx-top/tagfast v0.0.1 // indirect
 	github.com/webx-top/validation v0.0.3 // indirect
-	github.com/webx-top/validator v0.2.0 // indirect
+	github.com/webx-top/validator v0.3.0 // indirect
 	github.com/yusufpapurcu/wmi v1.2.4 // indirect
 	golang.org/x/crypto v0.19.0 // indirect
 	golang.org/x/image v0.15.0 // indirect
