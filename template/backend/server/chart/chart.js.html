@@ -113,6 +113,8 @@ $(function(){
     if($(idElem).length<1){
       clearInterval(window._interval);
       window._interval=null;
+      try {ws.close();} catch (_) {}
+      ws=null;
     }
   },1000);
 });
