@@ -60,7 +60,7 @@ func CommandAdd(ctx echo.Context) error {
 		if id > 0 {
 			err = m.Get(nil, `id`, id)
 			if err == nil {
-				echo.StructToForm(ctx, m.Command, ``, echo.LowerCaseFirstLetter)
+				echo.StructToForm(ctx, m.NgingCommand, ``, echo.LowerCaseFirstLetter)
 				ctx.Request().Form().Set(`id`, `0`)
 			}
 		}
