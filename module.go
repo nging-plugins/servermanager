@@ -32,5 +32,5 @@ var Module = module.Module{
 			RunnerGetter: handler.CommandJob,
 		},
 	},
-	DBSchemaVer: 0.3000,
+	DBSchemaVer: 0.4000,
 }

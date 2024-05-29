@@ -33,25 +33,25 @@ var LeftNavigate = &navigate.Item{
 			Name:    `打开控制台`,
 			Action:  `ptyWS`,
 		},
-		//指令集
+		//快捷命令
 		{
 			Display: true,
-			Name:    `指令集`,
+			Name:    `快捷命令`,
 			Action:  `command`,
 		},
 		{
 			Display: false,
-			Name:    `添加指令`,
+			Name:    `添加快捷命令`,
 			Action:  `command_add`,
 		},
 		{
 			Display: false,
-			Name:    `修改指令`,
+			Name:    `修改快捷命令`,
 			Action:  `command_edit`,
 		},
 		{
 			Display: false,
-			Name:    `删除指令`,
+			Name:    `删除快捷命令`,
 			Action:  `command_delete`,
 		},
 		{

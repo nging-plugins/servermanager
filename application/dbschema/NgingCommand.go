@@ -97,7 +97,7 @@ func NewNgingCommand(ctx echo.Context) *NgingCommand {
 	return m
 }
 
-// NgingCommand 指令集
+// NgingCommand 快捷命令
 type NgingCommand struct {
 	base    factory.Base
 	objects []*NgingCommand

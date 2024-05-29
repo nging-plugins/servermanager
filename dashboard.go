@@ -46,7 +46,7 @@ func init() {
 		Tmpl: `server/dashbord/cmd_list`,
 	}).SetContentGenerator(func(ctx echo.Context) error {
 		user := handler.User(ctx)
-		//指令集
+		//快捷命令
 		cmdMdl := model.NewCommand(ctx)
 		if user.Id == 1 {
 			cmdMdl.ListByOffset(nil, nil, 0, -1)
