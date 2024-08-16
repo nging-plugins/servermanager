@@ -40,7 +40,7 @@
 								<li title="{{`查看内存占用前五的进程`|$.T}}" data-toggle="tooltip" data-container="body" onclick="sendCmd('ps auxw | head -1;ps auxw|sort -rn -k4|head -5')"><i class="fa fa-flag"></i></li>
 								<li title="{{`查看CPU占用前五的进程`|$.T}}" data-toggle="tooltip" data-container="body" onclick="sendCmd('ps auxw|head -1;ps auxw|sort -rn -k3|head -5')"><i class="fa fa-heart"></i></li>
 								{{if $.Stored.isLinux}}
-								<li title="{{`查看服务列表`|$.T}}" data-toggle="tooltip" data-container="body" onclick="sendCmd('systemctl list-unit --type service')"><i class="fa fa-tasks"></i></li>
+								<li title="{{`查看服务列表`|$.T}}" data-toggle="tooltip" data-container="body" onclick="sendCmd('systemctl list-units --type service')"><i class="fa fa-tasks"></i></li>
 								<li title="{{`查看服务日志`|$.T}}" data-toggle="tooltip" data-container="body" onclick="$('#system_cmd').val('');App.insertAtCursor($('#system_cmd')[0],'journalctl -n 100 -u name.service',21,25);"><i class="fa fa-stethoscope"></i></li>
 								{{end}}
 								{{end}}
