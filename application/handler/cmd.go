@@ -99,8 +99,9 @@ func CmdSendBySockJS(c sockjs.Session) error {
 				continue
 			}
 			var (
-				workdir string
-				env     []string
+				workdir   string
+				env       []string
+				hasRemote bool
 			)
 			if command[0] == '>' {
 				id := param.String(command[1:]).Uint()
@@ -110,12 +111,14 @@ func CmdSendBySockJS(c sockjs.Session) error {
 						send <- remoteCmdResultPrefix() + err.Error()
 						continue
 					}
-					if m.Remote == `Y` {
+					if m.Remote == `Y` { // 仅在远程执行的命令
 						send <- remoteCmdResultPrefix() + result
+						hasRemote = true
 						continue
 					}
-					if m.Remote == `A` {
+					if m.Remote == `A` { // 同时在远程和本地执行的命令
 						send <- remoteCmdResultPrefix() + result
+						hasRemote = true
 					}
 					workdir = m.WorkDirectory
 					env = conf.ParseEnvSlice(m.Env)
@@ -127,10 +130,10 @@ func CmdSendBySockJS(c sockjs.Session) error {
 
 			}
 			if w == nil {
-				w, cmd, err = cmdRunner(workdir, env, command, send, func() {
+				w, cmd, err = cmdRunner(c.Request().Context(), workdir, env, command, send, func() {
 					w.Close()
 					w = nil
-				}, duration, c.Request().Context())
+				}, duration, hasRemote)
 				if err != nil {
 					return err
 				}
@@ -150,7 +153,7 @@ func CmdSendBySockJS(c sockjs.Session) error {
 	return nil
 }
 
-func cmdRunner(workdir string, env []string, command string, send chan string, onEnd func(), timeout time.Duration, ctx context.Context) (w io.WriteCloser, cmd *exec.Cmd, err error) {
+func cmdRunner(ctx context.Context, workdir string, env []string, command string, send chan string, onEnd func(), timeout time.Duration, hasRemote bool) (w io.WriteCloser, cmd *exec.Cmd, err error) {
 	params := cron.CmdParams(command)
 	var prefixSended atomic.Bool
 	output := func(b []byte) (e error) {
@@ -174,7 +177,7 @@ func cmdRunner(workdir string, env []string, command string, send chan string, o
 				return e
 			}
 		}
-		if !prefixSended.Swap(true) {
+		if hasRemote && !prefixSended.Swap(true) {
 			send <- localCmdResultPrefix() + string(b)
 			return nil
 		}
@@ -313,8 +316,9 @@ func CmdSendByWebsocket(c *websocket.Conn, ctx echo.Context) error {
 			//notice.OpenMessage(`test`, ``)
 			//notice.Send(`test`, notice.NewMessageWithValue(``, `from: admin`, `test user message`))
 			var (
-				workdir string
-				env     []string
+				workdir   string
+				env       []string
+				hasRemote bool
 			)
 			if command[0] == '>' {
 				id := param.String(command[1:]).Uint()
@@ -333,10 +337,12 @@ func CmdSendByWebsocket(c *websocket.Conn, ctx echo.Context) error {
 					}
 					if m.Remote == `Y` {
 						send <- remoteCmdResultPrefix() + result
+						hasRemote = true
 						continue
 					}
 					if m.Remote == `A` {
 						send <- remoteCmdResultPrefix() + result
+						hasRemote = true
 					}
 					workdir = m.WorkDirectory
 					env = conf.ParseEnvSlice(m.Env)
@@ -355,10 +361,10 @@ func CmdSendByWebsocket(c *websocket.Conn, ctx echo.Context) error {
 				}
 			}
 			if w == nil {
-				w, cmd, err = cmdRunner(workdir, env, command, send, func() {
+				w, cmd, err = cmdRunner(ctx.Request().StdRequest().Context(), workdir, env, command, send, func() {
 					w.Close()
 					w = nil
-				}, duration, ctx.Request().StdRequest().Context())
+				}, duration, hasRemote)
 				if err != nil {
 					return err
 				}
