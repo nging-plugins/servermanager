@@ -87,8 +87,7 @@ func Info(ctx echo.Context) error {
 		log.Warn(err)
 	}
 	info := &system.SystemInformation{
-		CPU:        cpuInfo,
-		CPUPercent: cpuPercent,
+		CPU:        &system.CPUInformation{Percent: cpuPercent},
 		Partitions: partitions,
 		//DiskIO:         ioCounter,
 		Host: hostInfo,
@@ -97,6 +96,11 @@ func Info(ctx echo.Context) error {
 		NetIO:  netIOCounter,
 		Go:     system.Status(),
 	}
+	if len(cpuInfo) > 0 {
+		info.CPU.ModelName = cpuInfo[0].ModelName
+	}
+	info.CPU.Cores, _ = cpu.Counts(false)
+	info.CPU.LogicalCores, _ = cpu.Counts(true)
 	info.DiskUsages = make([]*disk.UsageStat, len(info.Partitions))
 	for k, v := range info.Partitions {
 		usageStat, err := disk.Usage(v.Mountpoint)

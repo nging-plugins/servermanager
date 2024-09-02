@@ -28,8 +28,7 @@ import (
 )
 
 type SystemInformation struct {
-	CPU        []cpu.InfoStat                 `json:",omitempty"`
-	CPUPercent []float64                      `json:",omitempty"`
+	CPU        *CPUInformation                `json:",omitempty"`
 	Partitions []disk.PartitionStat           `json:",omitempty"`
 	DiskUsages []*disk.UsageStat              `json:",omitempty"`
 	DiskIO     map[string]disk.IOCountersStat `json:",omitempty"`
@@ -39,6 +38,13 @@ type SystemInformation struct {
 	NetIO      []net.IOCountersStat           `json:",omitempty"`
 	Temp       []host.TemperatureStat         `json:",omitempty"`
 	Go         *RuntimeStatus                 `json:",omitempty"`
+}
+
+type CPUInformation struct {
+	ModelName    string
+	Cores        int
+	LogicalCores int
+	Percent      []float64 `json:",omitempty"`
 }
 
 type MemoryInformation struct {

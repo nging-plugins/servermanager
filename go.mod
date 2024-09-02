@@ -2,8 +2,6 @@ module github.com/nging-plugins/servermanager
 
 go 1.22.0
 
-toolchain go1.22.6
-
 replace github.com/admpub/nging/v5 => ../../admpub/nging
 
 replace github.com/nging-plugins/sshmanager => ../sshmanager
@@ -19,9 +17,9 @@ require (
 	github.com/nging-plugins/sshmanager v1.5.7
 	github.com/shirou/gopsutil/v3 v3.24.5
 	github.com/stretchr/testify v1.9.0
-	github.com/webx-top/com v1.2.13
-	github.com/webx-top/db v1.27.7
-	github.com/webx-top/echo v1.7.15
+	github.com/webx-top/com v1.3.0
+	github.com/webx-top/db v1.27.9
+	github.com/webx-top/echo v1.8.1
 )
 
 require (
