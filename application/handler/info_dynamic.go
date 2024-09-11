@@ -24,11 +24,10 @@ import (
 
 	"github.com/admpub/sockjs-go/v3/sockjs"
 	"github.com/admpub/websocket"
+	"github.com/coscms/webcore/library/backend"
 	"github.com/webx-top/com"
 	"github.com/webx-top/echo"
 	"github.com/webx-top/echo/param"
-
-	"github.com/admpub/nging/v5/application/handler"
 
 	"github.com/nging-plugins/servermanager/application/library/system"
 )
@@ -38,19 +37,19 @@ func InfoBySockJS(c sockjs.Session) error {
 	safePush := func() (err error) {
 		defer func() {
 			if e := recover(); e != nil {
-				handler.WebSocketLogger.Errorf(`JSONEncode error: %v`, e)
+				backend.WebSocketLogger.Errorf(`JSONEncode error: %v`, e)
 			}
 		}()
 		var b []byte
 		b, err = com.JSONEncode(<-send)
 		if err != nil {
-			handler.WebSocketLogger.Error(`Push error: `, err.Error())
+			backend.WebSocketLogger.Error(`Push error: `, err.Error())
 			return nil
 		}
 		message := com.Bytes2str(b)
 		err = c.Send(message)
 		if err != nil {
-			handler.WebSocketLogger.Error(`Push error: `, err.Error())
+			backend.WebSocketLogger.Error(`Push error: `, err.Error())
 		}
 		return
 	}
@@ -85,7 +84,7 @@ func InfoBySockJS(c sockjs.Session) error {
 	}
 	err := exec(c)
 	if err != nil {
-		handler.WebSocketLogger.Error(err)
+		backend.WebSocketLogger.Error(err)
 	}
 	close(send)
 	return nil
@@ -96,13 +95,13 @@ func InfoByWebsocket(c *websocket.Conn, ctx echo.Context) error {
 	safePush := func() (err error) {
 		defer func() {
 			if e := recover(); e != nil {
-				handler.WebSocketLogger.Errorf(`WriteJSON error: %v`, e)
+				backend.WebSocketLogger.Errorf(`WriteJSON error: %v`, e)
 			}
 		}()
 		message := <-send
 		err = c.WriteJSON(message)
 		if err != nil {
-			handler.WebSocketLogger.Error(`Push error: `, err.Error())
+			backend.WebSocketLogger.Error(`Push error: `, err.Error())
 		}
 		return err
 	}
@@ -137,7 +136,7 @@ func InfoByWebsocket(c *websocket.Conn, ctx echo.Context) error {
 	}
 	err := exec(c)
 	if err != nil {
-		handler.WebSocketLogger.Error(err)
+		backend.WebSocketLogger.Error(err)
 	}
 	close(send)
 	return nil

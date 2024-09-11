@@ -34,9 +34,9 @@ import (
 	"github.com/webx-top/echo/param"
 
 	"github.com/admpub/log"
-	"github.com/admpub/nging/v5/application/library/cron"
-	"github.com/admpub/nging/v5/application/library/msgbox"
-	"github.com/admpub/nging/v5/application/registry/alert"
+	"github.com/coscms/webcore/library/cron"
+	"github.com/coscms/webcore/library/msgbox"
+	"github.com/coscms/webcore/registry/alert"
 )
 
 var (

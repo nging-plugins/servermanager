@@ -25,10 +25,10 @@ import (
 	"github.com/webx-top/echo"
 	"github.com/webx-top/echo/param"
 
-	"github.com/admpub/nging/v5/application/handler"
-	"github.com/admpub/nging/v5/application/library/role"
-	"github.com/admpub/nging/v5/application/library/role/roleutils"
-	"github.com/admpub/nging/v5/application/registry/dashboard"
+	"github.com/coscms/webcore/library/backend"
+	"github.com/coscms/webcore/library/role"
+	"github.com/coscms/webcore/library/role/roleutils"
+	"github.com/coscms/webcore/registry/dashboard"
 
 	"github.com/nging-plugins/servermanager/application/library/system"
 	"github.com/nging-plugins/servermanager/application/model"
@@ -45,7 +45,7 @@ func init() {
 	dashboard.BlockRegister((&dashboard.Block{
 		Tmpl: `server/dashbord/cmd_list`,
 	}).SetContentGenerator(func(ctx echo.Context) error {
-		user := handler.User(ctx)
+		user := backend.User(ctx)
 		//快捷命令
 		cmdMdl := model.NewCommand(ctx)
 		if user.Id == 1 {

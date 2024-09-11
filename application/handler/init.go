@@ -22,9 +22,9 @@ import (
 	"github.com/webx-top/echo"
 	ws "github.com/webx-top/echo/handler/websocket"
 
-	"github.com/admpub/nging/v5/application/library/config"
-	"github.com/admpub/nging/v5/application/library/route"
-	backendRoute "github.com/admpub/nging/v5/application/registry/route"
+	"github.com/coscms/webcore/library/config"
+	"github.com/coscms/webcore/library/route"
+	backendRoute "github.com/coscms/webcore/registry/route"
 )
 
 func RegisterRoute(r *route.Collection) {

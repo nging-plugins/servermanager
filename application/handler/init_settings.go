@@ -4,10 +4,10 @@ import (
 	"github.com/webx-top/com"
 	"github.com/webx-top/echo"
 
-	"github.com/admpub/nging/v5/application/cmd/bootconfig"
-	"github.com/admpub/nging/v5/application/dbschema"
-	"github.com/admpub/nging/v5/application/library/config"
-	"github.com/admpub/nging/v5/application/registry/settings"
+	"github.com/coscms/webcore/cmd/bootconfig"
+	"github.com/coscms/webcore/dbschema"
+	"github.com/coscms/webcore/library/config"
+	"github.com/coscms/webcore/registry/settings"
 
 	"github.com/nging-plugins/servermanager/application/library/system"
 )

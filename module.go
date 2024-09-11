@@ -1,9 +1,9 @@
 package servermanager
 
 import (
-	"github.com/admpub/nging/v5/application/library/config/cmder"
-	"github.com/admpub/nging/v5/application/library/cron"
-	"github.com/admpub/nging/v5/application/library/module"
+	"github.com/coscms/webcore/library/config/cmder"
+	"github.com/coscms/webcore/library/cron"
+	"github.com/coscms/webcore/library/module"
 
 	"github.com/nging-plugins/servermanager/application/handler"
 	pluginCmder "github.com/nging-plugins/servermanager/application/library/cmder"

@@ -3,8 +3,8 @@ package cmder
 import (
 	"io"
 
-	"github.com/admpub/nging/v5/application/library/config"
-	"github.com/admpub/nging/v5/application/library/config/cmder"
+	"github.com/coscms/webcore/library/config"
+	"github.com/coscms/webcore/library/config/cmder"
 	conf "github.com/nging-plugins/servermanager/application/library/config"
 )
 

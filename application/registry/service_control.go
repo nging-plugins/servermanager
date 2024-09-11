@@ -1,5 +1,5 @@
 package registry
 
-import "github.com/admpub/nging/v5/application/registry/dashboard"
+import "github.com/coscms/webcore/registry/dashboard"
 
 var ServiceControls = dashboard.Buttons{}

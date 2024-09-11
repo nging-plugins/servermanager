@@ -38,10 +38,11 @@ import (
 
 	"github.com/admpub/gopty"
 	"github.com/admpub/log"
-	"github.com/admpub/nging/v5/application/handler"
-	"github.com/admpub/nging/v5/application/library/charset"
-	"github.com/admpub/nging/v5/application/library/config"
-	"github.com/admpub/nging/v5/application/library/cron"
+	"github.com/coscms/webcore/library/backend"
+	"github.com/coscms/webcore/library/charset"
+	"github.com/coscms/webcore/library/common"
+	"github.com/coscms/webcore/library/config"
+	"github.com/coscms/webcore/library/cron"
 
 	"github.com/nging-plugins/servermanager/application/dbschema"
 	conf "github.com/nging-plugins/servermanager/application/library/config"
@@ -57,8 +58,8 @@ func Cmd(ctx echo.Context) error {
 	if id > 0 {
 		err := m.Get(nil, `id`, id)
 		if err != nil {
-			handler.SendFail(ctx, err.Error())
-			return ctx.Redirect(handler.URLFor(`/manager/command`))
+			common.SendFail(ctx, err.Error())
+			return ctx.Redirect(backend.URLFor(`/manager/command`))
 		}
 	}
 	ctx.Set(`id`, id)
@@ -75,9 +76,9 @@ func CmdSendBySockJS(c sockjs.Session) error {
 	go func() {
 		for {
 			message := <-send
-			handler.WebSocketLogger.Debug(`Push message: `, message)
+			backend.WebSocketLogger.Debug(`Push message: `, message)
 			if err := c.Send(message); err != nil {
-				handler.WebSocketLogger.Error(`Push error: `, err.Error())
+				backend.WebSocketLogger.Error(`Push error: `, err.Error())
 				return
 			}
 		}
@@ -147,7 +148,7 @@ func CmdSendBySockJS(c sockjs.Session) error {
 	}
 	err := exec(c)
 	if err != nil {
-		handler.WebSocketLogger.Error(err)
+		backend.WebSocketLogger.Error(err)
 	}
 	close(send)
 	return nil
@@ -263,11 +264,11 @@ func cmdContinue(command string, w io.WriteCloser, cmd *exec.Cmd) (err error) {
 		err = cmd.Process.Signal(os.Interrupt)
 		if err != nil {
 			if !strings.HasPrefix(err.Error(), `not supported by `) {
-				handler.WebSocketLogger.Error(err)
+				backend.WebSocketLogger.Error(err)
 			}
 			err = cmd.Process.Kill()
 			if err != nil {
-				handler.WebSocketLogger.Error(err)
+				backend.WebSocketLogger.Error(err)
 			}
 		}
 	default:
@@ -287,9 +288,9 @@ func CmdSendByWebsocket(c *websocket.Conn, ctx echo.Context) error {
 	go func() {
 		for {
 			message := <-send
-			handler.WebSocketLogger.Debug(`Push message: `, message)
+			backend.WebSocketLogger.Debug(`Push message: `, message)
 			if err := c.WriteMessage(websocket.TextMessage, []byte(message)); err != nil {
-				handler.WebSocketLogger.Error(`Push error: `, err.Error())
+				backend.WebSocketLogger.Error(`Push error: `, err.Error())
 				return
 			}
 		}
@@ -378,7 +379,7 @@ func CmdSendByWebsocket(c *websocket.Conn, ctx echo.Context) error {
 	}
 	err := exec(c)
 	if err != nil {
-		handler.WebSocketLogger.Error(err)
+		backend.WebSocketLogger.Error(err)
 	}
 	close(send)
 	return nil

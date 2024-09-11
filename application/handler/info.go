@@ -26,6 +26,8 @@ import (
 	"sync"
 	"time"
 
+	"github.com/coscms/webcore/library/backend"
+	"github.com/coscms/webcore/library/common"
 	"github.com/shirou/gopsutil/v3/cpu"
 	"github.com/shirou/gopsutil/v3/disk"
 	"github.com/shirou/gopsutil/v3/host"
@@ -37,7 +39,6 @@ import (
 	"github.com/webx-top/echo/param"
 
 	"github.com/admpub/log"
-	"github.com/admpub/nging/v5/application/handler"
 	"github.com/nging-plugins/servermanager/application/library/system"
 )
 
@@ -269,7 +270,7 @@ func ProcessList(ctx echo.Context) error {
 		}
 	}
 	if force {
-		return ctx.Redirect(handler.URLFor(`/server/processes`))
+		return ctx.Redirect(backend.URLFor(`/server/processes`))
 	}
 	switch ctx.Form(`sort`) {
 	case `cpu`:
@@ -335,5 +336,5 @@ func ProcessList(ctx echo.Context) error {
 		})
 		return ctx.JSON(data)
 	}
-	return ctx.Render(`server/processes`, handler.Err(ctx, err))
+	return ctx.Render(`server/processes`, common.Err(ctx, err))
 }

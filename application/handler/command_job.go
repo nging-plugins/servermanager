@@ -5,9 +5,9 @@ import (
 	"errors"
 	"time"
 
-	"github.com/admpub/nging/v5/application/library/charset"
-	"github.com/admpub/nging/v5/application/library/cron"
-	"github.com/admpub/nging/v5/application/library/notice"
+	"github.com/coscms/webcore/library/charset"
+	"github.com/coscms/webcore/library/cron"
+	"github.com/coscms/webcore/library/notice"
 	"github.com/webx-top/com"
 	"github.com/webx-top/echo/param"
 

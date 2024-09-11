@@ -28,9 +28,9 @@ import (
 	"github.com/webx-top/db"
 	"github.com/webx-top/echo"
 
-	"github.com/admpub/nging/v5/application/handler"
-	"github.com/admpub/nging/v5/application/library/common"
-	"github.com/admpub/nging/v5/application/library/config"
+	"github.com/coscms/webcore/library/backend"
+	"github.com/coscms/webcore/library/common"
+	"github.com/coscms/webcore/library/config"
 
 	conf "github.com/nging-plugins/servermanager/application/library/config"
 	"github.com/nging-plugins/servermanager/application/model"
@@ -39,8 +39,8 @@ import (
 func DaemonIndex(ctx echo.Context) error {
 	m := model.NewForeverProcess(ctx)
 	cond := db.Cond{}
-	_, err := handler.PagingWithListerCond(ctx, m, cond)
-	ret := handler.Err(ctx, err)
+	_, err := common.PagingWithListerCond(ctx, m, cond)
+	ret := common.Err(ctx, err)
 	configs := m.Objects()
 	for _, c := range configs {
 		if c.Disabled == `N` {
@@ -65,7 +65,7 @@ func ignoreOptionsPrefix(k string, v []string) (string, []string) {
 }
 
 func DaemonAdd(ctx echo.Context) error {
-	user := handler.User(ctx)
+	user := backend.User(ctx)
 	var err error
 	m := model.NewForeverProcess(ctx)
 	if ctx.IsPost() {
@@ -91,8 +91,8 @@ func DaemonAdd(ctx echo.Context) error {
 		if m.Disabled == `N` {
 			conf.AddDaemon(m.NgingForeverProcess, true)
 		}
-		handler.SendOk(ctx, ctx.T(`操作成功`))
-		return ctx.Redirect(handler.URLFor(`/server/daemon_index`))
+		common.SendOk(ctx, ctx.T(`操作成功`))
+		return ctx.Redirect(backend.URLFor(`/server/daemon_index`))
 	} else {
 		id := ctx.Formx(`copyId`).Uint()
 		if id > 0 {
@@ -166,8 +166,8 @@ func DaemonEdit(ctx echo.Context) error {
 				conf.Daemon.StopChild(fmt.Sprint(m.Id))
 			}
 		}
-		handler.SendOk(ctx, ctx.T(`操作成功`))
-		return ctx.Redirect(handler.URLFor(`/server/daemon_index`))
+		common.SendOk(ctx, ctx.T(`操作成功`))
+		return ctx.Redirect(backend.URLFor(`/server/daemon_index`))
 	} else if ctx.IsAjax() {
 		setDisabled := ctx.Query(`disabled`)
 		if len(setDisabled) > 0 {
@@ -232,12 +232,12 @@ func DaemonDelete(ctx echo.Context) error {
 		conf.Daemon.StopChild(fmt.Sprint(m.Id))
 	}
 	if err == nil {
-		handler.SendOk(ctx, ctx.T(`操作成功`))
+		common.SendOk(ctx, ctx.T(`操作成功`))
 	} else {
-		handler.SendFail(ctx, err.Error())
+		common.SendFail(ctx, err.Error())
 	}
 
-	return ctx.Redirect(handler.URLFor(`/server/daemon_index`))
+	return ctx.Redirect(backend.URLFor(`/server/daemon_index`))
 }
 
 func DaemonRestart(ctx echo.Context) error {

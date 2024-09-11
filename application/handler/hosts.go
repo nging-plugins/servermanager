@@ -21,10 +21,9 @@ package handler
 import (
 	"os"
 
+	"github.com/coscms/webcore/library/common"
 	"github.com/webx-top/com"
 	"github.com/webx-top/echo"
-
-	"github.com/admpub/nging/v5/application/handler"
 
 	"github.com/nging-plugins/servermanager/application/library/hosts"
 )
@@ -55,5 +54,5 @@ func Hosts(ctx echo.Context) error {
 	if err == nil {
 		ctx.Request().Form().Set(`hosts`, com.Bytes2str(b))
 	}
-	return ctx.Render(`server/hosts`, handler.Err(ctx, err))
+	return ctx.Render(`server/hosts`, common.Err(ctx, err))
 }

@@ -23,8 +23,8 @@ import (
 	"github.com/webx-top/echo"
 	"github.com/webx-top/echo/code"
 
-	"github.com/admpub/nging/v5/application/handler"
-	"github.com/admpub/nging/v5/application/library/common"
+	"github.com/coscms/webcore/library/backend"
+	"github.com/coscms/webcore/library/common"
 	"github.com/webx-top/db/lib/factory/pagination"
 
 	"github.com/nging-plugins/servermanager/application/model"
@@ -33,11 +33,11 @@ import (
 
 func Command(ctx echo.Context) error {
 	m := model.NewCommand(ctx)
-	_, err := handler.PagingWithLister(ctx, handler.NewLister(m, nil, func(r db.Result) db.Result {
+	_, err := common.PagingWithLister(ctx, common.NewLister(m, nil, func(r db.Result) db.Result {
 		return r.OrderBy(`-id`)
 	}))
 	ctx.Set(`listData`, m.Objects())
-	return ctx.Render(`server/command`, handler.Err(ctx, err))
+	return ctx.Render(`server/command`, common.Err(ctx, err))
 }
 
 func CommandAdd(ctx echo.Context) error {
@@ -52,8 +52,8 @@ func CommandAdd(ctx echo.Context) error {
 			_, err = m.Add()
 		}
 		if err == nil {
-			handler.SendOk(ctx, ctx.T(`操作成功`))
-			return ctx.Redirect(handler.URLFor(`/server/command`))
+			common.SendOk(ctx, ctx.T(`操作成功`))
+			return ctx.Redirect(backend.URLFor(`/server/command`))
 		}
 	} else {
 		id := ctx.Formx(`copyId`).Uint()
@@ -66,7 +66,7 @@ func CommandAdd(ctx echo.Context) error {
 		}
 	}
 	ctx.Set(`activeURL`, `/server/command`)
-	return ctx.Render(`server/command_edit`, handler.Err(ctx, err))
+	return ctx.Render(`server/command_edit`, common.Err(ctx, err))
 }
 
 func ajaxSelectSSHAccounts(ctx echo.Context) error {
@@ -92,8 +92,8 @@ func CommandEdit(ctx echo.Context) error {
 	m := model.NewCommand(ctx)
 	err := m.Get(nil, `id`, id)
 	if err != nil {
-		handler.SendFail(ctx, err.Error())
-		return ctx.Redirect(handler.URLFor(`/server/command`))
+		common.SendFail(ctx, err.Error())
+		return ctx.Redirect(backend.URLFor(`/server/command`))
 	}
 	if ctx.IsPost() {
 		err = ctx.MustBind(m.NgingCommand)
@@ -102,8 +102,8 @@ func CommandEdit(ctx echo.Context) error {
 			err = m.Edit(nil, `id`, id)
 		}
 		if err == nil {
-			handler.SendOk(ctx, ctx.T(`修改成功`))
-			return ctx.Redirect(handler.URLFor(`/server/command`))
+			common.SendOk(ctx, ctx.T(`修改成功`))
+			return ctx.Redirect(backend.URLFor(`/server/command`))
 		}
 	} else if ctx.IsAjax() {
 		disabled := ctx.Query(`disabled`)
@@ -125,7 +125,7 @@ func CommandEdit(ctx echo.Context) error {
 
 	echo.StructToForm(ctx, m.NgingCommand, ``, echo.LowerCaseFirstLetter)
 	ctx.Set(`activeURL`, `/server/command`)
-	return ctx.Render(`server/command_edit`, handler.Err(ctx, err))
+	return ctx.Render(`server/command_edit`, common.Err(ctx, err))
 }
 
 func CommandDelete(ctx echo.Context) error {
@@ -133,10 +133,10 @@ func CommandDelete(ctx echo.Context) error {
 	m := model.NewCommand(ctx)
 	err := m.Delete(nil, db.Cond{`id`: id})
 	if err == nil {
-		handler.SendOk(ctx, ctx.T(`操作成功`))
+		common.SendOk(ctx, ctx.T(`操作成功`))
 	} else {
-		handler.SendFail(ctx, err.Error())
+		common.SendFail(ctx, err.Error())
 	}
 
-	return ctx.Redirect(handler.URLFor(`/server/command`))
+	return ctx.Redirect(backend.URLFor(`/server/command`))
 }
