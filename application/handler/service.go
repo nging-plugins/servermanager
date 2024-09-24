@@ -27,7 +27,7 @@ import (
 	"github.com/webx-top/echo"
 
 	"github.com/coscms/webcore/library/config"
-	"github.com/coscms/webcore/registry/dashboard"
+	"github.com/coscms/webcore/library/dashboard"
 
 	"github.com/nging-plugins/servermanager/application/registry"
 )

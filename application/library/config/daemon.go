@@ -33,9 +33,9 @@ import (
 	"github.com/webx-top/echo"
 
 	ngingdbschema "github.com/coscms/webcore/dbschema"
-	"github.com/coscms/webcore/library/common"
 	"github.com/coscms/webcore/library/config"
 	"github.com/coscms/webcore/library/cron"
+	"github.com/coscms/webcore/library/nerrors"
 	"github.com/nging-plugins/servermanager/application/dbschema"
 )
 
@@ -147,7 +147,7 @@ func AddDaemon(p *dbschema.NgingForeverProcess, run ...bool) *goforever.Process 
 		data := map[string]interface{}{}
 		err := json.Unmarshal(b, &data)
 		if err != nil {
-			err = common.JSONBytesParseError(err, b)
+			err = nerrors.JSONBytesParseError(err, b)
 			log.Errorf(`failed to decode json: %v`, err)
 		} else {
 			for k, v := range data {

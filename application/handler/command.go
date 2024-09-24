@@ -25,6 +25,7 @@ import (
 
 	"github.com/coscms/webcore/library/backend"
 	"github.com/coscms/webcore/library/common"
+	"github.com/coscms/webcore/library/nsql"
 	"github.com/webx-top/db/lib/factory/pagination"
 
 	"github.com/nging-plugins/servermanager/application/model"
@@ -72,7 +73,7 @@ func CommandAdd(ctx echo.Context) error {
 func ajaxSelectSSHAccounts(ctx echo.Context) error {
 	sshUser := sshmodel.NewSshUser(ctx)
 	cond := db.NewCompounds()
-	common.SelectPageCond(ctx, cond)
+	nsql.SelectPageCond(ctx, cond)
 	_, err := pagination.NewLister(sshUser, nil, func(r db.Result) db.Result {
 		return r.Select(`id`, `name`).OrderBy(`-id`)
 	}, cond.And()).Paging(ctx)

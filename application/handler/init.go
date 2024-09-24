@@ -23,12 +23,12 @@ import (
 	ws "github.com/webx-top/echo/handler/websocket"
 
 	"github.com/coscms/webcore/library/config"
-	"github.com/coscms/webcore/library/route"
+	"github.com/coscms/webcore/library/module"
 	backendRoute "github.com/coscms/webcore/registry/route"
 )
 
-func RegisterRoute(r *route.Collection) {
-	r.Backend.RegisterToGroup(`/server`, registerRoute)
+func RegisterRoute(r module.Router) {
+	r.Backend().RegisterToGroup(`/server`, registerRoute)
 }
 
 func registerRoute(g echo.RouteRegister) {

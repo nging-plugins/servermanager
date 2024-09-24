@@ -26,23 +26,24 @@ import (
 	"github.com/webx-top/echo/param"
 
 	"github.com/coscms/webcore/library/backend"
+	"github.com/coscms/webcore/library/dashboard"
+	"github.com/coscms/webcore/library/httpserver"
 	"github.com/coscms/webcore/library/role"
 	"github.com/coscms/webcore/library/role/roleutils"
-	"github.com/coscms/webcore/registry/dashboard"
 
 	"github.com/nging-plugins/servermanager/application/library/system"
 	"github.com/nging-plugins/servermanager/application/model"
 )
 
 func init() {
-	dashboard.BlockRegister((&dashboard.Block{
+	httpserver.Backend.Dashboard.Blocks.Register((&dashboard.Block{
 		Tmpl:   `server/chart/cpu`,
 		Footer: `server/chart/cpu.js`,
 	}).SetContentGenerator(func(ctx echo.Context) error {
 		ctx.Set(`systemRealtimeStatusIsListening`, system.RealTimeStatusIsListening())
 		return nil
 	}))
-	dashboard.BlockRegister((&dashboard.Block{
+	httpserver.Backend.Dashboard.Blocks.Register((&dashboard.Block{
 		Tmpl: `server/dashbord/cmd_list`,
 	}).SetContentGenerator(func(ctx echo.Context) error {
 		user := backend.User(ctx)

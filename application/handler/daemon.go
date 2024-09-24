@@ -31,6 +31,7 @@ import (
 	"github.com/coscms/webcore/library/backend"
 	"github.com/coscms/webcore/library/common"
 	"github.com/coscms/webcore/library/config"
+	"github.com/coscms/webcore/library/nlog"
 
 	conf "github.com/nging-plugins/servermanager/application/library/config"
 	"github.com/nging-plugins/servermanager/application/model"
@@ -269,5 +270,5 @@ func DaemonLog(ctx echo.Context) error {
 	default:
 		logFile = m.Logfile
 	}
-	return common.LogShow(ctx, logFile, echo.H{`title`: m.Name, `charset`: m.LogCharset})
+	return nlog.LogShow(ctx, logFile, echo.H{`title`: m.Name, `charset`: m.LogCharset})
 }
