@@ -234,10 +234,14 @@ func (a *NgingForeverProcess) Struct_() string {
 }
 
 func (a *NgingForeverProcess) Name_() string {
-	if a.base.Namer() != nil {
-		return WithPrefix(a.base.Namer()(a))
+	b := a
+	if b == nil {
+		b = &NgingForeverProcess{}
 	}
-	return WithPrefix(factory.TableNamerGet(a.Short_())(a))
+	if b.base.Namer() != nil {
+		return WithPrefix(b.base.Namer()(b))
+	}
+	return WithPrefix(factory.TableNamerGet(b.Short_())(b))
 }
 
 func (a *NgingForeverProcess) CPAFrom(source factory.Model) factory.Model {
@@ -515,7 +519,7 @@ func (a *NgingForeverProcess) UpdateFields(mw func(db.Result) db.Result, kvset m
 	}
 	m := *a
 	m.FromRow(kvset)
-	var editColumns []string
+	editColumns := make([]string, 0, len(kvset))
 	for column := range kvset {
 		editColumns = append(editColumns, column)
 	}
@@ -550,7 +554,7 @@ func (a *NgingForeverProcess) UpdatexFields(mw func(db.Result) db.Result, kvset 
 	}
 	m := *a
 	m.FromRow(kvset)
-	var editColumns []string
+	editColumns := make([]string, 0, len(kvset))
 	for column := range kvset {
 		editColumns = append(editColumns, column)
 	}
@@ -792,6 +796,9 @@ func (a *NgingForeverProcess) AsMap(onlyFields ...string) param.Store {
 
 func (a *NgingForeverProcess) FromRow(row map[string]interface{}) {
 	for key, value := range row {
+		if _, ok := value.(db.RawValue); ok {
+			continue
+		}
 		switch key {
 		case "id":
 			a.Id = param.AsUint(value)
@@ -848,6 +855,160 @@ func (a *NgingForeverProcess) FromRow(row map[string]interface{}) {
 		case "notify_email":
 			a.NotifyEmail = param.AsString(value)
 		}
+	}
+}
+
+func (a *NgingForeverProcess) GetField(field string) interface{} {
+	switch field {
+	case "Id":
+		return a.Id
+	case "Uid":
+		return a.Uid
+	case "Name":
+		return a.Name
+	case "Command":
+		return a.Command
+	case "Workdir":
+		return a.Workdir
+	case "Env":
+		return a.Env
+	case "Args":
+		return a.Args
+	case "Pidfile":
+		return a.Pidfile
+	case "Logfile":
+		return a.Logfile
+	case "Errfile":
+		return a.Errfile
+	case "LogCharset":
+		return a.LogCharset
+	case "Respawn":
+		return a.Respawn
+	case "Delay":
+		return a.Delay
+	case "Ping":
+		return a.Ping
+	case "Pid":
+		return a.Pid
+	case "Status":
+		return a.Status
+	case "Debug":
+		return a.Debug
+	case "Disabled":
+		return a.Disabled
+	case "Created":
+		return a.Created
+	case "Updated":
+		return a.Updated
+	case "Error":
+		return a.Error
+	case "Lastrun":
+		return a.Lastrun
+	case "Description":
+		return a.Description
+	case "User":
+		return a.User
+	case "Options":
+		return a.Options
+	case "EnableNotify":
+		return a.EnableNotify
+	case "NotifyEmail":
+		return a.NotifyEmail
+	default:
+		return nil
+	}
+}
+
+func (a *NgingForeverProcess) GetAllFieldNames() []string {
+	return []string{
+		"Id",
+		"Uid",
+		"Name",
+		"Command",
+		"Workdir",
+		"Env",
+		"Args",
+		"Pidfile",
+		"Logfile",
+		"Errfile",
+		"LogCharset",
+		"Respawn",
+		"Delay",
+		"Ping",
+		"Pid",
+		"Status",
+		"Debug",
+		"Disabled",
+		"Created",
+		"Updated",
+		"Error",
+		"Lastrun",
+		"Description",
+		"User",
+		"Options",
+		"EnableNotify",
+		"NotifyEmail",
+	}
+}
+
+func (a *NgingForeverProcess) HasField(field string) bool {
+	switch field {
+	case "Id":
+		return true
+	case "Uid":
+		return true
+	case "Name":
+		return true
+	case "Command":
+		return true
+	case "Workdir":
+		return true
+	case "Env":
+		return true
+	case "Args":
+		return true
+	case "Pidfile":
+		return true
+	case "Logfile":
+		return true
+	case "Errfile":
+		return true
+	case "LogCharset":
+		return true
+	case "Respawn":
+		return true
+	case "Delay":
+		return true
+	case "Ping":
+		return true
+	case "Pid":
+		return true
+	case "Status":
+		return true
+	case "Debug":
+		return true
+	case "Disabled":
+		return true
+	case "Created":
+		return true
+	case "Updated":
+		return true
+	case "Error":
+		return true
+	case "Lastrun":
+		return true
+	case "Description":
+		return true
+	case "User":
+		return true
+	case "Options":
+		return true
+	case "EnableNotify":
+		return true
+	case "NotifyEmail":
+		return true
+	default:
+		return false
 	}
 }
 
@@ -1023,17 +1184,19 @@ func (a *NgingForeverProcess) AsRow(onlyFields ...string) param.Store {
 }
 
 func (a *NgingForeverProcess) ListPage(cond *db.Compounds, sorts ...interface{}) error {
-	_, err := pagination.NewLister(a, nil, func(r db.Result) db.Result {
-		return r.OrderBy(sorts...)
-	}, cond.And()).Paging(a.Context())
-	return err
+	return pagination.ListPage(a, cond, sorts...)
 }
 
 func (a *NgingForeverProcess) ListPageAs(recv interface{}, cond *db.Compounds, sorts ...interface{}) error {
-	_, err := pagination.NewLister(a, recv, func(r db.Result) db.Result {
-		return r.OrderBy(sorts...)
-	}, cond.And()).Paging(a.Context())
-	return err
+	return pagination.ListPageAs(a, recv, cond, sorts...)
+}
+
+func (a *NgingForeverProcess) ListPageByOffset(cond *db.Compounds, sorts ...interface{}) error {
+	return pagination.ListPageByOffset(a, cond, sorts...)
+}
+
+func (a *NgingForeverProcess) ListPageByOffsetAs(recv interface{}, cond *db.Compounds, sorts ...interface{}) error {
+	return pagination.ListPageByOffsetAs(a, recv, cond, sorts...)
 }
 
 func (a *NgingForeverProcess) BatchValidate(kvset map[string]interface{}) error {

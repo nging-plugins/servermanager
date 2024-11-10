@@ -218,10 +218,14 @@ func (a *NgingCommand) Struct_() string {
 }
 
 func (a *NgingCommand) Name_() string {
-	if a.base.Namer() != nil {
-		return WithPrefix(a.base.Namer()(a))
+	b := a
+	if b == nil {
+		b = &NgingCommand{}
 	}
-	return WithPrefix(factory.TableNamerGet(a.Short_())(a))
+	if b.base.Namer() != nil {
+		return WithPrefix(b.base.Namer()(b))
+	}
+	return WithPrefix(factory.TableNamerGet(b.Short_())(b))
 }
 
 func (a *NgingCommand) CPAFrom(source factory.Model) factory.Model {
@@ -479,7 +483,7 @@ func (a *NgingCommand) UpdateFields(mw func(db.Result) db.Result, kvset map[stri
 	}
 	m := *a
 	m.FromRow(kvset)
-	var editColumns []string
+	editColumns := make([]string, 0, len(kvset))
 	for column := range kvset {
 		editColumns = append(editColumns, column)
 	}
@@ -509,7 +513,7 @@ func (a *NgingCommand) UpdatexFields(mw func(db.Result) db.Result, kvset map[str
 	}
 	m := *a
 	m.FromRow(kvset)
-	var editColumns []string
+	editColumns := make([]string, 0, len(kvset))
 	for column := range kvset {
 		editColumns = append(editColumns, column)
 	}
@@ -681,6 +685,9 @@ func (a *NgingCommand) AsMap(onlyFields ...string) param.Store {
 
 func (a *NgingCommand) FromRow(row map[string]interface{}) {
 	for key, value := range row {
+		if _, ok := value.(db.RawValue); ok {
+			continue
+		}
 		switch key {
 		case "id":
 			a.Id = param.AsUint(value)
@@ -705,6 +712,80 @@ func (a *NgingCommand) FromRow(row map[string]interface{}) {
 		case "ssh_account_id":
 			a.SshAccountId = param.AsString(value)
 		}
+	}
+}
+
+func (a *NgingCommand) GetField(field string) interface{} {
+	switch field {
+	case "Id":
+		return a.Id
+	case "Name":
+		return a.Name
+	case "Description":
+		return a.Description
+	case "Command":
+		return a.Command
+	case "WorkDirectory":
+		return a.WorkDirectory
+	case "Env":
+		return a.Env
+	case "Created":
+		return a.Created
+	case "Updated":
+		return a.Updated
+	case "Disabled":
+		return a.Disabled
+	case "Remote":
+		return a.Remote
+	case "SshAccountId":
+		return a.SshAccountId
+	default:
+		return nil
+	}
+}
+
+func (a *NgingCommand) GetAllFieldNames() []string {
+	return []string{
+		"Id",
+		"Name",
+		"Description",
+		"Command",
+		"WorkDirectory",
+		"Env",
+		"Created",
+		"Updated",
+		"Disabled",
+		"Remote",
+		"SshAccountId",
+	}
+}
+
+func (a *NgingCommand) HasField(field string) bool {
+	switch field {
+	case "Id":
+		return true
+	case "Name":
+		return true
+	case "Description":
+		return true
+	case "Command":
+		return true
+	case "WorkDirectory":
+		return true
+	case "Env":
+		return true
+	case "Created":
+		return true
+	case "Updated":
+		return true
+	case "Disabled":
+		return true
+	case "Remote":
+		return true
+	case "SshAccountId":
+		return true
+	default:
+		return false
 	}
 }
 
@@ -800,17 +881,19 @@ func (a *NgingCommand) AsRow(onlyFields ...string) param.Store {
 }
 
 func (a *NgingCommand) ListPage(cond *db.Compounds, sorts ...interface{}) error {
-	_, err := pagination.NewLister(a, nil, func(r db.Result) db.Result {
-		return r.OrderBy(sorts...)
-	}, cond.And()).Paging(a.Context())
-	return err
+	return pagination.ListPage(a, cond, sorts...)
 }
 
 func (a *NgingCommand) ListPageAs(recv interface{}, cond *db.Compounds, sorts ...interface{}) error {
-	_, err := pagination.NewLister(a, recv, func(r db.Result) db.Result {
-		return r.OrderBy(sorts...)
-	}, cond.And()).Paging(a.Context())
-	return err
+	return pagination.ListPageAs(a, recv, cond, sorts...)
+}
+
+func (a *NgingCommand) ListPageByOffset(cond *db.Compounds, sorts ...interface{}) error {
+	return pagination.ListPageByOffset(a, cond, sorts...)
+}
+
+func (a *NgingCommand) ListPageByOffsetAs(recv interface{}, cond *db.Compounds, sorts ...interface{}) error {
+	return pagination.ListPageByOffsetAs(a, recv, cond, sorts...)
 }
 
 func (a *NgingCommand) BatchValidate(kvset map[string]interface{}) error {
