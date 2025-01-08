@@ -14,7 +14,7 @@ require (
 	github.com/admpub/sockjs-go/v3 v3.0.1
 	github.com/admpub/websocket v1.0.4
 	github.com/coscms/webcore v0.6.39
-	github.com/nging-plugins/sshmanager v1.6.1
+	github.com/nging-plugins/sshmanager v1.8.0
 	github.com/shirou/gopsutil/v3 v3.24.5
 	github.com/stretchr/testify v1.10.0
 	github.com/webx-top/com v1.3.20
@@ -93,7 +93,6 @@ require (
 	github.com/fcjr/aia-transport-go v1.2.2 // indirect
 	github.com/francoispqt/gojay v1.2.13 // indirect
 	github.com/friendsofgo/errors v0.9.2 // indirect
-	github.com/fsnotify/fsnotify v1.8.0 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.8 // indirect
 	github.com/go-errors/errors v1.5.1 // indirect
 	github.com/go-ole/go-ole v1.3.0 // indirect
