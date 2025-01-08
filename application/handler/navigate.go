@@ -1,122 +1,125 @@
 package handler
 
-import "github.com/coscms/webcore/library/navigate"
+import (
+	"github.com/coscms/webcore/library/navigate"
+	"github.com/webx-top/echo"
+)
 
 var LeftNavigate = &navigate.Item{
 	Display: true,
-	Name:    `服务器`,
+	Name:    echo.T(`服务器`),
 	Action:  `server`,
 	Icon:    `desktop`,
 	Children: &navigate.List{
 		{
 			Display: true,
-			Name:    `服务器信息`,
+			Name:    echo.T(`服务器信息`),
 			Action:  `sysinfo`,
 		},
 		{
 			Display: false,
-			Name:    `服务器进程`,
+			Name:    echo.T(`服务器进程`),
 			Action:  `processes`,
 		},
 		{
 			Display: true,
-			Name:    `网络端口`,
+			Name:    echo.T(`网络端口`),
 			Action:  `netstat`,
 		},
 		{
 			Display: true,
-			Name:    `执行命令`,
+			Name:    echo.T(`执行命令`),
 			Action:  `cmd`,
 		},
 		{
 			Display: false,
-			Name:    `打开控制台`,
+			Name:    echo.T(`打开控制台`),
 			Action:  `ptyWS`,
 		},
 		//快捷命令
 		{
 			Display: true,
-			Name:    `快捷命令`,
+			Name:    echo.T(`快捷命令`),
 			Action:  `command`,
 		},
 		{
 			Display: false,
-			Name:    `添加快捷命令`,
+			Name:    echo.T(`添加快捷命令`),
 			Action:  `command_add`,
 		},
 		{
 			Display: false,
-			Name:    `修改快捷命令`,
+			Name:    echo.T(`修改快捷命令`),
 			Action:  `command_edit`,
 		},
 		{
 			Display: false,
-			Name:    `删除快捷命令`,
+			Name:    echo.T(`删除快捷命令`),
 			Action:  `command_delete`,
 		},
 		{
 			Display: true,
-			Name:    `服务管理`,
+			Name:    echo.T(`服务管理`),
 			Action:  `service`,
 		},
 		{
 			Display: false,
-			Name:    `查看服务日志`,
+			Name:    echo.T(`查看服务日志`),
 			Action:  `log/:category`,
 		},
 		{
 			Display: true,
-			Name:    `hosts文件`,
+			Name:    echo.T(`hosts文件`),
 			Action:  `hosts`,
 		},
 		{
 			Display: false,
-			Name:    `查看进程详情`,
+			Name:    echo.T(`查看进程详情`),
 			Action:  `process/:pid`,
 		},
 		{
 			Display: false,
-			Name:    `杀死进程`,
+			Name:    echo.T(`杀死进程`),
 			Action:  `procskill/:pid`,
 		},
 		{
 			Display: false,
-			Name:    `命令对话`,
+			Name:    echo.T(`命令对话`),
 			Action:  `cmdSend/*`,
 		},
 		{
 			Display: false,
-			Name:    `发送命令`,
+			Name:    echo.T(`发送命令`),
 			Action:  `cmdSendWS`,
 		},
 		{
 			Display: true,
-			Name:    `进程值守`,
+			Name:    echo.T(`进程值守`),
 			Action:  `daemon_index`,
 		},
 		{
 			Display: false,
-			Name:    `进程值守日志`,
+			Name:    echo.T(`进程值守日志`),
 			Action:  `daemon_log`,
 		},
 		{
 			Display: false,
-			Name:    `添加值守配置`,
+			Name:    echo.T(`添加值守配置`),
 			Action:  `daemon_add`,
 		},
 		{
 			Display: false,
-			Name:    `修改值守配置`,
+			Name:    echo.T(`修改值守配置`),
 			Action:  `daemon_edit`,
 		},
 		{
 			Display: false,
-			Name:    `删除值守配置`,
+			Name:    echo.T(`删除值守配置`),
 			Action:  `daemon_delete`,
 		},
 		{
 			Display: false,
-			Name:    `重启值守`,
+			Name:    echo.T(`重启值守`),
 			Action:  `daemon_restart`,
 		},
 	},
