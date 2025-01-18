@@ -8,7 +8,7 @@ go 1.23
 
 require (
 	github.com/admpub/events v1.3.6
-	github.com/admpub/goforever v0.3.5
+	github.com/admpub/goforever v0.3.6
 	github.com/admpub/gopty v0.1.2
 	github.com/admpub/log v1.3.6
 	github.com/admpub/sockjs-go/v3 v3.0.1
@@ -141,7 +141,6 @@ require (
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/rwcarlsen/goexif v0.0.0-20190401172101-9e8deecbddbd // indirect
 	github.com/segmentio/fasthash v1.0.3 // indirect
-	github.com/shirou/gopsutil v3.21.11+incompatible // indirect
 	github.com/shoenig/go-m1cpu v0.1.6 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/tklauser/go-sysconf v0.3.14 // indirect
@@ -163,7 +162,7 @@ require (
 	github.com/webx-top/validator v0.3.0 // indirect
 	github.com/wenlng/go-captcha-assets v1.0.1 // indirect
 	github.com/yusufpapurcu/wmi v1.2.4 // indirect
-	golang.org/x/crypto v0.31.0 // indirect
+	golang.org/x/crypto v0.32.0 // indirect
 	golang.org/x/image v0.23.0 // indirect
 	golang.org/x/net v0.33.0 // indirect
 	golang.org/x/oauth2 v0.25.0 // indirect
