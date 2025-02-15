@@ -64,19 +64,19 @@
 								</td>
 								<td id="process-status-{{$v.Id}}">
 									{{- if eq $v.Status "running" -}}
-									<span class="status-run fa fa-play text-success"> {{"运行中"|$.T}}</span>
+									<span class="status-run text-success"><i class="fa fa-play"></i> {{"运行中"|$.T}}</span>
 									{{- else if eq $v.Status "started" -}}
-									<span class="status-run fa fa-play text-primary"> {{"已启动"|$.T}}</span>
+									<span class="status-run text-primary"><i class="fa fa-play"></i> {{"已启动"|$.T}}</span>
 									{{- else if eq $v.Status "restarted" -}}
-									<span class="status-run fa fa-refresh text-info"> {{"已重启"|$.T}}</span>
+									<span class="status-run text-info"><i class="fa fa-refresh"></i> {{"已重启"|$.T}}</span>
 									{{- else if eq $v.Status "exited" -}}
-									<span title="{{$v.Error}}" class="status-run fa fa-stop text-danger"> {{"已退出"|$.T}}</span>
+									<span title="{{$v.Error}}" class="status-run text-danger"><i class="fa fa-stop"></i> {{"已退出"|$.T}}</span>
 									{{- else if eq $v.Status "killed" -}}
-									<span class="status-run fa fa-stop text-danger"> {{"已终止"|$.T}}</span>
+									<span class="status-run text-danger"><i class="fa fa-stop"></i> {{"已终止"|$.T}}</span>
 									{{- else if eq $v.Status "stoped" -}}
-									<span class="status-run fa fa-stop text-danger"> {{"已停止"|$.T}}</span>
+									<span class="status-run text-danger"><i class="fa fa-stop"></i> {{"已停止"|$.T}}</span>
 									{{- else -}}
-									<span class="status-run fa fa-time text-default"> {{"空闲"|$.T}}</span>
+									<span class="status-run text-default"><i class="fa fa-time"></i> {{"空闲"|$.T}}</span>
 									{{- end -}}
 								</td>
 								<td>{{$v.Name}}</td>
@@ -107,13 +107,13 @@
 {{call $.Func.Modal "__TMPL__/server/log_show.yaml"}}
 <script>
 function statusHTML(status){
-	if(status=="running") return '<span class="status-run fa fa-play text-success"> {{"运行中"|$.T}}</span>';
-	if(status=="started") return '<span class="status-run fa fa-play text-primary"> {{"已启动"|$.T}}</span>';
-	if(status=="restarted") return '<span class="status-run fa fa-refresh text-info"> {{"已重启"|$.T}}</span>';
-	if(status=="exited") return '<span class="status-run fa fa-stop text-danger"> {{"已退出"|$.T}}</span>';
-	if(status=="killed") return '<span class="status-run fa fa-stop text-danger"> {{"已终止"|$.T}}</span>';
-	if(status=="stoped") return '<span class="status-run fa fa-stop text-danger"> {{"已停止"|$.T}}</span>';
-	return '<span class="status-run fa fa-time text-default"> {{"空闲"|$.T}}</span>';
+	if(status=="running") return '<span class="status-run text-success"><i class="fa fa-play"></i> {{"运行中"|$.T}}</span>';
+	if(status=="started") return '<span class="status-run text-primary"><i class="fa fa-play"></i> {{"已启动"|$.T}}</span>';
+	if(status=="restarted") return '<span class="status-run text-info"><i class="fa fa-refresh"></i> {{"已重启"|$.T}}</span>';
+	if(status=="exited") return '<span class="status-run text-danger"><i class="fa fa-stop"></i> {{"已退出"|$.T}}</span>';
+	if(status=="killed") return '<span class="status-run text-danger"><i class="fa fa-stop"></i> {{"已终止"|$.T}}</span>';
+	if(status=="stoped") return '<span class="status-run text-danger"><i class="fa fa-stop"></i> {{"已停止"|$.T}}</span>';
+	return '<span class="status-run text-default"><i class="fa fa-time"></i> {{"空闲"|$.T}}</span>';
 }
 $(function(){
 	App.bindSwitch('input.switch-disabled','click','server/daemon_edit',null,function(r){
