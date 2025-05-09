@@ -19,12 +19,13 @@
 package system
 
 import (
-	"github.com/shirou/gopsutil/v3/cpu"
-	"github.com/shirou/gopsutil/v3/disk"
-	"github.com/shirou/gopsutil/v3/host"
-	"github.com/shirou/gopsutil/v3/load"
-	"github.com/shirou/gopsutil/v3/mem"
-	"github.com/shirou/gopsutil/v3/net"
+	"github.com/shirou/gopsutil/v4/cpu"
+	"github.com/shirou/gopsutil/v4/disk"
+	"github.com/shirou/gopsutil/v4/host"
+	"github.com/shirou/gopsutil/v4/load"
+	"github.com/shirou/gopsutil/v4/mem"
+	"github.com/shirou/gopsutil/v4/net"
+	"github.com/shirou/gopsutil/v4/sensors"
 )
 
 type SystemInformation struct {
@@ -36,7 +37,7 @@ type SystemInformation struct {
 	Load       *load.AvgStat                  `json:",omitempty"`
 	Memory     *MemoryInformation             `json:",omitempty"`
 	NetIO      []net.IOCountersStat           `json:",omitempty"`
-	Temp       []host.TemperatureStat         `json:",omitempty"`
+	Temp       []sensors.TemperatureStat      `json:",omitempty"`
 	Go         *RuntimeStatus                 `json:",omitempty"`
 }
 
@@ -54,10 +55,10 @@ type MemoryInformation struct {
 
 type DynamicInformation struct {
 	CPUPercent []float64
-	Load       *load.AvgStat          `json:",omitempty"`
-	Memory     *MemoryInformation     `json:",omitempty"`
-	NetIO      []net.IOCountersStat   `json:",omitempty"`
-	Temp       []host.TemperatureStat `json:",omitempty"`
+	Load       *load.AvgStat             `json:",omitempty"`
+	Memory     *MemoryInformation        `json:",omitempty"`
+	NetIO      []net.IOCountersStat      `json:",omitempty"`
+	Temp       []sensors.TemperatureStat `json:",omitempty"`
 }
 
 func (d *DynamicInformation) Init() *DynamicInformation {

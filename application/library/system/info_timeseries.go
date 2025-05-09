@@ -27,8 +27,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/shirou/gopsutil/v3/host"
-	"github.com/shirou/gopsutil/v3/net"
+	"github.com/shirou/gopsutil/v4/net"
+	"github.com/shirou/gopsutil/v4/sensors"
 	"github.com/webx-top/com"
 	"github.com/webx-top/echo/defaults"
 	"github.com/webx-top/echo/param"
@@ -402,7 +402,7 @@ func (r *RealTimeStatus) CPUAdd(y float64) *RealTimeStatus {
 	return r
 }
 
-func (r *RealTimeStatus) TempAdd(ts []host.TemperatureStat) *RealTimeStatus {
+func (r *RealTimeStatus) TempAdd(ts []sensors.TemperatureStat) *RealTimeStatus {
 	if r.max <= 0 {
 		return r
 	}

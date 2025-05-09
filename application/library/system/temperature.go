@@ -1,10 +1,10 @@
 package system
 
-import "github.com/shirou/gopsutil/v3/host"
+import "github.com/shirou/gopsutil/v4/sensors"
 
-func SensorsTemperatures() ([]host.TemperatureStat, error) {
-	r := []host.TemperatureStat{}
-	temps, err := host.SensorsTemperatures()
+func SensorsTemperatures() ([]sensors.TemperatureStat, error) {
+	r := []sensors.TemperatureStat{}
+	temps, err := sensors.SensorsTemperatures()
 	if err != nil {
 		return r, err
 	}

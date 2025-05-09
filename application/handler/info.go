@@ -20,20 +20,18 @@ package handler
 
 import (
 	"context"
-	"runtime"
 	"sort"
-	"strings"
 	"sync"
 	"time"
 
 	"github.com/coscms/webcore/library/backend"
 	"github.com/coscms/webcore/library/common"
-	"github.com/shirou/gopsutil/v3/cpu"
-	"github.com/shirou/gopsutil/v3/disk"
-	"github.com/shirou/gopsutil/v3/host"
-	"github.com/shirou/gopsutil/v3/mem"
-	"github.com/shirou/gopsutil/v3/net"
-	"github.com/shirou/gopsutil/v3/process"
+	"github.com/shirou/gopsutil/v4/cpu"
+	"github.com/shirou/gopsutil/v4/disk"
+	"github.com/shirou/gopsutil/v4/host"
+	"github.com/shirou/gopsutil/v4/mem"
+	"github.com/shirou/gopsutil/v4/net"
+	"github.com/shirou/gopsutil/v4/process"
 	"github.com/webx-top/com"
 	"github.com/webx-top/echo"
 	"github.com/webx-top/echo/param"
@@ -168,47 +166,15 @@ func ProcessKill(ctx echo.Context) error {
 
 func Connections(ctx echo.Context) (err error) {
 	var conns []net.ConnectionStat
-	var kind string
+	kind := ctx.Form(`kind`, `all`)
 	switch kind {
 	case "tcp", "tcp4", "tcp6", "udp", "udp4", "udp6", "unix", "inet", "inet4", "inet6":
 	default:
 		kind = "all"
 	}
-	conns, err = net.Connections(kind)
-	if err != nil {
-		if err.Error() == "not implemented yet" {
-			if runtime.GOOS == "windows" {
-				err = nil
-				var conn <-chan net.ConnectionStat
-				if strings.HasPrefix(kind, `udp`) {
-					conn, err = NetStatUDP()
-				} else {
-					conn, err = NetStatTCP()
-				}
-				if err != nil {
-					return
-				}
-				done := make(chan bool)
-				go func() {
-					defer func() {
-						done <- true
-					}()
-					for {
-						select {
-						case c, r := <-conn:
-							if !r {
-								return
-							}
-							conns = append(conns, c)
-						}
-					}
-				}()
-				<-done
-			}
-		}
-	}
+	conns, err = net.ConnectionsWithContext(ctx, kind)
 	ctx.Set(`listData`, conns)
-	return ctx.Render(`server/netstat`, nil)
+	return ctx.Render(`server/netstat`, common.Err(ctx, err))
 }
 
 type cacheProcess struct {
