@@ -18,6 +18,21 @@
 
 package handler
 
-import "errors"
+import (
+	"github.com/coscms/webcore/library/common"
+	"github.com/shirou/gopsutil/v4/net"
+	"github.com/webx-top/echo"
+)
 
-var ErrNotImplemented = errors.New("not implemented yet")
+func Connections(ctx echo.Context) (err error) {
+	var conns []net.ConnectionStat
+	kind := ctx.Form(`kind`, `all`)
+	switch kind {
+	case "tcp", "tcp4", "tcp6", "udp", "udp4", "udp6", "unix", "inet", "inet4", "inet6":
+	default:
+		kind = "all"
+	}
+	conns, err = net.ConnectionsWithContext(ctx, kind)
+	ctx.Set(`listData`, conns)
+	return ctx.Render(`server/netstat`, common.Err(ctx, err))
+}

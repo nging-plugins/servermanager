@@ -1,6 +1,6 @@
 module github.com/nging-plugins/servermanager
 
-go 1.24
+go 1.24.2
 
 // replace github.com/coscms/webcore => ../../coscms/webcore
 
@@ -11,6 +11,7 @@ require (
 	github.com/admpub/goforever v0.3.7
 	github.com/admpub/gopty v0.1.2
 	github.com/admpub/log v1.4.0
+	github.com/admpub/pp v0.0.7
 	github.com/admpub/sockjs-go/v3 v3.0.1
 	github.com/admpub/websocket v1.0.4
 	github.com/coscms/webcore v0.9.7
@@ -66,7 +67,6 @@ require (
 	github.com/admpub/mysql-schema-sync v0.2.6 // indirect
 	github.com/admpub/null v8.0.4+incompatible // indirect
 	github.com/admpub/once v0.0.1 // indirect
-	github.com/admpub/pp v0.0.7 // indirect
 	github.com/admpub/qrcode v0.0.3 // indirect
 	github.com/admpub/randomize v0.0.2 // indirect
 	github.com/admpub/realip v0.2.7 // indirect
