@@ -19,50 +19,18 @@
 package handler
 
 import (
-	"path/filepath"
-	"strings"
-
-	"github.com/admpub/log"
-	"github.com/webx-top/com"
 	"github.com/webx-top/echo"
 
-	"github.com/coscms/webcore/library/config"
 	"github.com/coscms/webcore/library/dashboard"
+	"github.com/coscms/webcore/library/nlog/logcategory"
 
 	"github.com/nging-plugins/servermanager/application/registry"
 )
 
-func addLogCategory(logCategories *echo.KVList, k, v string) {
-	logFilename, _ := config.FromFile().Settings().Log.LogFilename(k)
-	if len(logFilename) > 0 {
-		logFilename = filepath.Base(logFilename)
-	}
-	logCategories.Add(k, v, echo.KVOptHKV(`logFilename`, logFilename))
-}
-
 func Service(ctx echo.Context) error {
-	logCategories := &echo.KVList{}
-	addLogCategory(logCategories, log.DefaultLog.Category, ctx.T(`Nging日志`))
-	if strings.Contains(config.FromFile().Settings().Log.LogFile(), `{category}`) {
-		ctx.Set(`logWithCategory`, true)
-		categories := config.FromFile().Settings().Log.LogCategories()
-		for _, k := range categories {
-			k = strings.SplitN(k, `,`, 2)[0]
-			v := k
-			switch k {
-			case `db`:
-				v = ctx.T(`SQL日志`)
-			case `echo`:
-				v = ctx.T(`Web框架日志`)
-			default:
-				v = ctx.T(`%s日志`, com.Title(k))
-			}
-			addLogCategory(logCategories, k, v)
-		}
-	} else {
-		ctx.Set(`logWithCategory`, false)
-	}
-	ctx.Set(`logCategories`, *logCategories)
+	logCategories := logcategory.LogList(ctx)
+	ctx.Set(`logWithCategory`, logCategories.WithCategory)
+	ctx.Set(`logCategories`, logCategories.Categories)
 	ctx.SetFunc(`ServiceControls`, func() dashboard.Buttons {
 		buttons := registry.ServiceControls
 		buttons.Ready(ctx)
