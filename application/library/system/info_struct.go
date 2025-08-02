@@ -31,7 +31,7 @@ import (
 )
 
 var (
-	_ Releaser = (*RealTimeStatus)(nil)
+	_ Releaser = (*RealTimeStatusLite)(nil)
 	_ Releaser = (*DynamicInformation)(nil)
 )
 

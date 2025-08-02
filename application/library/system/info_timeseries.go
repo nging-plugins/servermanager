@@ -51,22 +51,22 @@ func init() {
 	alert.Topics.Add(`systemStatus`, `系统状态`)
 }
 
-var poolRealTimeStatus = sync.Pool{
+var poolRealTimeStatusLite = sync.Pool{
 	New: func() any {
-		return &RealTimeStatus{pooled: true}
+		return &RealTimeStatusLite{pooled: true}
 	},
 }
 
 // RealTimeStatusObject 实时状态
-func RealTimeStatusObject(n ...int) *RealTimeStatus {
-	if len(n) == 0 || n[0] <= 0 {
-		return realTimeStatus
-	}
-	max := n[0]
-	r := poolRealTimeStatus.Get().(*RealTimeStatus)
+func RealTimeStatusObject(n ...int) *RealTimeStatusLite {
+	r := poolRealTimeStatusLite.Get().(*RealTimeStatusLite)
 	if !r.pooled {
 		r.pooled = true
 	}
+	if len(n) == 0 || n[0] <= 0 {
+		return r.CopyFrom(realTimeStatus)
+	}
+	max := n[0]
 	r.CPU = realTimeStatus.CPU.GetTruncate(max)
 	r.Mem = realTimeStatus.Mem.GetTruncate(max)
 	r.Net = NetIOTimeSeries{
@@ -158,6 +158,35 @@ type NetIOTimeSeries struct {
 	PacketsRecv TimeSeries
 }
 
+type RealTimeStatusLite struct {
+	CPU    TimeSeries
+	Mem    TimeSeries
+	Net    NetIOTimeSeries
+	Temp   map[string]TimeSeries
+	pooled bool
+}
+
+func (r *RealTimeStatusLite) Release() {
+	if r.pooled {
+		r.CPU = nil
+		r.Mem = nil
+		r.Net.BytesSent = nil
+		r.Net.BytesRecv = nil
+		r.Net.PacketsSent = nil
+		r.Net.PacketsRecv = nil
+		r.Temp = nil
+		poolRealTimeStatusLite.Put(r)
+	}
+}
+
+func (r *RealTimeStatusLite) CopyFrom(f *RealTimeStatus) *RealTimeStatusLite {
+	r.CPU = f.CPU
+	r.Mem = f.CPU
+	r.Net = f.Net
+	r.Temp = f.Temp
+	return r
+}
+
 // RealTimeStatus 实时状态数据结构
 type RealTimeStatus struct {
 	max         int
@@ -171,20 +200,6 @@ type RealTimeStatus struct {
 	reportTime  map[string]time.Time
 	status      string
 	lock        sync.RWMutex
-	pooled      bool
-}
-
-func (r *RealTimeStatus) Release() {
-	if r.pooled {
-		r.CPU = nil
-		r.Mem = nil
-		r.Net.BytesSent = nil
-		r.Net.BytesRecv = nil
-		r.Net.PacketsSent = nil
-		r.Net.PacketsRecv = nil
-		r.Temp = nil
-		poolRealTimeStatus.Put(r)
-	}
 }
 
 // Listen 监听
