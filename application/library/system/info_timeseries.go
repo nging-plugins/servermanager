@@ -23,7 +23,6 @@ import (
 	"fmt"
 	"math"
 	"os"
-	"slices"
 	"strings"
 	"sync"
 	"time"
@@ -464,14 +463,14 @@ func NewXY(y float64) XY {
 func (t *TimeSeries) Truncate(max int) {
 	length := len(*t)
 	if length > max {
-		*t = slices.Clone((*t)[length-max:])
+		*t = (*t)[length-max:]
 	}
 }
 
 func (t TimeSeries) GetTruncate(max int) TimeSeries {
 	length := len(t)
 	if length > max {
-		return slices.Clone(t[length-max:])
+		return t[length-max:]
 	}
 	return t
 }
