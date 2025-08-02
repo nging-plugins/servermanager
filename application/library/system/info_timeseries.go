@@ -23,6 +23,7 @@ import (
 	"fmt"
 	"math"
 	"os"
+	"slices"
 	"strings"
 	"sync"
 	"time"
@@ -55,49 +56,20 @@ func RealTimeStatusObject(n ...int) *RealTimeStatus {
 	if len(n) == 0 || n[0] <= 0 {
 		return realTimeStatus
 	}
-	r := &RealTimeStatus{
-		CPU:  TimeSeries{},
-		Mem:  TimeSeries{},
-		Net:  NewNetIOTimeSeries(),
-		Temp: map[string]TimeSeries{},
-	}
 	max := n[0]
-	if max < len(realTimeStatus.CPU) {
-		r.CPU = realTimeStatus.CPU[len(realTimeStatus.CPU)-max:]
-	} else {
-		r.CPU = realTimeStatus.CPU
-	}
-	if max < len(realTimeStatus.Mem) {
-		r.Mem = realTimeStatus.Mem[len(realTimeStatus.Mem)-max:]
-	} else {
-		r.Mem = realTimeStatus.Mem
-	}
-	if max < len(realTimeStatus.Net.BytesSent) {
-		r.Net.BytesSent = realTimeStatus.Net.BytesSent[len(realTimeStatus.Net.BytesSent)-max:]
-	} else {
-		r.Net.BytesSent = realTimeStatus.Net.BytesSent
-	}
-	if max < len(realTimeStatus.Net.BytesRecv) {
-		r.Net.BytesRecv = realTimeStatus.Net.BytesRecv[len(realTimeStatus.Net.BytesRecv)-max:]
-	} else {
-		r.Net.BytesRecv = realTimeStatus.Net.BytesRecv
-	}
-	if max < len(realTimeStatus.Net.PacketsSent) {
-		r.Net.PacketsSent = realTimeStatus.Net.PacketsSent[len(realTimeStatus.Net.PacketsSent)-max:]
-	} else {
-		r.Net.PacketsSent = realTimeStatus.Net.PacketsSent
-	}
-	if max < len(realTimeStatus.Net.PacketsRecv) {
-		r.Net.PacketsRecv = realTimeStatus.Net.PacketsRecv[len(realTimeStatus.Net.PacketsRecv)-max:]
-	} else {
-		r.Net.PacketsRecv = realTimeStatus.Net.PacketsRecv
+	r := &RealTimeStatus{
+		CPU: realTimeStatus.CPU.GetTruncate(max),
+		Mem: realTimeStatus.Mem.GetTruncate(max),
+		Net: NetIOTimeSeries{
+			BytesSent:   realTimeStatus.Net.BytesSent.GetTruncate(max),
+			BytesRecv:   realTimeStatus.Net.BytesRecv.GetTruncate(max),
+			PacketsSent: realTimeStatus.Net.PacketsSent.GetTruncate(max),
+			PacketsRecv: realTimeStatus.Net.PacketsRecv.GetTruncate(max),
+		},
+		Temp: make(map[string]TimeSeries, len(realTimeStatus.Temp)),
 	}
 	for key, value := range realTimeStatus.Temp {
-		if max < len(value) {
-			r.Temp[key] = value[len(value)-max:]
-		} else {
-			r.Temp[key] = value
-		}
+		r.Temp[key] = value.GetTruncate(max)
 	}
 	return r
 }
@@ -229,8 +201,6 @@ func (r *RealTimeStatus) Listen(ctx context.Context) *RealTimeStatus {
 		}
 	}
 }
-
-var emptyTime = time.Time{}
 
 func checkAndSendAlarm(r *RealTimeStatus, value float64, typ string, subType ...string) {
 	if r == nil || r.settings == nil {
@@ -393,11 +363,8 @@ func (r *RealTimeStatus) CPUAdd(y float64) *RealTimeStatus {
 	}
 	r.lock.Lock()
 	checkAndSendAlarm(r, y, `CPU`)
-	l := len(r.CPU)
-	if l >= r.max {
-		r.CPU = r.CPU[1+l-r.max:]
-	}
-	r.CPU = append(r.CPU, NewXY(y))
+	r.CPU.Truncate(r.max - 1)
+	r.CPU.Add(NewXY(y))
 	r.lock.Unlock()
 	return r
 }
@@ -417,11 +384,8 @@ func (r *RealTimeStatus) TempAdd(ts []sensors.TemperatureStat) *RealTimeStatus {
 			r.Temp[temp.SensorKey] = []XY{NewXY(temp.Temperature)}
 			continue
 		}
-		l := len(_temp)
-		if l >= r.max {
-			_temp = _temp[1+l-r.max:]
-		}
-		_temp = append(_temp, NewXY(temp.Temperature))
+		_temp.Truncate(r.max - 1)
+		_temp.Add(NewXY(temp.Temperature))
 		r.Temp[temp.SensorKey] = _temp
 	}
 	r.lock.Unlock()
@@ -434,11 +398,8 @@ func (r *RealTimeStatus) MemAdd(y float64) *RealTimeStatus {
 	}
 	r.lock.Lock()
 	checkAndSendAlarm(r, y, `Mem`)
-	l := len(r.Mem)
-	if l >= r.max {
-		r.Mem = r.Mem[1+l-r.max:]
-	}
-	r.Mem = append(r.Mem, NewXY(y))
+	r.Mem.Truncate(r.max - 1)
+	r.Mem.Add(NewXY(y))
 	r.lock.Unlock()
 	return r
 }
@@ -449,10 +410,7 @@ func (r *RealTimeStatus) NetAdd(stat net.IOCountersStat) *RealTimeStatus {
 	}
 	r.lock.Lock()
 	now := time.Now()
-	l := len(r.Net.BytesRecv)
-	if l >= r.max {
-		r.Net.BytesRecv = r.Net.BytesRecv[1+l-r.max:]
-	}
+	r.Net.BytesRecv.Truncate(r.max - 1)
 	n := float64(stat.BytesRecv)
 	var speed float64
 	if !r.Net.lastBytesRecv.Time.IsZero() {
@@ -461,14 +419,11 @@ func (r *RealTimeStatus) NetAdd(stat net.IOCountersStat) *RealTimeStatus {
 	} else {
 		speed = 0
 	}
-	r.Net.BytesRecv = append(r.Net.BytesRecv, NewXY(speed))
+	r.Net.BytesRecv.Add(NewXY(speed))
 	r.Net.lastBytesRecv.Time = now
 	r.Net.lastBytesRecv.Value = n
 
-	l = len(r.Net.BytesSent)
-	if l >= r.max {
-		r.Net.BytesSent = r.Net.BytesSent[1+l-r.max:]
-	}
+	r.Net.BytesSent.Truncate(r.max - 1)
 	n = float64(stat.BytesSent)
 	if !r.Net.lastBytesSent.Time.IsZero() {
 		speed = (n - r.Net.lastBytesSent.Value) / now.Sub(r.Net.lastBytesSent.Time).Seconds()
@@ -476,14 +431,11 @@ func (r *RealTimeStatus) NetAdd(stat net.IOCountersStat) *RealTimeStatus {
 	} else {
 		speed = 0
 	}
-	r.Net.BytesSent = append(r.Net.BytesSent, NewXY(speed))
+	r.Net.BytesSent.Add(NewXY(speed))
 	r.Net.lastBytesSent.Time = now
 	r.Net.lastBytesSent.Value = n
 
-	l = len(r.Net.PacketsRecv)
-	if l >= r.max {
-		r.Net.PacketsRecv = r.Net.PacketsRecv[1+l-r.max:]
-	}
+	r.Net.PacketsRecv.Truncate(r.max - 1)
 	n = float64(stat.PacketsRecv)
 	if !r.Net.lastPacketsRecv.Time.IsZero() {
 		speed = (n - r.Net.lastPacketsRecv.Value) / now.Sub(r.Net.lastPacketsRecv.Time).Seconds()
@@ -491,14 +443,11 @@ func (r *RealTimeStatus) NetAdd(stat net.IOCountersStat) *RealTimeStatus {
 	} else {
 		speed = 0
 	}
-	r.Net.PacketsRecv = append(r.Net.PacketsRecv, NewXY(speed))
+	r.Net.PacketsRecv.Add(NewXY(speed))
 	r.Net.lastPacketsRecv.Time = now
 	r.Net.lastPacketsRecv.Value = n
 
-	l = len(r.Net.PacketsSent)
-	if l >= r.max {
-		r.Net.PacketsSent = r.Net.PacketsSent[1+l-r.max:]
-	}
+	r.Net.PacketsSent.Truncate(r.max - 1)
 	n = float64(stat.PacketsSent)
 	if !r.Net.lastPacketsSent.Time.IsZero() {
 		speed = (n - r.Net.lastPacketsSent.Value) / now.Sub(r.Net.lastPacketsSent.Time).Seconds()
@@ -506,7 +455,7 @@ func (r *RealTimeStatus) NetAdd(stat net.IOCountersStat) *RealTimeStatus {
 	} else {
 		speed = 0
 	}
-	r.Net.PacketsSent = append(r.Net.PacketsSent, NewXY(speed))
+	r.Net.PacketsSent.Add(NewXY(speed))
 	r.Net.lastPacketsSent.Time = now
 	r.Net.lastPacketsSent.Value = n
 	r.lock.Unlock()
@@ -521,4 +470,23 @@ type (
 func NewXY(y float64) XY {
 	x := time.Now().UnixNano() / 1e6 //毫秒
 	return XY{x, y}
+}
+
+func (t *TimeSeries) Truncate(max int) {
+	length := len(*t)
+	if length > max {
+		*t = slices.Clone((*t)[length-max:])
+	}
+}
+
+func (t TimeSeries) GetTruncate(max int) TimeSeries {
+	length := len(t)
+	if length > max {
+		return slices.Clone(t[length-max:])
+	}
+	return t
+}
+
+func (t *TimeSeries) Add(v XY) {
+	*t = append(*t, v)
 }
