@@ -41,7 +41,8 @@ func InfoBySockJS(c sockjs.Session) error {
 			}
 		}()
 		var b []byte
-		b, err = com.JSONEncode(<-send)
+		v := <-send
+		b, err = com.JSONEncode(v)
 		if err != nil {
 			backend.WebSocketLogger.Error(`Push error: `, err.Error())
 			return nil
@@ -50,6 +51,9 @@ func InfoBySockJS(c sockjs.Session) error {
 		err = c.Send(message)
 		if err != nil {
 			backend.WebSocketLogger.Error(`Push error: `, err.Error())
+		}
+		if rs, ok := v.(system.Releaser); ok {
+			rs.Release()
 		}
 		return
 	}
@@ -77,8 +81,7 @@ func InfoBySockJS(c sockjs.Session) error {
 				}
 				send <- system.RealTimeStatusObject(n)
 			case `pingAll`:
-				info := &system.DynamicInformation{}
-				send <- info.Init()
+				send <- system.AquireDynamicInformation()
 			}
 		}
 	}
@@ -102,6 +105,9 @@ func InfoByWebsocket(c *websocket.Conn, ctx echo.Context) error {
 		err = c.WriteJSON(message)
 		if err != nil {
 			backend.WebSocketLogger.Error(`Push error: `, err.Error())
+		}
+		if rs, ok := message.(system.Releaser); ok {
+			rs.Release()
 		}
 		return err
 	}
@@ -129,8 +135,7 @@ func InfoByWebsocket(c *websocket.Conn, ctx echo.Context) error {
 				}
 				send <- system.RealTimeStatusObject(n)
 			case `pingAll`:
-				info := &system.DynamicInformation{}
-				send <- info.Init()
+				send <- system.AquireDynamicInformation()
 			}
 		}
 	}

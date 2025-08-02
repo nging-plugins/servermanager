@@ -19,6 +19,8 @@
 package system
 
 import (
+	"sync"
+
 	"github.com/shirou/gopsutil/v4/cpu"
 	"github.com/shirou/gopsutil/v4/disk"
 	"github.com/shirou/gopsutil/v4/host"
@@ -27,6 +29,15 @@ import (
 	"github.com/shirou/gopsutil/v4/net"
 	"github.com/shirou/gopsutil/v4/sensors"
 )
+
+var (
+	_ Releaser = (*RealTimeStatus)(nil)
+	_ Releaser = (*DynamicInformation)(nil)
+)
+
+type Releaser interface {
+	Release()
+}
 
 type SystemInformation struct {
 	CPU        *CPUInformation                `json:",omitempty"`
@@ -53,12 +64,38 @@ type MemoryInformation struct {
 	Swap    *mem.SwapMemoryStat    `json:",omitempty"`
 }
 
+var poolDynamicInformation = sync.Pool{
+	New: func() any {
+		return &DynamicInformation{pooled: true}
+	},
+}
+
+func AquireDynamicInformation() *DynamicInformation {
+	d := poolDynamicInformation.Get().(*DynamicInformation)
+	if !d.pooled {
+		d.pooled = true
+	}
+	return d.Init()
+}
+
 type DynamicInformation struct {
 	CPUPercent []float64
 	Load       *load.AvgStat             `json:",omitempty"`
 	Memory     *MemoryInformation        `json:",omitempty"`
 	NetIO      []net.IOCountersStat      `json:",omitempty"`
 	Temp       []sensors.TemperatureStat `json:",omitempty"`
+	pooled     bool
+}
+
+func (d *DynamicInformation) Release() {
+	if d.pooled {
+		d.CPUPercent = nil
+		d.Load = nil
+		d.Memory = nil
+		d.NetIO = nil
+		d.Temp = nil
+		poolDynamicInformation.Put(d)
+	}
 }
 
 func (d *DynamicInformation) Init() *DynamicInformation {

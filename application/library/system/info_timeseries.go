@@ -51,23 +51,31 @@ func init() {
 	alert.Topics.Add(`systemStatus`, `系统状态`)
 }
 
+var poolRealTimeStatus = sync.Pool{
+	New: func() any {
+		return &RealTimeStatus{pooled: true}
+	},
+}
+
 // RealTimeStatusObject 实时状态
 func RealTimeStatusObject(n ...int) *RealTimeStatus {
 	if len(n) == 0 || n[0] <= 0 {
 		return realTimeStatus
 	}
 	max := n[0]
-	r := &RealTimeStatus{
-		CPU: realTimeStatus.CPU.GetTruncate(max),
-		Mem: realTimeStatus.Mem.GetTruncate(max),
-		Net: NetIOTimeSeries{
-			BytesSent:   realTimeStatus.Net.BytesSent.GetTruncate(max),
-			BytesRecv:   realTimeStatus.Net.BytesRecv.GetTruncate(max),
-			PacketsSent: realTimeStatus.Net.PacketsSent.GetTruncate(max),
-			PacketsRecv: realTimeStatus.Net.PacketsRecv.GetTruncate(max),
-		},
-		Temp: make(map[string]TimeSeries, len(realTimeStatus.Temp)),
+	r := poolRealTimeStatus.Get().(*RealTimeStatus)
+	if !r.pooled {
+		r.pooled = true
 	}
+	r.CPU = realTimeStatus.CPU.GetTruncate(max)
+	r.Mem = realTimeStatus.Mem.GetTruncate(max)
+	r.Net = NetIOTimeSeries{
+		BytesSent:   realTimeStatus.Net.BytesSent.GetTruncate(max),
+		BytesRecv:   realTimeStatus.Net.BytesRecv.GetTruncate(max),
+		PacketsSent: realTimeStatus.Net.PacketsSent.GetTruncate(max),
+		PacketsRecv: realTimeStatus.Net.PacketsRecv.GetTruncate(max),
+	}
+	r.Temp = make(map[string]TimeSeries, len(realTimeStatus.Temp))
 	for key, value := range realTimeStatus.Temp {
 		r.Temp[key] = value.GetTruncate(max)
 	}
@@ -163,6 +171,20 @@ type RealTimeStatus struct {
 	reportTime  map[string]time.Time
 	status      string
 	lock        sync.RWMutex
+	pooled      bool
+}
+
+func (r *RealTimeStatus) Release() {
+	if r.pooled {
+		r.CPU = nil
+		r.Mem = nil
+		r.Net.BytesSent = nil
+		r.Net.BytesRecv = nil
+		r.Net.PacketsSent = nil
+		r.Net.PacketsRecv = nil
+		r.Temp = nil
+		poolRealTimeStatus.Put(r)
+	}
 }
 
 // Listen 监听
