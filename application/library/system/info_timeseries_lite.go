@@ -49,7 +49,7 @@ func (r *RealTimeStatusLite) Release() {
 
 func (r *RealTimeStatusLite) CopyFrom(f *RealTimeStatus) *RealTimeStatusLite {
 	r.CPU = f.CPU
-	r.Mem = f.CPU
+	r.Mem = f.Mem
 	r.Net = f.Net
 	r.Temp = f.Temp
 	return r
