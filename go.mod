@@ -14,7 +14,7 @@ require (
 	github.com/admpub/pp v0.0.7
 	github.com/admpub/sockjs-go/v3 v3.0.1
 	github.com/admpub/websocket v1.0.4
-	github.com/coscms/webcore v0.12.8-0.20250822092232-b70fd820c5fa
+	github.com/coscms/webcore v0.12.9-0.20250822120659-3e25f93a4b08
 	github.com/nging-plugins/sshmanager v1.8.0
 	github.com/shirou/gopsutil/v4 v4.25.7
 	github.com/stretchr/testify v1.10.0

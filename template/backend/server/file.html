@@ -112,7 +112,12 @@
                                 {{"文件"|$.T}}
                                 {{end}}</td>
 							<td>{{if $v.IsDir}}-{{else}}{{$v.Size|FormatByte}}{{end}}</td>
-							<td>{{$mode}}</td>
+							<td>
+                                {{- $mode -}}
+                                &nbsp;<a title="{{`修改权限`|$.T}}" href="javascript:;" data-url="{{BackendURL}}/server/file?do=chmod&path={{if $path}}{{$path}}/{{end}}{{$v.Name}}" onclick="fileChmod(this,'{{$v.Name}}',{{call $.Func.PermInfo $v.Mode}})" data-toggle="tooltip">
+                                <i class="fa fa-pencil"></i>
+                                </a>
+                            </td>
 							<td class="label-group">
                                 <a title="{{`删除`|$.T}}" class="label label-danger" href="{{BackendURL}}/server/file?do=delete&path={{if $path}}{{$path}}/{{end}}{{$v.Name}}" onclick="return confirm('{{$.T `真的要删除“%v”吗？` $v.Name}}');" data-toggle="tooltip">
                                 <i class="fa fa-times"></i>
@@ -143,6 +148,7 @@
 {{/Block}}
 
 {{Block "footer"}}
+{{call $.Func.Modal "__TMPL__/filemanager/file_chmod.yaml"}}
 {{Include "filemanager/file.script"}}
 <script>
 function uploadURL(currentPath){

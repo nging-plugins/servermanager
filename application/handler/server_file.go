@@ -71,6 +71,36 @@ func ServerFile(ctx echo.Context) error {
 	}
 
 	switch do {
+	case `chmod`:
+		data := ctx.Data()
+		perms := filemanager.Perms{}
+		err = ctx.MustBind(&perms)
+		if err != nil {
+			return ctx.JSON(data.SetError(err))
+		}
+		err = mgr.Chmod(absPath, perms.Owner, perms.Group, perms.Other)
+		if err != nil {
+			return ctx.JSON(data.SetError(err))
+		}
+		return ctx.JSON(data.SetCode(1))
+	case `chown`:
+		data := ctx.Data()
+		uid := ctx.Formx(`uid`).Int()
+		gid := ctx.Formx(`gid`).Int()
+		if uid > 0 && gid > 0 {
+			err = mgr.ChownByID(absPath, uid, gid)
+		} else {
+			username := ctx.Formx(`username`).String()
+			usergroup := ctx.Formx(`usergroup`).String()
+			if len(username) == 0 {
+				return ctx.JSON(data.SetInfo(ctx.T(`请指定用户名`), 0))
+			}
+			err = mgr.Chown(absPath, username, usergroup)
+		}
+		if err != nil {
+			return ctx.JSON(data.SetError(err))
+		}
+		return ctx.JSON(data.SetCode(1))
 	case `edit`:
 		data := ctx.Data()
 		if _, ok := Editable(absPath); !ok {
@@ -179,6 +209,7 @@ func ServerFile(ctx echo.Context) error {
 		mime, _ := Playable(fileName)
 		return mime
 	})
+	ctx.SetFunc(`PermInfo`, filemanager.FileModeToPerms)
 	ctx.Set(`activeURL`, `/server/file`)
 	return ctx.Render(`server/file`, err)
 }
