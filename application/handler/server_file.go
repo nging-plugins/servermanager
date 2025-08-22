@@ -154,7 +154,11 @@ func ServerFile(ctx echo.Context) error {
 		urlPrefix += encodedSep
 	}
 	ctx.Set(`pathLinks`, pathLinks)
-	ctx.Set(`rootPath`, strings.TrimSuffix(root, echo.FilePathSeparator))
+	rootPath := strings.TrimSuffix(root, echo.FilePathSeparator)
+	if len(rootPath) == 0 {
+		rootPath = root
+	}
+	ctx.Set(`rootPath`, rootPath)
 	ctx.Set(`path`, filePath)
 	ctx.Set(`absPath`, absPath)
 	ctx.SetFunc(`Editable`, func(fileName string) bool {
