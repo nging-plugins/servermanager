@@ -35,12 +35,22 @@ import (
 	"github.com/coscms/webcore/library/common"
 	"github.com/coscms/webcore/library/config"
 	"github.com/coscms/webcore/library/filemanager"
+	"github.com/coscms/webcore/library/navigate"
 	"github.com/coscms/webcore/library/notice"
 	"github.com/coscms/webcore/library/respond"
 	uploadChunk "github.com/coscms/webcore/registry/upload/chunk"
 
 	routeRegistry "github.com/coscms/webcore/registry/route"
 )
+
+func init() {
+	LeftNavigate.Children.Add(-1, &navigate.Item{
+		Display: true,
+		Name:    echo.T(`服务器文件管理`),
+		Action:  `file`,
+		Icon:    `file`,
+	})
+}
 
 func registerRouteServerFile(g echo.RouteRegister) {
 	metaHandler := routeRegistry.IRegister().MetaHandler
