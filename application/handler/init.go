@@ -32,6 +32,7 @@ func RegisterRoute(r module.Router) {
 }
 
 func registerRoute(g echo.RouteRegister) {
+	registerRouteServerFile(g)
 	g.Route("GET", `/sysinfo`, Info)
 	g.Route("GET", `/netstat`, Connections)
 	g.Route("GET", `/processes`, ProcessList)
