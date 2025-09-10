@@ -33,9 +33,9 @@ import (
 	"github.com/webx-top/echo"
 	"github.com/webx-top/echo/defaults"
 
-	"github.com/coscms/webcore/cmd/bootconfig"
 	ngingdbschema "github.com/coscms/webcore/dbschema"
 	"github.com/coscms/webcore/library/config"
+	"github.com/coscms/webcore/library/config/startup"
 	"github.com/coscms/webcore/library/cron"
 	"github.com/coscms/webcore/library/nerrors"
 	"github.com/nging-plugins/servermanager/application/dbschema"
@@ -56,7 +56,7 @@ func init() {
 		config.FromFile().UnregisterExtend(data.Context.String(`name`))
 		return nil
 	})
-	bootconfig.OnWebStart(-1, RunDaemon)
+	startup.OnAfter(`web.installed`, RunDaemon)
 }
 
 func DaemonCommonHook(p *goforever.Process) {
