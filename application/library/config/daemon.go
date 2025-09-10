@@ -31,7 +31,9 @@ import (
 	"github.com/admpub/log"
 	"github.com/webx-top/com"
 	"github.com/webx-top/echo"
+	"github.com/webx-top/echo/defaults"
 
+	"github.com/coscms/webcore/cmd/bootconfig"
 	ngingdbschema "github.com/coscms/webcore/dbschema"
 	"github.com/coscms/webcore/library/config"
 	"github.com/coscms/webcore/library/cron"
@@ -54,6 +56,7 @@ func init() {
 		config.FromFile().UnregisterExtend(data.Context.String(`name`))
 		return nil
 	})
+	bootconfig.OnWebStart(-1, RunDaemon)
 }
 
 func DaemonCommonHook(p *goforever.Process) {
@@ -65,7 +68,8 @@ func DaemonCommonHook(p *goforever.Process) {
 			return
 		}
 	*/
-	processM := dbschema.NewNgingForeverProcess(nil)
+	ctx := defaults.NewMockContext()
+	processM := dbschema.NewNgingForeverProcess(ctx)
 	err := processM.Get(nil, `id`, p.Name)
 	if err != nil {
 		log.Errorf(`Not found ForeverProcess: %v (%v)`, p.Name, err)
@@ -98,6 +102,7 @@ func DaemonCommonHook(p *goforever.Process) {
 
 // RestartDaemon 重启所有已登记的进程
 func RestartDaemon() {
+	Daemon.Reset()
 	RunDaemon()
 }
 
@@ -106,14 +111,14 @@ func RunDaemon() {
 	if !config.IsInstalled() {
 		return
 	}
-	Daemon.Reset()
 	Daemon.SetHook(goforever.StatusStarted, DaemonDefaultHook)
 	Daemon.SetHook(goforever.StatusStopped, DaemonDefaultHook)
 	Daemon.SetHook(goforever.StatusRunning, DaemonDefaultHook)
 	Daemon.SetHook(goforever.StatusRestarted, DaemonDefaultHook)
 	Daemon.SetHook(goforever.StatusExited, DaemonDefaultHook)
 	Daemon.SetHook(goforever.StatusKilled, DaemonDefaultHook)
-	processM := dbschema.NewNgingForeverProcess(nil)
+	ctx := defaults.NewMockContext()
+	processM := dbschema.NewNgingForeverProcess(ctx)
 	_, err := processM.ListByOffset(nil, nil, 0, -1, `disabled`, `N`)
 	if err != nil {
 		log.Errorf(`failed to query nging_forever_process list: %s`, err.Error())

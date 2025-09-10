@@ -8,20 +8,20 @@ go 1.24.5
 
 require (
 	github.com/admpub/events v1.3.6
-	github.com/admpub/goforever v0.3.7
+	github.com/admpub/goforever v0.3.8
 	github.com/admpub/gopty v0.1.2
 	github.com/admpub/log v1.4.0
 	github.com/admpub/pp v0.0.7
 	github.com/admpub/sockjs-go/v3 v3.0.1
 	github.com/admpub/websocket v1.0.4
-	github.com/coscms/webcore v0.12.9-0.20250822120659-3e25f93a4b08
+	github.com/coscms/webcore v0.12.10-0.20250910100523-c1c431a5317e
 	github.com/nging-plugins/sshmanager v1.8.0
-	github.com/shirou/gopsutil/v4 v4.25.7
-	github.com/stretchr/testify v1.10.0
+	github.com/shirou/gopsutil/v4 v4.25.8
+	github.com/stretchr/testify v1.11.1
 	github.com/webx-top/client v0.9.6
 	github.com/webx-top/com v1.4.0
-	github.com/webx-top/db v1.28.6
-	github.com/webx-top/echo v1.21.6
+	github.com/webx-top/db v1.28.9
+	github.com/webx-top/echo v1.22.1
 )
 
 require (
@@ -35,6 +35,7 @@ require (
 	github.com/admpub/conpty v0.2.0 // indirect
 	github.com/admpub/copier v0.1.1 // indirect
 	github.com/admpub/cron v0.1.1 // indirect
+	github.com/admpub/dateparse v0.0.0-20250903020633-d86d3f2a4cfd // indirect
 	github.com/admpub/decimal v1.3.2 // indirect
 	github.com/admpub/email v2.4.1+incompatible // indirect
 	github.com/admpub/errors v0.8.2 // indirect
@@ -61,7 +62,8 @@ require (
 	github.com/admpub/imaging v1.6.3 // indirect
 	github.com/admpub/ip2region/v2 v2.0.1 // indirect
 	github.com/admpub/json5 v0.0.1 // indirect
-	github.com/admpub/license_gen v0.1.1 // indirect
+	github.com/admpub/license_gen v0.1.2 // indirect
+	github.com/admpub/machineid v1.0.2 // indirect
 	github.com/admpub/mahonia v0.0.0-20151019004008-c528b747d92d // indirect
 	github.com/admpub/mail v0.0.0-20170408110349-d63147b0317b // indirect
 	github.com/admpub/map2struct v0.1.3 // indirect
@@ -94,7 +96,7 @@ require (
 	github.com/ebitengine/purego v0.8.4 // indirect
 	github.com/fcjr/aia-transport-go v1.3.0 // indirect
 	github.com/francoispqt/gojay v1.2.13 // indirect
-	github.com/gabriel-vasile/mimetype v1.4.9 // indirect
+	github.com/gabriel-vasile/mimetype v1.4.10 // indirect
 	github.com/go-errors/errors v1.5.1 // indirect
 	github.com/go-ole/go-ole v1.3.0 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
@@ -118,7 +120,7 @@ require (
 	github.com/klauspost/compress v1.18.0 // indirect
 	github.com/kr/fs v0.1.0 // indirect
 	github.com/leodido/go-urn v1.4.0 // indirect
-	github.com/lufia/plan9stats v0.0.0-20250317134145-8bc96cf8fc35 // indirect
+	github.com/lufia/plan9stats v0.0.0-20250827001030-24949be3fa54 // indirect
 	github.com/maruel/rs v1.1.0 // indirect
 	github.com/mattn/go-colorable v0.1.14 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
@@ -141,7 +143,7 @@ require (
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/rwcarlsen/goexif v0.0.0-20190401172101-9e8deecbddbd // indirect
 	github.com/segmentio/fasthash v1.0.3 // indirect
-	github.com/spf13/pflag v1.0.7 // indirect
+	github.com/spf13/pflag v1.0.9 // indirect
 	github.com/tklauser/go-sysconf v0.3.15 // indirect
 	github.com/tklauser/numcpus v0.10.0 // indirect
 	github.com/tuotoo/qrcode v0.0.0-20220425170535-52ccc2bebf5d // indirect
@@ -157,13 +159,13 @@ require (
 	github.com/webx-top/validation v0.0.3 // indirect
 	github.com/webx-top/validator v0.3.0 // indirect
 	github.com/yusufpapurcu/wmi v1.2.4 // indirect
-	golang.org/x/crypto v0.41.0 // indirect
+	golang.org/x/crypto v0.42.0 // indirect
 	golang.org/x/image v0.30.0 // indirect
 	golang.org/x/net v0.43.0 // indirect
 	golang.org/x/oauth2 v0.30.0 // indirect
-	golang.org/x/sync v0.16.0 // indirect
-	golang.org/x/sys v0.35.0 // indirect
-	golang.org/x/text v0.28.0 // indirect
+	golang.org/x/sync v0.17.0 // indirect
+	golang.org/x/sys v0.36.0 // indirect
+	golang.org/x/text v0.29.0 // indirect
 	google.golang.org/protobuf v1.36.8 // indirect
 	gopkg.in/tomb.v1 v1.0.0-20141024135613-dd632973f1e7 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
