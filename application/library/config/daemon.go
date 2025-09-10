@@ -212,7 +212,8 @@ func OnExitedDaemon(processM *dbschema.NgingForeverProcess) {
 	if processM.EnableNotify == 0 {
 		return
 	}
-	user := ngingdbschema.NewNgingUser(nil)
+	ctx := defaults.NewMockContext()
+	user := ngingdbschema.NewNgingUser(ctx)
 	if processM.Uid > 0 {
 		user.Get(nil, `id`, processM.Uid)
 	}
