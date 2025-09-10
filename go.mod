@@ -8,7 +8,7 @@ go 1.24.5
 
 require (
 	github.com/admpub/events v1.3.6
-	github.com/admpub/goforever v0.3.10
+	github.com/admpub/goforever v0.3.11
 	github.com/admpub/gopty v0.1.2
 	github.com/admpub/log v1.4.0
 	github.com/admpub/pp v0.0.7
