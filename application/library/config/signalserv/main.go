@@ -16,7 +16,7 @@ func main() {
 			fmt.Printf("[%s] 收到信号: %v\n", time.Now().Format(time.DateTime), sig)
 			// 如果需要特定处理，可以在这里添加逻辑
 			if sig == syscall.SIGINT || sig == syscall.SIGTERM {
-				fmt.Println("优雅退出...")
+				fmt.Println("[" + time.Now().Format(time.DateTime) + "] 优雅退出...")
 				os.Exit(0)
 			}
 		}
