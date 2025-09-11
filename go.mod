@@ -1,6 +1,6 @@
 module github.com/nging-plugins/servermanager
 
-go 1.24.5
+go 1.25.1
 
 // replace github.com/coscms/webcore => ../../coscms/webcore
 
@@ -14,14 +14,14 @@ require (
 	github.com/admpub/pp v0.0.7
 	github.com/admpub/sockjs-go/v3 v3.0.1
 	github.com/admpub/websocket v1.0.4
-	github.com/coscms/webcore v0.12.10-0.20250910100523-c1c431a5317e
+	github.com/coscms/webcore v0.12.10-0.20250911105334-34f0fd03e1de
 	github.com/nging-plugins/sshmanager v1.8.0
 	github.com/shirou/gopsutil/v4 v4.25.8
 	github.com/stretchr/testify v1.11.1
 	github.com/webx-top/client v0.9.6
 	github.com/webx-top/com v1.4.0
 	github.com/webx-top/db v1.28.9
-	github.com/webx-top/echo v1.22.1
+	github.com/webx-top/echo v1.22.3
 )
 
 require (
@@ -161,8 +161,8 @@ require (
 	github.com/yusufpapurcu/wmi v1.2.4 // indirect
 	golang.org/x/crypto v0.42.0 // indirect
 	golang.org/x/image v0.30.0 // indirect
-	golang.org/x/net v0.43.0 // indirect
-	golang.org/x/oauth2 v0.30.0 // indirect
+	golang.org/x/net v0.44.0 // indirect
+	golang.org/x/oauth2 v0.31.0 // indirect
 	golang.org/x/sync v0.17.0 // indirect
 	golang.org/x/sys v0.36.0 // indirect
 	golang.org/x/text v0.29.0 // indirect
