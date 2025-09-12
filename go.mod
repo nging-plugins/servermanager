@@ -9,7 +9,7 @@ go 1.25.1
 require (
 	github.com/admpub/events v1.3.6
 	github.com/admpub/goforever v0.3.11
-	github.com/admpub/gopty v0.1.2
+	github.com/admpub/gopty v0.1.4
 	github.com/admpub/log v1.4.0
 	github.com/admpub/pp v0.0.7
 	github.com/admpub/sockjs-go/v3 v3.0.1
@@ -18,7 +18,6 @@ require (
 	github.com/nging-plugins/sshmanager v1.8.0
 	github.com/shirou/gopsutil/v4 v4.25.8
 	github.com/stretchr/testify v1.11.1
-	github.com/webx-top/client v0.9.6
 	github.com/webx-top/com v1.4.0
 	github.com/webx-top/db v1.28.9
 	github.com/webx-top/echo v1.22.3
@@ -32,7 +31,7 @@ require (
 	github.com/admpub/checksum v1.1.0 // indirect
 	github.com/admpub/color v1.8.1 // indirect
 	github.com/admpub/confl v0.2.4 // indirect
-	github.com/admpub/conpty v0.2.0 // indirect
+	github.com/admpub/conpty v0.2.1 // indirect
 	github.com/admpub/copier v0.1.1 // indirect
 	github.com/admpub/cron v0.1.1 // indirect
 	github.com/admpub/dateparse v0.0.0-20250903020633-d86d3f2a4cfd // indirect
@@ -90,7 +89,7 @@ require (
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/coscms/captcha v0.2.3 // indirect
 	github.com/coscms/forms v1.13.10 // indirect
-	github.com/creack/pty v1.1.21 // indirect
+	github.com/creack/pty v1.1.24 // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/dsoprea/go-logging v0.0.0-20200710184922-b02d349568dd // indirect
 	github.com/ebitengine/purego v0.8.4 // indirect
@@ -150,6 +149,7 @@ require (
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/webx-top/captcha v0.1.0 // indirect
 	github.com/webx-top/chardet v0.0.2 // indirect
+	github.com/webx-top/client v0.9.6 // indirect
 	github.com/webx-top/codec v0.3.0 // indirect
 	github.com/webx-top/image v0.1.2 // indirect
 	github.com/webx-top/pagination v0.3.2 // indirect
