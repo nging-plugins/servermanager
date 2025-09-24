@@ -1,0 +1,165 @@
+package handler
+
+import (
+	"bytes"
+	"io"
+
+	"github.com/webx-top/echo"
+	"github.com/webx-top/echo/code"
+
+	routeRegistry "github.com/coscms/webcore/registry/route"
+	"github.com/nging-plugins/servermanager/application/handler"
+	"github.com/nging-plugins/servermanager/application/library/servicemgr"
+)
+
+func init() {
+	handler.AddRouteRegister(registerRouteSystemService)
+	handler.SetSystemServiceListQuerier(systemServiceList)
+}
+
+func registerRouteSystemService(r echo.RouteRegister) {
+	metaHandler := routeRegistry.IRegister().MetaHandler
+	g := r.Group(`/system_service`)
+	g.Route(`GET,POST`, `/daemon_reload`, metaHandler(echo.H{`name`: `重载服务后台`}, systemServiceDaemonReload))
+	g.Route(`GET,POST`, `/restart`, metaHandler(echo.H{`name`: `重启服务`}, systemServiceRestart))
+	g.Route(`GET,POST`, `/stop`, metaHandler(echo.H{`name`: `停止服务`}, systemServiceStop))
+	g.Route(`GET,POST`, `/start`, metaHandler(echo.H{`name`: `启动服务`}, systemServiceStart))
+	g.Route(`GET,POST`, `/enable`, metaHandler(echo.H{`name`: `启用服务`}, systemServiceEnable))
+	g.Route(`GET,POST`, `/disable`, metaHandler(echo.H{`name`: `禁用服务`}, systemServiceDisable))
+	g.Route(`GET`, `/log`, metaHandler(echo.H{`name`: `查看服务日志`}, systemServiceLog))
+}
+
+func systemServiceDaemonReload(ctx echo.Context) error {
+	data := ctx.Data()
+	client, err := servicemgr.NewClient()
+	if err != nil {
+		return ctx.JSON(data.SetError(err))
+	}
+	err = client.Reload()
+	if err != nil {
+		return ctx.JSON(data.SetError(err))
+	}
+	return ctx.JSON(data.SetInfo(ctx.T("服务后台重载成功"), code.Success.Int()))
+}
+
+func systemServiceList(ctx echo.Context) error {
+	client, err := servicemgr.NewClient()
+	if err != nil {
+		return err
+	}
+	list, err := client.List()
+	if err != nil {
+		return err
+	}
+	ctx.Set(`systemServiceList`, list)
+	return err
+}
+
+func getServiceName(ctx echo.Context) (string, error) {
+	name := ctx.Formx("name").String()
+	if name == "" {
+		return "", ctx.NewError(code.InvalidParameter, "Missing service name").SetZone(`name`)
+	}
+	return name, nil
+}
+
+func systemServiceRestart(ctx echo.Context) error {
+	data := ctx.Data()
+	client, err := servicemgr.NewClient()
+	if err != nil {
+		return ctx.JSON(data.SetError(err))
+	}
+	name, err := getServiceName(ctx)
+	if err != nil {
+		return ctx.JSON(data.SetError(err))
+	}
+	err = client.Restart(name)
+	if err != nil {
+		return ctx.JSON(data.SetError(err))
+	}
+	return ctx.JSON(data.SetInfo(ctx.T("服务重启成功"), code.Success.Int()))
+}
+
+func systemServiceStop(ctx echo.Context) error {
+	data := ctx.Data()
+	client, err := servicemgr.NewClient()
+	if err != nil {
+		return ctx.JSON(data.SetError(err))
+	}
+	name, err := getServiceName(ctx)
+	if err != nil {
+		return ctx.JSON(data.SetError(err))
+	}
+	err = client.Stop(name)
+	if err != nil {
+		return ctx.JSON(data.SetError(err))
+	}
+	return ctx.JSON(data.SetInfo(ctx.T("服务停止成功"), code.Success.Int()))
+}
+
+func systemServiceStart(ctx echo.Context) error {
+	data := ctx.Data()
+	client, err := servicemgr.NewClient()
+	if err != nil {
+		return ctx.JSON(data.SetError(err))
+	}
+	name, err := getServiceName(ctx)
+	if err != nil {
+		return ctx.JSON(data.SetError(err))
+	}
+	err = client.Start(name)
+	if err != nil {
+		return ctx.JSON(data.SetError(err))
+	}
+	return ctx.JSON(data.SetInfo(ctx.T("服务启动成功"), code.Success.Int()))
+}
+
+func systemServiceEnable(ctx echo.Context) error {
+	data := ctx.Data()
+	client, err := servicemgr.NewClient()
+	if err != nil {
+		return ctx.JSON(data.SetError(err))
+	}
+	name, err := getServiceName(ctx)
+	if err != nil {
+		return ctx.JSON(data.SetError(err))
+	}
+	err = client.Enable(name)
+	if err != nil {
+		return ctx.JSON(data.SetError(err))
+	}
+	return ctx.JSON(data.SetInfo(ctx.T("服务启用成功"), code.Success.Int()))
+}
+
+func systemServiceDisable(ctx echo.Context) error {
+	data := ctx.Data()
+	client, err := servicemgr.NewClient()
+	if err != nil {
+		return ctx.JSON(data.SetError(err))
+	}
+	name, err := getServiceName(ctx)
+	if err != nil {
+		return ctx.JSON(data.SetError(err))
+	}
+	err = client.Disable(name)
+	if err != nil {
+		return ctx.JSON(data.SetError(err))
+	}
+	return ctx.JSON(data.SetInfo(ctx.T("服务禁用成功"), code.Success.Int()))
+}
+
+func systemServiceLog(ctx echo.Context) error {
+	name, err := getServiceName(ctx)
+	if err != nil {
+		return err
+	}
+	buf := bytes.NewBuffer(nil)
+	err = servicemgr.ServiceLog(ctx, name, func(rd io.Reader) error {
+		_, err := io.Copy(buf, rd)
+		return err
+	}, false)
+	if err != nil {
+		return err
+	}
+	return ctx.String(buf.String())
+}

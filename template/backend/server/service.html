@@ -90,6 +90,9 @@
         </div>
 	</div>
 </div>
+{{- if $.Stored.systemServiceList -}}
+{{Include "server/service_system"}}
+{{- end -}}
 {{/Block}}
 {{Block "footer"}}
 {{call $.Func.Modal "__TMPL__/server/log_show.yaml"}}

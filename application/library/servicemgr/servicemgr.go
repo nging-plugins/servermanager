@@ -31,7 +31,7 @@ func Parse(line string) *Service {
 	return nil
 }
 
-func ReadCmdOutput(cmd *exec.Cmd, callback func(rd io.ReadCloser) error) error {
+func ReadCmdOutput(cmd *exec.Cmd, callback func(rd io.Reader) error) error {
 	rd, err := cmd.StdoutPipe()
 	if err != nil {
 		return err

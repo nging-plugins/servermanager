@@ -1,9 +1,12 @@
 package servicemgr
 
 import (
+	"context"
+	"io"
 	"strings"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/webx-top/com"
 )
 
@@ -28,11 +31,24 @@ console-setup.service              loaded active exited  Set console font and ke
 	com.Dump(r)
 }
 
-/*
+// *
 func TestList(t *testing.T) {
 	ctx := context.Background()
 	list, err := List(ctx)
 	assert.NoError(t, err)
 	com.Dump(list)
+	client, err := NewClient()
+	assert.NoError(t, err)
+	defer client.Close()
+	list, err = client.List()
+	assert.NoError(t, err)
+	com.Dump(list)
+	ServiceLog(ctx, "ssh", func(rd io.Reader) error {
+		buf := make([]byte, 4096)
+		n, _ := rd.Read(buf)
+		println(string(buf[:n]))
+		return nil
+	}, false)
 }
-*/
+
+//*/

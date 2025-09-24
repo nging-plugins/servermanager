@@ -31,6 +31,16 @@ func RegisterRoute(r module.Router) {
 	r.Backend().RegisterToGroup(`/server`, registerRoute)
 }
 
+var routeRegisters = []func(echo.RouteRegister){}
+
+func AddRouteRegister(f func(echo.RouteRegister)) {
+	routeRegisters = append(routeRegisters, f)
+}
+
+func SetSystemServiceListQuerier(f func(ctx echo.Context) error) {
+	querySystemServiceList = f
+}
+
 func registerRoute(g echo.RouteRegister) {
 	registerRouteServerFile(g)
 	g.Route("GET", `/sysinfo`, Info)
@@ -59,4 +69,7 @@ func registerRoute(g echo.RouteRegister) {
 	ws.New("/cmdSendWS", CmdSendByWebsocket).Wrapper(g)
 	ws.New("/ptyWS", Pty).Wrapper(g)
 	ws.New("/dynamic", InfoByWebsocket).Wrapper(g).SetMetaKV(httpserver.PermPublicKV())
+	for _, register := range routeRegisters {
+		register(g)
+	}
 }

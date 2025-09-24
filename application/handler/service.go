@@ -27,6 +27,8 @@ import (
 	"github.com/nging-plugins/servermanager/application/registry"
 )
 
+var querySystemServiceList func(ctx echo.Context) error
+
 func Service(ctx echo.Context) error {
 	logCategories := logcategory.LogList(ctx)
 	ctx.Set(`logWithCategory`, logCategories.WithCategory)
@@ -36,5 +38,10 @@ func Service(ctx echo.Context) error {
 		buttons.Ready(ctx)
 		return buttons
 	})
+	if querySystemServiceList != nil {
+		if err := querySystemServiceList(ctx); err != nil {
+			return err
+		}
+	}
 	return ctx.Render(`server/service`, nil)
 }
