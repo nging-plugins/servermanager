@@ -9,6 +9,7 @@ import (
 
 	"github.com/coreos/go-systemd/v22/dbus"
 	dbusLib "github.com/godbus/dbus/v5"
+	"github.com/webx-top/com"
 )
 
 const serviceSuffix = ".service"
@@ -187,9 +188,13 @@ func getServiceName(name string) string {
 }
 
 func ServiceLog(ctx context.Context, service string, callback func(rd io.Reader) error, follow ...bool) error {
+	return ServiceLogWithRows(ctx, service, 100, callback, follow...)
+}
+
+func ServiceLogWithRows(ctx context.Context, service string, lines uint, callback func(rd io.Reader) error, follow ...bool) error {
 	args := []string{
 		`-u`, getServiceName(service),
-		`-n`, `100`,
+		`-n`, com.String(lines),
 	}
 	if len(follow) > 0 && follow[0] {
 		args = append(args, `-f`)

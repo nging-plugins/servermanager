@@ -3,7 +3,9 @@ package handler
 import (
 	"bytes"
 	"io"
+	"strings"
 
+	"github.com/webx-top/com"
 	"github.com/webx-top/echo"
 	"github.com/webx-top/echo/code"
 
@@ -59,6 +61,9 @@ func getServiceName(ctx echo.Context) (string, error) {
 	name := ctx.Formx("name").String()
 	if name == "" {
 		return "", ctx.NewError(code.InvalidParameter, "Missing service name").SetZone(`name`)
+	}
+	if strings.ContainsAny(name, "\n\t\r'\"") || com.IllegalFilePath(name) {
+		return "", ctx.NewError(code.InvalidParameter, "Invalid service name").SetZone(`name`)
 	}
 	return name, nil
 }
@@ -149,17 +154,25 @@ func systemServiceDisable(ctx echo.Context) error {
 }
 
 func systemServiceLog(ctx echo.Context) error {
+	data := ctx.Data()
 	name, err := getServiceName(ctx)
 	if err != nil {
-		return err
+		return ctx.JSON(data.SetError(err))
 	}
 	buf := bytes.NewBuffer(nil)
-	err = servicemgr.ServiceLog(ctx, name, func(rd io.Reader) error {
+	lines := ctx.Formx("lastLines").Uint()
+	if lines == 0 {
+		lines = 100
+	} else if lines > 500 {
+		lines = 500
+	}
+	err = servicemgr.ServiceLogWithRows(ctx, name, lines, func(rd io.Reader) error {
 		_, err := io.Copy(buf, rd)
 		return err
 	}, false)
 	if err != nil {
-		return err
+		return ctx.JSON(data.SetError(err))
 	}
-	return ctx.String(buf.String())
+	data.SetData(echo.H{`content`: buf.String()})
+	return ctx.JSON(data)
 }
