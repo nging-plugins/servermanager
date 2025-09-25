@@ -23,6 +23,7 @@ func registerRouteSystemService(r echo.RouteRegister) {
 	metaHandler := routeRegistry.IRegister().MetaHandler
 	g := r.Group(`/system_service`)
 	g.Route(`GET,POST`, `/daemon_reload`, metaHandler(echo.H{`name`: `重载服务后台`}, systemServiceDaemonReload))
+	g.Route(`GET,POST`, `/reload`, metaHandler(echo.H{`name`: `重载服务`}, systemServiceReload))
 	g.Route(`GET,POST`, `/restart`, metaHandler(echo.H{`name`: `重启服务`}, systemServiceRestart))
 	g.Route(`GET,POST`, `/stop`, metaHandler(echo.H{`name`: `停止服务`}, systemServiceStop))
 	g.Route(`GET,POST`, `/start`, metaHandler(echo.H{`name`: `启动服务`}, systemServiceStart))
@@ -100,6 +101,23 @@ func systemServiceRestart(ctx echo.Context) error {
 		return ctx.JSON(data.SetError(err))
 	}
 	err = client.Restart(ctx, name)
+	if err != nil {
+		return ctx.JSON(data.SetError(err))
+	}
+	return ctx.JSON(data.SetInfo(ctx.T("服务重启成功"), code.Success.Int()))
+}
+
+func systemServiceReload(ctx echo.Context) error {
+	data := ctx.Data()
+	client, err := servicemgr.NewClient(ctx)
+	if err != nil {
+		return ctx.JSON(data.SetError(err))
+	}
+	name, err := getServiceName(ctx)
+	if err != nil {
+		return ctx.JSON(data.SetError(err))
+	}
+	err = client.ReloadUnit(ctx, name)
 	if err != nil {
 		return ctx.JSON(data.SetError(err))
 	}
