@@ -33,7 +33,7 @@ func registerRouteSystemService(r echo.RouteRegister) {
 
 func systemServiceDaemonReload(ctx echo.Context) error {
 	data := ctx.Data()
-	client, err := servicemgr.NewClient()
+	client, err := servicemgr.NewClient(ctx)
 	if err != nil {
 		return ctx.JSON(data.SetError(err))
 	}
@@ -45,11 +45,27 @@ func systemServiceDaemonReload(ctx echo.Context) error {
 }
 
 func systemServiceList(ctx echo.Context) error {
-	client, err := servicemgr.NewClient()
+	client, err := servicemgr.NewClient(ctx)
 	if err != nil {
 		return err
 	}
-	list, err := client.List(ctx)
+	state := ctx.Formx("state").String()
+	var states []string
+	if state != "" && com.StrIsAlphaNumeric(state) {
+		states = []string{state}
+	}
+	var patterns []string
+	name := ctx.FormAnyx("name", "q").String()
+	if name != "" {
+		if err := validateServiceName(ctx, name); err != nil {
+			return err
+		}
+		if !strings.HasSuffix(name, `.service`) {
+			name += `.service`
+		}
+		patterns = []string{`*` + name + `*` + `.service`}
+	}
+	list, err := client.List(ctx, states, patterns)
 	if err != nil {
 		return err
 	}
@@ -57,20 +73,25 @@ func systemServiceList(ctx echo.Context) error {
 	return err
 }
 
+func validateServiceName(ctx echo.Context, name string) error {
+	if strings.ContainsAny(name, "\n\t\r'\"") || com.IllegalFilePath(name) {
+		return ctx.NewError(code.InvalidParameter, "Invalid service name").SetZone(`name`)
+	}
+	return nil
+}
+
 func getServiceName(ctx echo.Context) (string, error) {
 	name := ctx.Formx("name").String()
 	if name == "" {
 		return "", ctx.NewError(code.InvalidParameter, "Missing service name").SetZone(`name`)
 	}
-	if strings.ContainsAny(name, "\n\t\r'\"") || com.IllegalFilePath(name) {
-		return "", ctx.NewError(code.InvalidParameter, "Invalid service name").SetZone(`name`)
-	}
-	return name, nil
+	err := validateServiceName(ctx, name)
+	return name, err
 }
 
 func systemServiceRestart(ctx echo.Context) error {
 	data := ctx.Data()
-	client, err := servicemgr.NewClient()
+	client, err := servicemgr.NewClient(ctx)
 	if err != nil {
 		return ctx.JSON(data.SetError(err))
 	}
@@ -87,7 +108,7 @@ func systemServiceRestart(ctx echo.Context) error {
 
 func systemServiceStop(ctx echo.Context) error {
 	data := ctx.Data()
-	client, err := servicemgr.NewClient()
+	client, err := servicemgr.NewClient(ctx)
 	if err != nil {
 		return ctx.JSON(data.SetError(err))
 	}
@@ -104,7 +125,7 @@ func systemServiceStop(ctx echo.Context) error {
 
 func systemServiceStart(ctx echo.Context) error {
 	data := ctx.Data()
-	client, err := servicemgr.NewClient()
+	client, err := servicemgr.NewClient(ctx)
 	if err != nil {
 		return ctx.JSON(data.SetError(err))
 	}
@@ -121,7 +142,7 @@ func systemServiceStart(ctx echo.Context) error {
 
 func systemServiceEnable(ctx echo.Context) error {
 	data := ctx.Data()
-	client, err := servicemgr.NewClient()
+	client, err := servicemgr.NewClient(ctx)
 	if err != nil {
 		return ctx.JSON(data.SetError(err))
 	}
@@ -138,7 +159,7 @@ func systemServiceEnable(ctx echo.Context) error {
 
 func systemServiceDisable(ctx echo.Context) error {
 	data := ctx.Data()
-	client, err := servicemgr.NewClient()
+	client, err := servicemgr.NewClient(ctx)
 	if err != nil {
 		return ctx.JSON(data.SetError(err))
 	}

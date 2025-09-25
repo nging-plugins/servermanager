@@ -14,12 +14,12 @@ import (
 
 const serviceSuffix = ".service"
 
-func NewClient() (*Client, error) {
-	conn, err := dbus.New()
+func NewClient(ctx context.Context) (*Client, error) {
+	conn, err := dbus.NewWithContext(ctx)
 	if err != nil {
 		return nil, err
 	}
-	return &Client{conn: conn}, nil
+	return &Client{conn: conn, runtime: true}, nil
 }
 
 // Client represents systemd D-Bus API client.
@@ -28,9 +28,12 @@ type Client struct {
 	runtime bool
 }
 
-func (c *Client) List(ctx context.Context) ([]*Service, error) {
+func (c *Client) List(ctx context.Context, states []string, patterns []string) ([]*Service, error) {
 	var list []*Service
-	units, err := c.conn.ListUnitsByPatternsContext(ctx, nil, []string{`*.service`})
+	if len(patterns) == 0 {
+		patterns = []string{`*.service`}
+	}
+	units, err := c.conn.ListUnitsByPatternsContext(ctx, states, patterns)
 	if err != nil {
 		return list, err
 	}
