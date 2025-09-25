@@ -62,8 +62,6 @@
 	</div>
 </div>
 <script>
-function renderServiceConfFileContent(list){
-	return App.genTable(list,{"Content":function(v){return '<pre class="no-margin">'+App.htmlEncode(v)+'</pre>';} } );
-}
+function renderServiceConfFileContent(list){return App.genTable(list,{"Content":function(v){return '<pre class="no-margin">'+App.htmlEncode(v)+'</pre>';}});}
 </script>
 {{/Strip}}

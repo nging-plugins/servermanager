@@ -98,7 +98,7 @@
 {{call $.Func.Modal "__TMPL__/server/log_show.yaml"}}
 <script>
 $(function(){
-$('input[type=checkbox][data-toggle=switch]').each(function(){App.bindSwitch(this,'click',$(this).data('url'));});
+$('input[type=checkbox][data-toggle=switch]').each(function(){App.bindSwitch(this,'click');});
 });
 </script>
 {{/Block}}
