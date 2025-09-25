@@ -21,6 +21,7 @@ package handler
 import (
 	"github.com/webx-top/echo"
 
+	"github.com/coscms/webcore/library/common"
 	"github.com/coscms/webcore/library/dashboard"
 	"github.com/coscms/webcore/library/nlog/logcategory"
 
@@ -38,10 +39,9 @@ func Service(ctx echo.Context) error {
 		buttons.Ready(ctx)
 		return buttons
 	})
+	var err error
 	if querySystemServiceList != nil {
-		if err := querySystemServiceList(ctx); err != nil {
-			return err
-		}
+		err = querySystemServiceList(ctx)
 	}
-	return ctx.Render(`server/service`, nil)
+	return ctx.Render(`server/service`, common.Err(ctx, err))
 }
