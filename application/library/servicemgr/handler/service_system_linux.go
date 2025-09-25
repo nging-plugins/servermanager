@@ -31,6 +31,7 @@ func registerRouteSystemService(r echo.RouteRegister) {
 	g.Route(`GET,POST`, `/disable`, metaHandler(echo.H{`name`: `禁用服务`}, systemServiceDisable))
 	g.Route(`GET`, `/list_files`, metaHandler(echo.H{`name`: `服务配置文件列表`}, systemServiceListFiles))
 	g.Route(`GET`, `/log`, metaHandler(echo.H{`name`: `查看服务日志`}, systemServiceLog))
+	g.Route(`GET`, `/log_clear`, metaHandler(echo.H{`name`: `清理服务日志`}, systemServiceLogClear))
 }
 
 func systemServiceDaemonReload(ctx echo.Context) error {
@@ -231,5 +232,15 @@ func systemServiceLog(ctx echo.Context) error {
 		return ctx.JSON(data.SetError(err))
 	}
 	data.SetData(echo.H{`content`: buf.String()})
+	return ctx.JSON(data)
+}
+
+func systemServiceLogClear(ctx echo.Context) error {
+	data := ctx.Data()
+	err := servicemgr.ServiceLogClear(ctx)
+	if err != nil {
+		return ctx.JSON(data.SetError(err))
+	}
+	data.SetInfo(ctx.T("服务日志清理成功"), code.Success.Int())
 	return ctx.JSON(data)
 }

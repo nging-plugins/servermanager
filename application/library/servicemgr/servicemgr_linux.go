@@ -229,3 +229,18 @@ func ServiceLogWithRows(ctx context.Context, service string, lines uint, callbac
 	)
 	return ReadCmdOutput(cmd, callback)
 }
+
+func ServiceLogClear(ctx context.Context) error {
+	cmd := exec.CommandContext(
+		ctx, `journalctl`,
+		`--rotate`,
+	)
+	if err := cmd.Run(); err != nil {
+		return err
+	}
+	cmd = exec.CommandContext(
+		ctx, `journalctl`,
+		`--vacuum-time`, `1s`,
+	)
+	return cmd.Run()
+}
