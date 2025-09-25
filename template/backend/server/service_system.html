@@ -33,7 +33,8 @@
 									{{- if eq $v.Type `enabled` `disabled`}}<br />
 									{{"开机启动"|$.T}}: 
 									<div class="checkbox checkbox-success checkbox-inline no-margin-y">
-										<input id="checkbox-{{$k}}" class="styled switch-enabled" data-toggle="switch" type="checkbox" data-id="{{$v.Name}}"{{if eq $v.Type `enabled`}} checked="checked"{{end}} value="Y" /><label for="checkbox-{{$k}}" data-url="server/system_service/enable"></label>
+										<input id="checkbox-{{$k}}" class="styled switch-enabled" data-toggle="switch" type="checkbox" data-id="{{$v.Name}}" data-url="server/system_service/enable"{{if eq $v.Type `enabled`}} checked="checked"{{end}} value="Y" />
+										<label for="checkbox-{{$k}}"></label>
 									</div>
 									{{- end}}
 								</td>
