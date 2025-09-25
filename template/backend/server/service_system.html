@@ -35,16 +35,17 @@
 									<a href="javascript:;" data-url="{{BackendURL}}/server/system_service/log?name={{$v.Name}}" data-modal-title="{{$.T `[ %s ] 服务日志` $v.Name}}" title="{{`查看日志`|$.T}}" data-toggle="tooltip" onclick="App.logShow(this,true);">{{"查看日志"|$.T}}</a>
 								</td>
 								<td class="label-group">
+									<a class="label label-warning" href="javascript:;" data-ajax-accept="json" data-ajax-url="{{BackendURL}}/server/system_service/reload?name={{$v.Name}}" title="{{`重载服务`|$.T}}" data-toggle="tooltip"><i class="fa fa-refresh"></i> {{`重载服务`|$.T}}</a>
 									{{- if eq $v.Active "active"}}
-									<a class="label label-danger" href="javascript:;" data-ajax-accept="json" data-ajax-url="{{BackendURL}}/server/system_service/disable?name={{$v.Name}}" title="{{`禁用服务`|$.T}}" data-toggle="tooltip"><i class="fa fa-times"></i></a>
+									<a class="label label-danger" href="javascript:;" data-ajax-accept="json" data-ajax-url="{{BackendURL}}/server/system_service/disable?name={{$v.Name}}" title="{{`禁用服务`|$.T}}" data-toggle="tooltip"><i class="fa fa-times"></i> {{`禁用服务`|$.T}}</a>
 									{{- else}}
-									<a class="label label-success" href="javascript:;" data-ajax-accept="json" data-ajax-url="{{BackendURL}}/server/system_service/enable?name={{$v.Name}}" title="{{`启用服务`|$.T}}" data-toggle="tooltip"><i class="fa fa-check"></i></a>
+									<a class="label label-success" href="javascript:;" data-ajax-accept="json" data-ajax-url="{{BackendURL}}/server/system_service/enable?name={{$v.Name}}" title="{{`启用服务`|$.T}}" data-toggle="tooltip"><i class="fa fa-check"></i> {{`启用服务`|$.T}}</a>
 									{{- end}}
 									{{- if eq $v.Sub "running"}}
-									<a class="label label-danger" href="javascript:;" data-ajax-accept="json" data-ajax-url="{{BackendURL}}/server/system_service/stop?name={{$v.Name}}" title="{{`停止服务`|$.T}}" data-toggle="tooltip"><i class="fa fa-stop"></i></a>
-									<a class="label label-warning" href="javascript:;" data-ajax-accept="json" data-ajax-url="{{BackendURL}}/server/system_service/restart?name={{$v.Name}}" title="{{`重启服务`|$.T}}" data-toggle="tooltip"><i class="fa fa-refresh"></i></a>
+									<a class="label label-danger" href="javascript:;" data-ajax-accept="json" data-ajax-url="{{BackendURL}}/server/system_service/stop?name={{$v.Name}}" title="{{`停止服务`|$.T}}" data-toggle="tooltip"><i class="fa fa-stop"></i> {{`停止服务`|$.T}}</a>
+									<a class="label label-warning" href="javascript:;" data-ajax-accept="json" data-ajax-url="{{BackendURL}}/server/system_service/restart?name={{$v.Name}}" title="{{`重启服务`|$.T}}" data-toggle="tooltip"><i class="fa fa-refresh"></i> {{`重启服务`|$.T}}</a>
 									{{- else}}
-									<a class="label label-success" href="javascript:;" data-ajax-accept="json" data-ajax-url="{{BackendURL}}/server/system_service/start?name={{$v.Name}}" title="{{`启动服务`|$.T}}" data-toggle="tooltip"><i class="fa fa-play"></i></a>
+									<a class="label label-success" href="javascript:;" data-ajax-accept="json" data-ajax-url="{{BackendURL}}/server/system_service/start?name={{$v.Name}}" title="{{`启动服务`|$.T}}" data-toggle="tooltip"><i class="fa fa-play"></i> {{`启动服务`|$.T}}</a>
 									{{- end}}
 								</td>
 							</tr>
