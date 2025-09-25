@@ -88,7 +88,8 @@ func systemServiceListFiles(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(data.SetError(err))
 	}
-	return ctx.JSON(data.SetData(echo.H{`list`: list}))
+	data.SetData(echo.H{`list`: servicemgr.ServiceConfFileWithContent(list)})
+	return ctx.JSON(data)
 }
 
 func validateServiceName(ctx echo.Context, name string) error {

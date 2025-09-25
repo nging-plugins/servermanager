@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"context"
 	"io"
+	"os"
 	"os/exec"
 	"strings"
 
@@ -160,6 +161,26 @@ func (c *Client) Reload(ctx context.Context) error {
 func (c *Client) Close() error {
 	c.conn.Close()
 	return nil
+}
+
+func ServiceConfFileWithContent(items []dbus.UnitFile) []ServiceConf {
+	r := make([]ServiceConf, 0, len(items))
+	for _, item := range items {
+		var content string
+		if item.Path != "" {
+			bs, err := os.ReadFile(item.Path)
+			if err == nil {
+				content = string(bs)
+			}
+		}
+		r = append(r, ServiceConf{UnitFile: item, Content: content})
+	}
+	return r
+}
+
+type ServiceConf struct {
+	dbus.UnitFile
+	Content string
 }
 
 func List(ctx context.Context) (r []*Service, e error) {
