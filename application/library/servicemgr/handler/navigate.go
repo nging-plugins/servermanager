@@ -27,13 +27,13 @@ var leftNavigate = navigate.List{
 		Action: `system_service/start`,
 	},
 	{
-		Name:   echo.T(`启用系统服务`),
+		Name:   echo.T(`设置系统服务开机启动`),
 		Action: `system_service/enable`,
 	},
-	{
-		Name:   echo.T(`禁用系统服务`),
-		Action: `system_service/disable`,
-	},
+	// {
+	// 	Name:   echo.T(`禁用系统服务`),
+	// 	Action: `system_service/disable`,
+	// },
 	{
 		Name:   echo.T(`查看系统服务配置文件`),
 		Action: `system_service/list_files`,
