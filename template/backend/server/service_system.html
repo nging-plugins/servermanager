@@ -32,7 +32,7 @@
 									{{"运行状态"|$.T}}: <span class="{{if eq $v.Sub `running`}}text-success text-bold{{else if eq $v.Sub `failed`}}text-danger text-bold{{else}}text-warning{{end}}">{{$v.Sub}}</span>
 									{{- if eq $v.Type `enabled` `disabled`}}<br />
 									{{"开机启动"|$.T}}: 
-									<div class="checkbox checkbox-success no-margin-y">
+									<div class="checkbox checkbox-success checkbox-inline no-margin-y">
 										<input id="checkbox-{{$k}}" class="styled switch-enabled" data-toggle="switch" type="checkbox" data-id="{{$v.Name}}"{{if eq $v.Type `enabled`}} checked="checked"{{end}} value="Y" /><label for="checkbox-{{$k}}" data-url="server/system_service/enable"></label>
 									</div>
 									{{- end}}
