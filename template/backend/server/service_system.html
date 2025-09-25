@@ -28,8 +28,8 @@
 							{{- range $k,$v := $.Stored.systemServiceList}}
 							<tr>
 								<td>{{"加载状态"|$.T}}: <span class="{{if eq $v.Load `loaded`}}text-success text-bold{{else}}text-warning{{end}}">{{$v.Load}}</span><br />
-									{{"活跃状态"|$.T}}: <span class="{{if eq $v.Active `active`}}text-success text-bold{{else}}text-danger{{end}}">{{$v.Active}}</span><br />
-									{{"运行状态"|$.T}}: <span class="{{if eq $v.Sub `running`}}text-success text-bold{{else if eq $v.Sub `exited`}}text-danger{{else}}text-warning{{end}}">{{$v.Sub}}</span>
+									{{"活跃状态"|$.T}}: <span class="{{if eq $v.Active `active`}}text-success text-bold{{else if eq $v.Active `failed`}}text-danger text-bold{{else}}text-warning{{end}}">{{$v.Active}}</span><br />
+									{{"运行状态"|$.T}}: <span class="{{if eq $v.Sub `running`}}text-success text-bold{{else if eq $v.Sub `failed`}}text-danger text-bold{{else}}text-warning{{end}}">{{$v.Sub}}</span>
 								</td>
 								<td><strong>{{$v.Name}}</strong><br />{{$v.Description}}</td>
 								<td>
