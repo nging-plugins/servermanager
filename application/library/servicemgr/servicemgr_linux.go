@@ -40,6 +40,7 @@ func (c *Client) List(ctx context.Context, states []string, patterns []string) (
 		return list, err
 	}
 	for _, unit := range units {
+		//com.Dump(unit)
 		s := &Service{}
 		s.Name = strings.TrimSuffix(unit.Name, serviceSuffix)
 		s.Load = unit.LoadState
