@@ -11,7 +11,7 @@ import (
 
 	"github.com/coreos/go-systemd/v22/dbus"
 	// "github.com/coreos/go-systemd/v22/sdjournal" cgo dependency
-	dbusLib "github.com/godbus/dbus/v5"
+
 	"github.com/webx-top/com"
 )
 
@@ -75,22 +75,6 @@ func (c *Client) SetRuntime(runtime bool) {
 
 func (c *Client) getServiceName(name string) string {
 	return GetServiceName(name)
-}
-
-func (c *Client) getFilesByName(ctx context.Context, name string) ([]string, error) {
-	name = c.getServiceName(name)
-	unitFiles, err := c.ListFiles(ctx, []string{name})
-	if err != nil {
-		return nil, err
-	}
-	if len(unitFiles) == 0 {
-		return nil, dbusLib.ErrMsgNoObject
-	}
-	files := make([]string, 0, len(unitFiles))
-	for _, uf := range unitFiles {
-		files = append(files, uf.Path)
-	}
-	return files, err
 }
 
 func (c *Client) Enable(ctx context.Context, name string) error {
