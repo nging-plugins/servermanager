@@ -18,11 +18,8 @@
 					<table class="table no-border hover">
 						<thead class="no-border">
 							<tr>
-								<th style="width:80px"><strong>{{"加载状态"|$.T}}</strong></th>
-								<th style="width:80px"><strong>{{"活跃状态"|$.T}}</strong></th>
-								<th style="width:80px"><strong>{{"运行状态"|$.T}}</strong></th>
-								<th><strong>{{"名称"|$.T}}</strong></th>
-								<th><strong>{{"描述"|$.T}}</strong></th>
+								<th style="width:180px"><strong>{{"状态"|$.T}}</strong></th>
+								<th><strong>{{"服务名称"|$.T}}</strong></th>
 								<th style="width:80px"><strong>{{"其它信息"|$.T}}</strong></th>
 								<th style="width:180px"><strong>{{"操作"|$.T}}</strong></th>
 							</tr>
@@ -30,11 +27,11 @@
 						<tbody class="no-border-y">
 							{{- range $k,$v := $.Stored.systemServiceList}}
 							<tr>
-								<td><span class="{{if eq $v.Load `loaded`}}text-success text-bold{{else}}text-warning{{end}}">{{$v.Load}}</span></td>
-								<td><span class="{{if eq $v.Active `active`}}text-success text-bold{{else}}text-danger{{end}}">{{$v.Active}}</span></td>
-								<td><span class="{{if eq $v.Sub `running`}}text-success text-bold{{else if eq $v.Sub `exited`}}text-danger{{else}}text-warning{{end}}">{{$v.Sub}}</span></td>
-								<td><strong>{{$v.Name}}</strong></td>
-								<td>{{$v.Description}}</td>
+								<td>{{"加载状态"|$.T}}: <span class="{{if eq $v.Load `loaded`}}text-success text-bold{{else}}text-warning{{end}}">{{$v.Load}}</span><br />
+									{{"活跃状态"|$.T}}: <span class="{{if eq $v.Active `active`}}text-success text-bold{{else}}text-danger{{end}}">{{$v.Active}}</span><br />
+									{{"运行状态"|$.T}}: <span class="{{if eq $v.Sub `running`}}text-success text-bold{{else if eq $v.Sub `exited`}}text-danger{{else}}text-warning{{end}}">{{$v.Sub}}</span>
+								</td>
+								<td><strong>{{$v.Name}}</strong><br />{{$v.Description}}</td>
 								<td>
 									<a class="badge badge-info" href="javascript:;" data-url="{{BackendURL}}/server/system_service/log?name={{$v.Name}}" data-modal-title="{{$.T `[ %s ] 服务日志` $v.Name}}" title="{{`查看日志`|$.T}}" data-toggle="tooltip" onclick="App.logShow(this,true);">{{"查看日志"|$.T}}</a><br />
 									<a class="badge badge-primary xs-margin-top" href="javascript:;" data-url="{{BackendURL}}/server/system_service/list_files?name={{$v.Name}}" data-modal-title="{{$.T `[ %s ] 服务配置文件` $v.Name}}" title="{{`查看配置文件`|$.T}}" data-toggle="tooltip" onclick="App.logShow(this,true,'',renderServiceConfFileContent);">{{"查看配置"|$.T}}</a>
