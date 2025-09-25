@@ -38,7 +38,7 @@
 							<tr>
 								<td><span class="{{if eq $v.Load `loaded`}}text-success{{else}}text-warning{{end}}">{{$v.Load}}</span></td>
 								<td><span class="{{if eq $v.Active `active`}}text-success{{else}}text-danger{{end}}">{{$v.Active}}</span></td>
-								<td><span class="{{if eq $v.Sub `running`}}text-success{{else if eq $v.Sub `exited`}}text-danger{{else}}text-warning{{end}}">{{$v.Sub}}{{end}}</span></td>
+								<td><span class="{{if eq $v.Sub `running`}}text-success{{else if eq $v.Sub `exited`}}text-danger{{else}}text-warning{{end}}">{{$v.Sub}}</span></td>
 								<td><strong>{{$v.Name}}</strong></td>
 								<td>{{$v.Description}}</td>
 								<td>
