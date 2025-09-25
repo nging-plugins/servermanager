@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/coreos/go-systemd/v22/dbus"
+	// "github.com/coreos/go-systemd/v22/sdjournal" cgo dependency
 	dbusLib "github.com/godbus/dbus/v5"
 	"github.com/webx-top/com"
 )
@@ -229,6 +230,33 @@ func ServiceLogWithRows(ctx context.Context, service string, lines uint, callbac
 	)
 	return ReadCmdOutput(cmd, callback)
 }
+
+/* 依赖cgo
+func ServiceLogWithRows2(ctx context.Context, service string, lines uint, callback func(rd io.Reader) error) error {
+	r, err := sdjournal.NewJournalReader(sdjournal.JournalReaderConfig{
+		Since: time.Duration(-15) * time.Second,
+		Matches: []sdjournal.Match{
+			{
+				Field: sdjournal.SD_JOURNAL_FIELD_SYSTEMD_UNIT,
+				Value: GetServiceName(service),
+			},
+		},
+	})
+	if err != nil {
+		return err
+	}
+	defer r.Close()
+	pr, pw := io.Pipe()
+	defer func() {
+		pw.Close()
+		pr.Close()
+	}()
+	go io.Copy(pw, r)
+	err = callback(pr)
+	//r.Follow()
+	return err
+}
+*/
 
 func ServiceLogClear(ctx context.Context) error {
 	cmd := exec.CommandContext(
