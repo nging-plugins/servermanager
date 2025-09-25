@@ -1,12 +1,17 @@
 package handler
 
 import (
+	"os/exec"
+
 	routeRegistry "github.com/coscms/webcore/registry/route"
 	"github.com/nging-plugins/servermanager/application/handler"
 	"github.com/webx-top/echo"
 )
 
 func init() {
+	if _, err := exec.LookPath(`systemctl`); err != nil {
+		return
+	}
 	handler.AddRouteRegister(registerRouteSystemService)
 	handler.SetSystemServiceListQuerier(systemServiceList)
 	handler.LeftNavigate.Children.Add(-1, leftNavigate...)

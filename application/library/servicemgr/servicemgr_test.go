@@ -1,12 +1,10 @@
 package servicemgr
 
 import (
-	"context"
-	"io"
+	"os/exec"
 	"strings"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
 	"github.com/webx-top/com"
 )
 
@@ -29,9 +27,11 @@ console-setup.service              loaded active exited  Set console font and ke
 		r = append(r, s)
 	}
 	com.Dump(r)
+	result, err := exec.LookPath(`systemctl`)
+	t.Logf(`%#v,%v`, result, err)
 }
 
-// *
+/*/
 func TestList(t *testing.T) {
 	ctx := context.Background()
 	list, err := List(ctx)
