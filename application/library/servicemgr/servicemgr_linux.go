@@ -58,6 +58,7 @@ func (c *Client) List(ctx context.Context, states []string, patterns []string) (
 		for _, file := range files {
 			if index, ok := nameIndexes[filepath.Base(file.Path)]; ok {
 				list[index].Type = file.Type
+				list[index].Path = file.Path
 			}
 		}
 	}
@@ -215,6 +216,35 @@ func List(ctx context.Context) (r []*Service, e error) {
 		}
 		return nil
 	})
+	return
+}
+
+func IsEnabled(ctx context.Context, service string) (state string, err error) {
+	var b []byte
+	b, err = exec.CommandContext(
+		ctx,
+		`systemctl`, `is-enabled`, GetServiceName(service),
+	).CombinedOutput()
+	if err == nil {
+		state = strings.TrimSpace(string(b))
+	}
+	return
+}
+
+func ListDependencies(ctx context.Context, service string, reverse ...bool) (result string, err error) {
+	args := []string{`list-dependencies`}
+	if len(reverse) > 0 && reverse[0] {
+		args = append(args, `--reverse`)
+	}
+	args = append(args, GetServiceName(service))
+	var b []byte
+	b, err = exec.CommandContext(
+		ctx,
+		`systemctl`, args...,
+	).CombinedOutput()
+	if err == nil {
+		result = strings.TrimSpace(string(b))
+	}
 	return
 }
 

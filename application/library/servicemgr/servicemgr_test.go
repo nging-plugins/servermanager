@@ -40,7 +40,7 @@ func TestList(t *testing.T) {
 	client, err := NewClient(ctx)
 	assert.NoError(t, err)
 	defer client.Close()
-	list, err = client.List(ctx, []string{`running`}, []string{`*ssh*`})
+	list, err = client.List(ctx, []string{}, []string{})
 	assert.NoError(t, err)
 	com.Dump(list)
 	ServiceLog(ctx, "ssh", func(rd io.Reader) error {

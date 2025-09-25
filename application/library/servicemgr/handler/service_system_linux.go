@@ -5,6 +5,7 @@ import (
 	"io"
 	"strings"
 
+	"github.com/coscms/webcore/library/common"
 	"github.com/webx-top/com"
 	"github.com/webx-top/echo"
 	"github.com/webx-top/echo/code"
@@ -79,7 +80,7 @@ func validateServiceName(ctx echo.Context, name string) error {
 }
 
 func getServiceName(ctx echo.Context) (string, error) {
-	name := ctx.Formx("name").String()
+	name := ctx.FormAnyx("name", "id").String()
 	if name == "" {
 		return "", ctx.NewError(code.InvalidParameter, "Missing service name").SetZone(`name`)
 	}
@@ -161,15 +162,29 @@ func systemServiceEnable(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(data.SetError(err))
 	}
-	name, err := getServiceName(ctx)
+	var name string
+	name, err = getServiceName(ctx)
 	if err != nil {
 		return ctx.JSON(data.SetError(err))
+	}
+	enabled := ctx.Form(`enabled`)
+	if len(enabled) > 0 {
+		if !common.IsBoolFlag(enabled) {
+			return ctx.JSON(data.SetError(ctx.NewError(code.InvalidParameter, "Invalid enabled value").SetZone(`enabled`)))
+		}
+		if enabled != common.BoolY {
+			err = client.Disable(ctx, name)
+			if err != nil {
+				return ctx.JSON(data.SetError(err))
+			}
+			return ctx.JSON(data.SetInfo(ctx.T("成功禁止服务开机启动"), code.Success.Int()))
+		}
 	}
 	err = client.Enable(ctx, name)
 	if err != nil {
 		return ctx.JSON(data.SetError(err))
 	}
-	return ctx.JSON(data.SetInfo(ctx.T("服务启用成功"), code.Success.Int()))
+	return ctx.JSON(data.SetInfo(ctx.T("成功开启服务开机启动"), code.Success.Int()))
 }
 
 func systemServiceDisable(ctx echo.Context) error {
@@ -186,7 +201,7 @@ func systemServiceDisable(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(data.SetError(err))
 	}
-	return ctx.JSON(data.SetInfo(ctx.T("服务禁用成功"), code.Success.Int()))
+	return ctx.JSON(data.SetInfo(ctx.T("成功禁止服务开机启动"), code.Success.Int()))
 }
 
 func systemServiceLog(ctx echo.Context) error {

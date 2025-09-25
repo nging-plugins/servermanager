@@ -13,8 +13,11 @@ type Service struct {
 	Load        string
 	Active      string
 	Sub         string
-	Type        string
 	Description string
+
+	// units file path and type
+	Type string
+	Path string
 }
 
 func Parse(line string) *Service {

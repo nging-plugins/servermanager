@@ -84,7 +84,7 @@
 								<td>{{$v.Workdir}}</td>
 								<td>{{if gt $v.Updated 0}}{{(Date $v.Updated).Format "2006-01-02 15:04:05"}}{{else}}{{(Date $v.Created).Format "2006-01-02 15:04:05"}}{{end}}</td>
 								<td>
-									<a href="javascript:;" data-url="{{BackendURL}}/server/daemon_log?id={{$v.Id}}" title="{{`信息日志`|$.T}}" data-toggle="tooltip" class="text-info" onclick="App.logShow(this,true);">{{"信息日志"|$.T}}</a><br />
+									<a href="javascript:;" data-url="{{BackendURL}}/server/daemon_log?id={{$v.Id}}" title="{{`信息日志`|$.T}}" data-toggle="tooltip" onclick="App.logShow(this,true);">{{"信息日志"|$.T}}</a><br />
 									<a href="javascript:;" data-url="{{BackendURL}}/server/daemon_log?type=error&id={{$v.Id}}" title="{{`错误日志`|$.T}}" data-toggle="tooltip" class="text-danger" onclick="App.logShow(this,true);">{{"错误日志"|$.T}}</a>
 								</td>
 								<td class="label-group">
