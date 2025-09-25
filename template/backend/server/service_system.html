@@ -32,7 +32,7 @@
 								<td><strong>{{$v.Name}}</strong></td>
 								<td>{{$v.Description}}</td>
 								<td>
-									<a href="javascript:;" data-url="{{BackendURL}}/server/system_service/log?name={{$v.Name}}" title="{{$.T `%s服务日志` {{$v.Name}}}}" data-toggle="tooltip" onclick="App.logShow(this,true);">{{"查看日志"|$.T}}</a>
+									<a href="javascript:;" data-url="{{BackendURL}}/server/system_service/log?name={{$v.Name}}" title="{{$.T `[ %s ] 服务日志` {{$v.Name}}}}" data-toggle="tooltip" onclick="App.logShow(this,true);">{{"查看日志"|$.T}}</a>
 								</td>
 								<td class="label-group">
 									{{- if eq $v.Active "active"}}
