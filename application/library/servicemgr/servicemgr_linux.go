@@ -6,6 +6,7 @@ import (
 	"io"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strings"
 
 	"github.com/coreos/go-systemd/v22/dbus"
@@ -39,7 +40,11 @@ func (c *Client) List(ctx context.Context, states []string, patterns []string) (
 	if err != nil {
 		return list, err
 	}
-	for _, unit := range units {
+	names := make([]string, len(units))
+	nameIndexes := make(map[string]int, len(units))
+	for index, unit := range units {
+		names[index] = unit.Name
+		nameIndexes[unit.Name] = index
 		//com.Dump(unit)
 		s := &Service{}
 		s.Name = strings.TrimSuffix(unit.Name, serviceSuffix)
@@ -48,6 +53,13 @@ func (c *Client) List(ctx context.Context, states []string, patterns []string) (
 		s.Sub = unit.SubState
 		s.Description = unit.Description
 		list = append(list, s)
+	}
+	if files, err := c.ListFiles(ctx, names); err == nil {
+		for _, file := range files {
+			if index, ok := nameIndexes[filepath.Base(file.Path)]; ok {
+				list[index].Type = file.Type
+			}
+		}
 	}
 	return list, nil
 }

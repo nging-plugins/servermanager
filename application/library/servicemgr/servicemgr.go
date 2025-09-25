@@ -13,6 +13,7 @@ type Service struct {
 	Load        string
 	Active      string
 	Sub         string
+	Type        string
 	Description string
 }
 
