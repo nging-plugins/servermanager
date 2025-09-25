@@ -9,29 +9,74 @@ import (
 	"github.com/webx-top/echo"
 	"github.com/webx-top/echo/code"
 
+	"github.com/coscms/webcore/library/navigate"
 	routeRegistry "github.com/coscms/webcore/registry/route"
 	"github.com/nging-plugins/servermanager/application/handler"
 	"github.com/nging-plugins/servermanager/application/library/servicemgr"
 )
 
+var LeftNavigate = navigate.List{
+	{
+		Name:   echo.T(`重载系统服务后台`),
+		Action: `system_service/daemon_reload`,
+	},
+	{
+		Name:   echo.T(`重载系统服务`),
+		Action: `system_service/reload`,
+	},
+	{
+		Name:   echo.T(`重启系统服务`),
+		Action: `system_service/restart`,
+	},
+	{
+		Name:   echo.T(`停止系统服务`),
+		Action: `system_service/stop`,
+	},
+	{
+		Name:   echo.T(`启动系统服务`),
+		Action: `system_service/start`,
+	},
+	{
+		Name:   echo.T(`启用系统服务`),
+		Action: `system_service/enable`,
+	},
+	{
+		Name:   echo.T(`禁用系统服务`),
+		Action: `system_service/disable`,
+	},
+	{
+		Name:   echo.T(`查看系统服务配置文件`),
+		Action: `system_service/list_files`,
+	},
+	{
+		Name:   echo.T(`查看系统服务日志`),
+		Action: `system_service/log`,
+	},
+	{
+		Name:   echo.T(`清理系统服务日志`),
+		Action: `system_service/log_clear`,
+	},
+}
+
 func init() {
 	handler.AddRouteRegister(registerRouteSystemService)
 	handler.SetSystemServiceListQuerier(systemServiceList)
+	handler.LeftNavigate.Children.Add(-1, LeftNavigate...)
 }
 
 func registerRouteSystemService(r echo.RouteRegister) {
 	metaHandler := routeRegistry.IRegister().MetaHandler
 	g := r.Group(`/system_service`)
-	g.Route(`GET,POST`, `/daemon_reload`, metaHandler(echo.H{`name`: `重载服务后台`}, systemServiceDaemonReload))
-	g.Route(`GET,POST`, `/reload`, metaHandler(echo.H{`name`: `重载服务`}, systemServiceReload))
-	g.Route(`GET,POST`, `/restart`, metaHandler(echo.H{`name`: `重启服务`}, systemServiceRestart))
-	g.Route(`GET,POST`, `/stop`, metaHandler(echo.H{`name`: `停止服务`}, systemServiceStop))
-	g.Route(`GET,POST`, `/start`, metaHandler(echo.H{`name`: `启动服务`}, systemServiceStart))
-	g.Route(`GET,POST`, `/enable`, metaHandler(echo.H{`name`: `启用服务`}, systemServiceEnable))
-	g.Route(`GET,POST`, `/disable`, metaHandler(echo.H{`name`: `禁用服务`}, systemServiceDisable))
-	g.Route(`GET`, `/list_files`, metaHandler(echo.H{`name`: `服务配置文件列表`}, systemServiceListFiles))
-	g.Route(`GET`, `/log`, metaHandler(echo.H{`name`: `查看服务日志`}, systemServiceLog))
-	g.Route(`GET`, `/log_clear`, metaHandler(echo.H{`name`: `清理服务日志`}, systemServiceLogClear))
+	g.Route(`GET,POST`, `/daemon_reload`, metaHandler(echo.H{`name`: `重载系统服务后台`}, systemServiceDaemonReload))
+	g.Route(`GET,POST`, `/reload`, metaHandler(echo.H{`name`: `重载系统服务`}, systemServiceReload))
+	g.Route(`GET,POST`, `/restart`, metaHandler(echo.H{`name`: `重启系统服务`}, systemServiceRestart))
+	g.Route(`GET,POST`, `/stop`, metaHandler(echo.H{`name`: `停止系统服务`}, systemServiceStop))
+	g.Route(`GET,POST`, `/start`, metaHandler(echo.H{`name`: `启动系统服务`}, systemServiceStart))
+	g.Route(`GET,POST`, `/enable`, metaHandler(echo.H{`name`: `启用系统服务`}, systemServiceEnable))
+	g.Route(`GET,POST`, `/disable`, metaHandler(echo.H{`name`: `禁用系统服务`}, systemServiceDisable))
+	g.Route(`GET`, `/list_files`, metaHandler(echo.H{`name`: `查看系统服务配置文件`}, systemServiceListFiles))
+	g.Route(`GET`, `/log`, metaHandler(echo.H{`name`: `查看系统服务日志`}, systemServiceLog))
+	g.Route(`GET`, `/log_clear`, metaHandler(echo.H{`name`: `清理系统服务日志`}, systemServiceLogClear))
 }
 
 func systemServiceDaemonReload(ctx echo.Context) error {
