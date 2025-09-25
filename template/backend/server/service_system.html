@@ -31,9 +31,9 @@
 								<td><span class="{{if eq $v.Sub `running`}}text-success text-bold{{else if eq $v.Sub `exited`}}text-danger{{else}}text-warning{{end}}">{{$v.Sub}}</span></td>
 								<td><strong>{{$v.Name}}</strong></td>
 								<td>{{$v.Description}}</td>
-								<td class="label-group">
-									<a class="label label-info" href="javascript:;" data-url="{{BackendURL}}/server/system_service/log?name={{$v.Name}}" data-modal-title="{{$.T `[ %s ] 服务日志` $v.Name}}" title="{{`查看日志`|$.T}}" data-toggle="tooltip" onclick="App.logShow(this,true);">{{"查看日志"|$.T}}</a><br />
-									<a class="label label-black" href="javascript:;" data-url="{{BackendURL}}/server/system_service/list_files?name={{$v.Name}}" data-modal-title="{{$.T `[ %s ] 服务配置文件` $v.Name}}" title="{{`查看配置文件`|$.T}}" data-toggle="tooltip" onclick="App.logShow(this,true,'',renderServiceConfFileContent);">{{"查看配置"|$.T}}</a>
+								<td>
+									<a class="badge badge-info" href="javascript:;" data-url="{{BackendURL}}/server/system_service/log?name={{$v.Name}}" data-modal-title="{{$.T `[ %s ] 服务日志` $v.Name}}" title="{{`查看日志`|$.T}}" data-toggle="tooltip" onclick="App.logShow(this,true);">{{"查看日志"|$.T}}</a><br />
+									<a class="badge badge-primary xs-margin-top" href="javascript:;" data-url="{{BackendURL}}/server/system_service/list_files?name={{$v.Name}}" data-modal-title="{{$.T `[ %s ] 服务配置文件` $v.Name}}" title="{{`查看配置文件`|$.T}}" data-toggle="tooltip" onclick="App.logShow(this,true,'',renderServiceConfFileContent);">{{"查看配置"|$.T}}</a>
 								</td>
 								<td class="label-group">
 									<a class="label label-warning" href="javascript:;" data-ajax-accept="json" data-ajax-url="{{BackendURL}}/server/system_service/reload?name={{$v.Name}}" title="{{`重载服务`|$.T}}" data-toggle="tooltip"><i class="fa fa-refresh"></i> {{`重载服务`|$.T}}</a>
