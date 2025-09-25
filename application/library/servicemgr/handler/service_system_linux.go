@@ -29,6 +29,7 @@ func registerRouteSystemService(r echo.RouteRegister) {
 	g.Route(`GET,POST`, `/start`, metaHandler(echo.H{`name`: `启动服务`}, systemServiceStart))
 	g.Route(`GET,POST`, `/enable`, metaHandler(echo.H{`name`: `启用服务`}, systemServiceEnable))
 	g.Route(`GET,POST`, `/disable`, metaHandler(echo.H{`name`: `禁用服务`}, systemServiceDisable))
+	g.Route(`GET`, `/list_files`, metaHandler(echo.H{`name`: `服务配置文件列表`}, systemServiceListFiles))
 	g.Route(`GET`, `/log`, metaHandler(echo.H{`name`: `查看服务日志`}, systemServiceLog))
 }
 
@@ -61,10 +62,8 @@ func systemServiceList(ctx echo.Context) error {
 		if err := validateServiceName(ctx, name); err != nil {
 			return err
 		}
-		if !strings.HasSuffix(name, `.service`) {
-			name += `.service`
-		}
-		patterns = []string{`*` + name + `*` + `.service`}
+		name = servicemgr.GetServiceName(name)
+		patterns = append(patterns, name)
 	}
 	list, err := client.List(ctx, states, patterns)
 	if err != nil {
@@ -72,6 +71,24 @@ func systemServiceList(ctx echo.Context) error {
 	}
 	ctx.Set(`systemServiceList`, list)
 	return err
+}
+
+func systemServiceListFiles(ctx echo.Context) error {
+	data := ctx.Data()
+	client, err := servicemgr.NewClient(ctx)
+	if err != nil {
+		return ctx.JSON(data.SetError(err))
+	}
+	name, err := getServiceName(ctx)
+	if err != nil {
+		return ctx.JSON(data.SetError(err))
+	}
+	name = servicemgr.GetServiceName(name)
+	list, err := client.ListFiles(ctx, []string{name})
+	if err != nil {
+		return ctx.JSON(data.SetError(err))
+	}
+	return ctx.JSON(data.SetData(echo.H{`list`: list}))
 }
 
 func validateServiceName(ctx echo.Context, name string) error {

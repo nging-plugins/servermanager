@@ -49,7 +49,7 @@ func (c *Client) List(ctx context.Context, states []string, patterns []string) (
 	return list, nil
 }
 
-func (c *Client) listFiles(ctx context.Context, names []string) ([]dbus.UnitFile, error) {
+func (c *Client) ListFiles(ctx context.Context, names []string) ([]dbus.UnitFile, error) {
 	return c.conn.ListUnitFilesByPatternsContext(ctx, nil, names)
 }
 
@@ -58,12 +58,12 @@ func (c *Client) SetRuntime(runtime bool) {
 }
 
 func (c *Client) getServiceName(name string) string {
-	return getServiceName(name)
+	return GetServiceName(name)
 }
 
 func (c *Client) getFilesByName(ctx context.Context, name string) ([]string, error) {
 	name = c.getServiceName(name)
-	unitFiles, err := c.listFiles(ctx, []string{name})
+	unitFiles, err := c.ListFiles(ctx, []string{name})
 	if err != nil {
 		return nil, err
 	}
@@ -183,7 +183,7 @@ func List(ctx context.Context) (r []*Service, e error) {
 	return
 }
 
-func getServiceName(name string) string {
+func GetServiceName(name string) string {
 	if !strings.HasSuffix(name, serviceSuffix) {
 		name += serviceSuffix
 	}
@@ -196,7 +196,7 @@ func ServiceLog(ctx context.Context, service string, callback func(rd io.Reader)
 
 func ServiceLogWithRows(ctx context.Context, service string, lines uint, callback func(rd io.Reader) error, follow ...bool) error {
 	args := []string{
-		`-u`, getServiceName(service),
+		`-u`, GetServiceName(service),
 		`-n`, com.String(lines),
 	}
 	if len(follow) > 0 && follow[0] {
