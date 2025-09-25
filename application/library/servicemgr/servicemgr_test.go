@@ -43,6 +43,8 @@ func TestList(t *testing.T) {
 	list, err = client.List(ctx, []string{}, []string{})
 	assert.NoError(t, err)
 	com.Dump(list)
+	// err = client.Enable(ctx, "Nging")
+	// assert.NoError(t, err)
 	ServiceLog(ctx, "ssh", func(rd io.Reader) error {
 		buf := make([]byte, 4096)
 		n, _ := rd.Read(buf)

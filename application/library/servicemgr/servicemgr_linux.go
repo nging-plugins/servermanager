@@ -94,20 +94,12 @@ func (c *Client) getFilesByName(ctx context.Context, name string) ([]string, err
 }
 
 func (c *Client) Enable(ctx context.Context, name string) error {
-	files, err := c.getFilesByName(ctx, name)
-	if err != nil {
-		return err
-	}
-	_, _, err = c.conn.EnableUnitFilesContext(ctx, files, c.runtime, false)
+	_, _, err := c.conn.EnableUnitFilesContext(ctx, []string{c.getServiceName(name)}, c.runtime, false)
 	return err
 }
 
 func (c *Client) Disable(ctx context.Context, name string) error {
-	files, err := c.getFilesByName(ctx, name)
-	if err != nil {
-		return err
-	}
-	_, err = c.conn.DisableUnitFilesContext(ctx, files, c.runtime)
+	_, err := c.conn.DisableUnitFilesContext(ctx, []string{c.getServiceName(name)}, c.runtime)
 	return err
 }
 
