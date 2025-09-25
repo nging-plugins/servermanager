@@ -14,8 +14,9 @@ require (
 	github.com/admpub/pp v0.0.7
 	github.com/admpub/sockjs-go/v3 v3.0.1
 	github.com/admpub/websocket v1.0.4
-	github.com/coreos/go-systemd v0.0.0-20181012123002-c6f51f82210d
+	github.com/coreos/go-systemd/v22 v22.6.0
 	github.com/coscms/webcore v0.12.10-0.20250911105334-34f0fd03e1de
+	github.com/godbus/dbus/v5 v5.1.0
 	github.com/nging-plugins/sshmanager v1.8.8
 	github.com/shirou/gopsutil/v4 v4.25.8
 	github.com/stretchr/testify v1.11.1
@@ -104,7 +105,6 @@ require (
 	github.com/go-playground/validator/v10 v10.27.0 // indirect
 	github.com/go-sql-driver/mysql v1.9.3 // indirect
 	github.com/goccy/go-json v0.10.5 // indirect
-	github.com/godbus/dbus v4.1.0+incompatible // indirect
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/gorilla/css v1.0.1 // indirect

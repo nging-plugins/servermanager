@@ -35,7 +35,7 @@ func systemServiceDaemonReload(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(data.SetError(err))
 	}
-	err = client.Reload()
+	err = client.Reload(ctx)
 	if err != nil {
 		return ctx.JSON(data.SetError(err))
 	}
@@ -47,7 +47,7 @@ func systemServiceList(ctx echo.Context) error {
 	if err != nil {
 		return err
 	}
-	list, err := client.List()
+	list, err := client.List(ctx)
 	if err != nil {
 		return err
 	}
@@ -73,7 +73,7 @@ func systemServiceRestart(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(data.SetError(err))
 	}
-	err = client.Restart(name)
+	err = client.Restart(ctx, name)
 	if err != nil {
 		return ctx.JSON(data.SetError(err))
 	}
@@ -90,7 +90,7 @@ func systemServiceStop(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(data.SetError(err))
 	}
-	err = client.Stop(name)
+	err = client.Stop(ctx, name)
 	if err != nil {
 		return ctx.JSON(data.SetError(err))
 	}
@@ -107,7 +107,7 @@ func systemServiceStart(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(data.SetError(err))
 	}
-	err = client.Start(name)
+	err = client.Start(ctx, name)
 	if err != nil {
 		return ctx.JSON(data.SetError(err))
 	}
@@ -124,7 +124,7 @@ func systemServiceEnable(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(data.SetError(err))
 	}
-	err = client.Enable(name)
+	err = client.Enable(ctx, name)
 	if err != nil {
 		return ctx.JSON(data.SetError(err))
 	}
@@ -141,7 +141,7 @@ func systemServiceDisable(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(data.SetError(err))
 	}
-	err = client.Disable(name)
+	err = client.Disable(ctx, name)
 	if err != nil {
 		return ctx.JSON(data.SetError(err))
 	}

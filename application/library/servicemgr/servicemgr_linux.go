@@ -7,8 +7,8 @@ import (
 	"os/exec"
 	"strings"
 
-	"github.com/coreos/go-systemd/dbus"
-	dbusLib "github.com/godbus/dbus"
+	"github.com/coreos/go-systemd/v22/dbus"
+	dbusLib "github.com/godbus/dbus/v5"
 )
 
 const serviceSuffix = ".service"
@@ -27,9 +27,9 @@ type Client struct {
 	runtime bool
 }
 
-func (c *Client) List() ([]*Service, error) {
+func (c *Client) List(ctx context.Context) ([]*Service, error) {
 	var list []*Service
-	units, err := c.conn.ListUnitsByPatterns(nil, []string{`*.service`})
+	units, err := c.conn.ListUnitsByPatternsContext(ctx, nil, []string{`*.service`})
 	if err != nil {
 		return list, err
 	}
@@ -45,8 +45,8 @@ func (c *Client) List() ([]*Service, error) {
 	return list, nil
 }
 
-func (c *Client) listFiles(names []string) ([]dbus.UnitFile, error) {
-	return c.conn.ListUnitFilesByPatterns(nil, names)
+func (c *Client) listFiles(ctx context.Context, names []string) ([]dbus.UnitFile, error) {
+	return c.conn.ListUnitFilesByPatternsContext(ctx, nil, names)
 }
 
 func (c *Client) SetRuntime(runtime bool) {
@@ -57,9 +57,9 @@ func (c *Client) getServiceName(name string) string {
 	return getServiceName(name)
 }
 
-func (c *Client) getFilesByName(name string) ([]string, error) {
+func (c *Client) getFilesByName(ctx context.Context, name string) ([]string, error) {
 	name = c.getServiceName(name)
-	unitFiles, err := c.listFiles([]string{name})
+	unitFiles, err := c.listFiles(ctx, []string{name})
 	if err != nil {
 		return nil, err
 	}
@@ -73,28 +73,28 @@ func (c *Client) getFilesByName(name string) ([]string, error) {
 	return files, err
 }
 
-func (c *Client) Enable(name string) error {
-	files, err := c.getFilesByName(name)
+func (c *Client) Enable(ctx context.Context, name string) error {
+	files, err := c.getFilesByName(ctx, name)
 	if err != nil {
 		return err
 	}
-	_, _, err = c.conn.EnableUnitFiles(files, c.runtime, false)
+	_, _, err = c.conn.EnableUnitFilesContext(ctx, files, c.runtime, false)
 	return err
 }
 
-func (c *Client) Disable(name string) error {
-	files, err := c.getFilesByName(name)
+func (c *Client) Disable(ctx context.Context, name string) error {
+	files, err := c.getFilesByName(ctx, name)
 	if err != nil {
 		return err
 	}
-	_, err = c.conn.DisableUnitFiles(files, c.runtime)
+	_, err = c.conn.DisableUnitFilesContext(ctx, files, c.runtime)
 	return err
 }
 
-func (c *Client) Start(name string) error {
+func (c *Client) Start(ctx context.Context, name string) error {
 	ch := make(chan string)
 	name = c.getServiceName(name)
-	_, err := c.conn.StartUnit(name, `replace`, ch)
+	_, err := c.conn.StartUnitContext(ctx, name, `replace`, ch)
 	if err != nil {
 		return err
 	}
@@ -102,10 +102,10 @@ func (c *Client) Start(name string) error {
 	return nil
 }
 
-func (c *Client) Stop(name string) error {
+func (c *Client) Stop(ctx context.Context, name string) error {
 	ch := make(chan string)
 	name = c.getServiceName(name)
-	_, err := c.conn.StopUnit(name, `replace`, ch)
+	_, err := c.conn.StopUnitContext(ctx, name, `replace`, ch)
 	if err != nil {
 		return err
 	}
@@ -113,10 +113,10 @@ func (c *Client) Stop(name string) error {
 	return nil
 }
 
-func (c *Client) Restart(name string) error {
+func (c *Client) Restart(ctx context.Context, name string) error {
 	ch := make(chan string)
 	name = c.getServiceName(name)
-	_, err := c.conn.RestartUnit(name, `replace`, ch)
+	_, err := c.conn.RestartUnitContext(ctx, name, `replace`, ch)
 	if err != nil {
 		return err
 	}
@@ -124,10 +124,10 @@ func (c *Client) Restart(name string) error {
 	return nil
 }
 
-func (c *Client) ReloadOrRestart(name string) error {
+func (c *Client) ReloadOrRestart(ctx context.Context, name string) error {
 	ch := make(chan string)
 	name = c.getServiceName(name)
-	_, err := c.conn.ReloadOrRestartUnit(name, `replace`, ch)
+	_, err := c.conn.ReloadOrRestartUnitContext(ctx, name, `replace`, ch)
 	if err != nil {
 		return err
 	}
@@ -135,21 +135,10 @@ func (c *Client) ReloadOrRestart(name string) error {
 	return nil
 }
 
-func (c *Client) ReloadUnit(name string) error {
+func (c *Client) ReloadUnit(ctx context.Context, name string) error {
 	ch := make(chan string)
 	name = c.getServiceName(name)
-	_, err := c.conn.ReloadUnit(name, `replace`, ch)
-	if err != nil {
-		return err
-	}
-	<-ch
-	return nil
-}
-
-func (c *Client) StopAndStart(name string) error {
-	ch := make(chan string)
-	name = c.getServiceName(name)
-	_, err := c.conn.StopUnit(name, `replace`, ch)
+	_, err := c.conn.ReloadUnitContext(ctx, name, `replace`, ch)
 	if err != nil {
 		return err
 	}
@@ -159,8 +148,8 @@ func (c *Client) StopAndStart(name string) error {
 
 // Reload instructs systemd to scan for and reload unit files. This is
 // equivalent to a 'systemctl daemon-reload'.
-func (c *Client) Reload() error {
-	err := c.conn.Reload()
+func (c *Client) Reload(ctx context.Context) error {
+	err := c.conn.ReloadContext(ctx)
 	return err
 }
 
