@@ -19,6 +19,7 @@ func systemServiceDaemonReload(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(data.SetError(err))
 	}
+	defer client.Close()
 	err = client.Reload(ctx)
 	if err != nil {
 		return ctx.JSON(data.SetError(err))
@@ -31,6 +32,7 @@ func systemServiceList(ctx echo.Context) error {
 	if err != nil {
 		return err
 	}
+	defer client.Close()
 	state := ctx.Formx("state").String()
 	var states []string
 	if state != "" && com.StrIsAlphaNumeric(state) {
@@ -55,14 +57,15 @@ func systemServiceList(ctx echo.Context) error {
 
 func systemServiceListFiles(ctx echo.Context) error {
 	data := ctx.Data()
-	client, err := servicemgr.NewClient(ctx)
-	if err != nil {
-		return ctx.JSON(data.SetError(err))
-	}
 	name, err := getServiceName(ctx)
 	if err != nil {
 		return ctx.JSON(data.SetError(err))
 	}
+	client, err := servicemgr.NewClient(ctx)
+	if err != nil {
+		return ctx.JSON(data.SetError(err))
+	}
+	defer client.Close()
 	name = servicemgr.GetServiceName(name)
 	list, err := client.ListFiles(ctx, []string{name})
 	if err != nil {
@@ -90,14 +93,15 @@ func getServiceName(ctx echo.Context) (string, error) {
 
 func systemServiceRestart(ctx echo.Context) error {
 	data := ctx.Data()
-	client, err := servicemgr.NewClient(ctx)
-	if err != nil {
-		return ctx.JSON(data.SetError(err))
-	}
 	name, err := getServiceName(ctx)
 	if err != nil {
 		return ctx.JSON(data.SetError(err))
 	}
+	client, err := servicemgr.NewClient(ctx)
+	if err != nil {
+		return ctx.JSON(data.SetError(err))
+	}
+	defer client.Close()
 	err = client.Restart(ctx, name)
 	if err != nil {
 		return ctx.JSON(data.SetError(err))
@@ -107,14 +111,15 @@ func systemServiceRestart(ctx echo.Context) error {
 
 func systemServiceReload(ctx echo.Context) error {
 	data := ctx.Data()
-	client, err := servicemgr.NewClient(ctx)
-	if err != nil {
-		return ctx.JSON(data.SetError(err))
-	}
 	name, err := getServiceName(ctx)
 	if err != nil {
 		return ctx.JSON(data.SetError(err))
 	}
+	client, err := servicemgr.NewClient(ctx)
+	if err != nil {
+		return ctx.JSON(data.SetError(err))
+	}
+	defer client.Close()
 	err = client.ReloadUnit(ctx, name)
 	if err != nil {
 		return ctx.JSON(data.SetError(err))
@@ -124,14 +129,15 @@ func systemServiceReload(ctx echo.Context) error {
 
 func systemServiceStop(ctx echo.Context) error {
 	data := ctx.Data()
-	client, err := servicemgr.NewClient(ctx)
-	if err != nil {
-		return ctx.JSON(data.SetError(err))
-	}
 	name, err := getServiceName(ctx)
 	if err != nil {
 		return ctx.JSON(data.SetError(err))
 	}
+	client, err := servicemgr.NewClient(ctx)
+	if err != nil {
+		return ctx.JSON(data.SetError(err))
+	}
+	defer client.Close()
 	err = client.Stop(ctx, name)
 	if err != nil {
 		return ctx.JSON(data.SetError(err))
@@ -141,14 +147,15 @@ func systemServiceStop(ctx echo.Context) error {
 
 func systemServiceStart(ctx echo.Context) error {
 	data := ctx.Data()
-	client, err := servicemgr.NewClient(ctx)
-	if err != nil {
-		return ctx.JSON(data.SetError(err))
-	}
 	name, err := getServiceName(ctx)
 	if err != nil {
 		return ctx.JSON(data.SetError(err))
 	}
+	client, err := servicemgr.NewClient(ctx)
+	if err != nil {
+		return ctx.JSON(data.SetError(err))
+	}
+	defer client.Close()
 	err = client.Start(ctx, name)
 	if err != nil {
 		return ctx.JSON(data.SetError(err))
@@ -158,15 +165,15 @@ func systemServiceStart(ctx echo.Context) error {
 
 func systemServiceEnable(ctx echo.Context) error {
 	data := ctx.Data()
+	name, err := getServiceName(ctx)
+	if err != nil {
+		return ctx.JSON(data.SetError(err))
+	}
 	client, err := servicemgr.NewClient(ctx)
 	if err != nil {
 		return ctx.JSON(data.SetError(err))
 	}
-	var name string
-	name, err = getServiceName(ctx)
-	if err != nil {
-		return ctx.JSON(data.SetError(err))
-	}
+	defer client.Close()
 	enabled := ctx.Form(`enabled`)
 	if len(enabled) > 0 {
 		if !common.IsBoolFlag(enabled) {
@@ -189,14 +196,15 @@ func systemServiceEnable(ctx echo.Context) error {
 
 func systemServiceDisable(ctx echo.Context) error {
 	data := ctx.Data()
-	client, err := servicemgr.NewClient(ctx)
-	if err != nil {
-		return ctx.JSON(data.SetError(err))
-	}
 	name, err := getServiceName(ctx)
 	if err != nil {
 		return ctx.JSON(data.SetError(err))
 	}
+	client, err := servicemgr.NewClient(ctx)
+	if err != nil {
+		return ctx.JSON(data.SetError(err))
+	}
+	defer client.Close()
 	err = client.Disable(ctx, name)
 	if err != nil {
 		return ctx.JSON(data.SetError(err))
