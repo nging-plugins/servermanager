@@ -6,6 +6,9 @@ import (
 
 	"github.com/nging-plugins/servermanager/application/handler"
 	"github.com/nging-plugins/servermanager/application/library/setup"
+
+	// initialize
+	_ "github.com/nging-plugins/servermanager/application/library/servicemgr/initialize"
 )
 
 const ID = `server`
