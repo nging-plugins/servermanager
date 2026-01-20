@@ -15,81 +15,7 @@ import (
 	"github.com/webx-top/echo/param"
 )
 
-type Slice_NgingForeverProcess []*NgingForeverProcess
-
-func (s Slice_NgingForeverProcess) Range(fn func(m factory.Model) error) error {
-	for _, v := range s {
-		if err := fn(v); err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
-func (s Slice_NgingForeverProcess) RangeRaw(fn func(m *NgingForeverProcess) error) error {
-	for _, v := range s {
-		if err := fn(v); err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
-func (s Slice_NgingForeverProcess) GroupBy(keyField string) map[string][]*NgingForeverProcess {
-	r := map[string][]*NgingForeverProcess{}
-	for _, row := range s {
-		dmap := row.AsMap()
-		vkey := fmt.Sprint(dmap[keyField])
-		if _, y := r[vkey]; !y {
-			r[vkey] = []*NgingForeverProcess{}
-		}
-		r[vkey] = append(r[vkey], row)
-	}
-	return r
-}
-
-func (s Slice_NgingForeverProcess) KeyBy(keyField string) map[string]*NgingForeverProcess {
-	r := map[string]*NgingForeverProcess{}
-	for _, row := range s {
-		dmap := row.AsMap()
-		vkey := fmt.Sprint(dmap[keyField])
-		r[vkey] = row
-	}
-	return r
-}
-
-func (s Slice_NgingForeverProcess) AsKV(keyField string, valueField string) param.Store {
-	r := param.Store{}
-	for _, row := range s {
-		dmap := row.AsMap()
-		vkey := fmt.Sprint(dmap[keyField])
-		r[vkey] = dmap[valueField]
-	}
-	return r
-}
-
-func (s Slice_NgingForeverProcess) Transform(transfers map[string]param.Transfer) []param.Store {
-	r := make([]param.Store, len(s))
-	for idx, row := range s {
-		r[idx] = row.AsMap().Transform(transfers)
-	}
-	return r
-}
-
-func (s Slice_NgingForeverProcess) FromList(data interface{}) Slice_NgingForeverProcess {
-	values, ok := data.([]*NgingForeverProcess)
-	if !ok {
-		for _, value := range data.([]interface{}) {
-			row := &NgingForeverProcess{}
-			row.FromRow(value.(map[string]interface{}))
-			s = append(s, row)
-		}
-		return s
-	}
-	s = append(s, values...)
-
-	return s
-}
+type Slice_NgingForeverProcess = factory.Slicex[*NgingForeverProcess]
 
 func NewNgingForeverProcess(ctx echo.Context) *NgingForeverProcess {
 	m := &NgingForeverProcess{}
@@ -120,8 +46,8 @@ type NgingForeverProcess struct {
 	Status       string `db:"status" bson:"status" comment:"进程运行状态" json:"status" xml:"status"`
 	Debug        string `db:"debug" bson:"debug" comment:"DEBUG" json:"debug" xml:"debug"`
 	Disabled     string `db:"disabled" bson:"disabled" comment:"是否禁用" json:"disabled" xml:"disabled"`
-	Created      uint   `db:"created" bson:"created" comment:"创建时间" json:"created" xml:"created"`
-	Updated      uint   `db:"updated" bson:"updated" comment:"修改时间" json:"updated" xml:"updated"`
+	Created      uint   `db:"created" bson:"created" comment:"创建时间" json:"created" xml:"created" form_decoder:"time2unix" form_encoder:"unix2time"`
+	Updated      uint   `db:"updated" bson:"updated" comment:"修改时间" json:"updated" xml:"updated" form_decoder:"time2unix" form_encoder:"unix2time"`
 	Error        string `db:"error" bson:"error" comment:"错误信息" json:"error" xml:"error"`
 	Lastrun      uint   `db:"lastrun" bson:"lastrun" comment:"上次运行时间" json:"lastrun" xml:"lastrun"`
 	Description  string `db:"description" bson:"description" comment:"说明" json:"description" xml:"description"`
@@ -244,10 +170,13 @@ func (a *NgingForeverProcess) Name_() string {
 	return WithPrefix(factory.TableNamerGet(b.Short_())(b))
 }
 
+// CPAFrom Deprecated: Use CtxFrom instead.
 func (a *NgingForeverProcess) CPAFrom(source factory.Model) factory.Model {
-	a.SetContext(source.Context())
-	a.SetConnID(source.ConnID())
-	a.SetNamer(source.Namer())
+	return a.CtxFrom(source)
+}
+
+func (a *NgingForeverProcess) CtxFrom(source factory.Model) factory.Model {
+	a.base.CtxFrom(source)
 	return a
 }
 
@@ -259,13 +188,13 @@ func (a *NgingForeverProcess) Get(mw func(db.Result) db.Result, args ...interfac
 		return
 	}
 	queryParam := a.Param(mw, args...).SetRecv(a)
-	if err = DBI.FireReading(a, queryParam); err != nil {
+	if err = a.base.FireReading(a, queryParam); err != nil {
 		return
 	}
 	err = queryParam.One()
 	a.base = base
 	if err == nil {
-		err = DBI.FireReaded(a, queryParam)
+		err = a.base.FireReaded(a, queryParam)
 	}
 	return
 }
@@ -278,18 +207,18 @@ func (a *NgingForeverProcess) List(recv interface{}, mw func(db.Result) db.Resul
 		return a.Param(mw, args...).SetPage(page).SetSize(size).SetRecv(recv).List()
 	}
 	queryParam := a.Param(mw, args...).SetPage(page).SetSize(size).SetRecv(recv)
-	if err := DBI.FireReading(a, queryParam); err != nil {
+	if err := a.base.FireReading(a, queryParam); err != nil {
 		return nil, err
 	}
 	cnt, err := queryParam.List()
 	if err == nil {
 		switch v := recv.(type) {
 		case *[]*NgingForeverProcess:
-			err = DBI.FireReaded(a, queryParam, Slice_NgingForeverProcess(*v))
+			err = a.base.FireReaded(a, queryParam, Slice_NgingForeverProcess(*v))
 		case []*NgingForeverProcess:
-			err = DBI.FireReaded(a, queryParam, Slice_NgingForeverProcess(v))
+			err = a.base.FireReaded(a, queryParam, Slice_NgingForeverProcess(v))
 		case factory.Ranger:
-			err = DBI.FireReaded(a, queryParam, v)
+			err = a.base.FireReaded(a, queryParam, v)
 		}
 	}
 	return cnt, err
@@ -333,18 +262,18 @@ func (a *NgingForeverProcess) ListByOffset(recv interface{}, mw func(db.Result) 
 		return a.Param(mw, args...).SetOffset(offset).SetSize(size).SetRecv(recv).List()
 	}
 	queryParam := a.Param(mw, args...).SetOffset(offset).SetSize(size).SetRecv(recv)
-	if err := DBI.FireReading(a, queryParam); err != nil {
+	if err := a.base.FireReading(a, queryParam); err != nil {
 		return nil, err
 	}
 	cnt, err := queryParam.List()
 	if err == nil {
 		switch v := recv.(type) {
 		case *[]*NgingForeverProcess:
-			err = DBI.FireReaded(a, queryParam, Slice_NgingForeverProcess(*v))
+			err = a.base.FireReaded(a, queryParam, Slice_NgingForeverProcess(*v))
 		case []*NgingForeverProcess:
-			err = DBI.FireReaded(a, queryParam, Slice_NgingForeverProcess(v))
+			err = a.base.FireReaded(a, queryParam, Slice_NgingForeverProcess(v))
 		case factory.Ranger:
-			err = DBI.FireReaded(a, queryParam, v)
+			err = a.base.FireReaded(a, queryParam, v)
 		}
 	}
 	return cnt, err
@@ -363,7 +292,7 @@ func (a *NgingForeverProcess) Insert() (pk interface{}, err error) {
 		a.Disabled = "N"
 	}
 	if a.base.Eventable() {
-		err = DBI.Fire("creating", a, nil)
+		err = a.base.Fire(factory.EventCreating, a, nil)
 		if err != nil {
 			return
 		}
@@ -377,7 +306,7 @@ func (a *NgingForeverProcess) Insert() (pk interface{}, err error) {
 		}
 	}
 	if err == nil && a.base.Eventable() {
-		err = DBI.Fire("created", a, nil)
+		err = a.base.Fire(factory.EventCreated, a, nil)
 	}
 	return
 }
@@ -396,13 +325,13 @@ func (a *NgingForeverProcess) Update(mw func(db.Result) db.Result, args ...inter
 	if !a.base.Eventable() {
 		return a.Param(mw, args...).SetSend(a).Update()
 	}
-	if err = DBI.Fire("updating", a, mw, args...); err != nil {
+	if err = a.base.Fire(factory.EventUpdating, a, mw, args...); err != nil {
 		return
 	}
 	if err = a.Param(mw, args...).SetSend(a).Update(); err != nil {
 		return
 	}
-	return DBI.Fire("updated", a, mw, args...)
+	return a.base.Fire(factory.EventUpdated, a, mw, args...)
 }
 
 func (a *NgingForeverProcess) Updatex(mw func(db.Result) db.Result, args ...interface{}) (affected int64, err error) {
@@ -419,13 +348,13 @@ func (a *NgingForeverProcess) Updatex(mw func(db.Result) db.Result, args ...inte
 	if !a.base.Eventable() {
 		return a.Param(mw, args...).SetSend(a).Updatex()
 	}
-	if err = DBI.Fire("updating", a, mw, args...); err != nil {
+	if err = a.base.Fire(factory.EventUpdating, a, mw, args...); err != nil {
 		return
 	}
 	if affected, err = a.Param(mw, args...).SetSend(a).Updatex(); err != nil {
 		return
 	}
-	err = DBI.Fire("updated", a, mw, args...)
+	err = a.base.Fire(factory.EventUpdated, a, mw, args...)
 	return
 }
 
@@ -447,13 +376,13 @@ func (a *NgingForeverProcess) UpdateByFields(mw func(db.Result) db.Result, field
 	for index, field := range fields {
 		editColumns[index] = com.SnakeCase(field)
 	}
-	if err = DBI.FireUpdate("updating", a, editColumns, mw, args...); err != nil {
+	if err = a.base.FireUpdate(factory.EventUpdating, a, editColumns, mw, args...); err != nil {
 		return
 	}
 	if err = a.Param(mw, args...).UpdateByStruct(a, fields...); err != nil {
 		return
 	}
-	err = DBI.FireUpdate("updated", a, editColumns, mw, args...)
+	err = a.base.FireUpdate(factory.EventUpdated, a, editColumns, mw, args...)
 	return
 }
 
@@ -475,13 +404,13 @@ func (a *NgingForeverProcess) UpdatexByFields(mw func(db.Result) db.Result, fiel
 	for index, field := range fields {
 		editColumns[index] = com.SnakeCase(field)
 	}
-	if err = DBI.FireUpdate("updating", a, editColumns, mw, args...); err != nil {
+	if err = a.base.FireUpdate(factory.EventUpdating, a, editColumns, mw, args...); err != nil {
 		return
 	}
 	if affected, err = a.Param(mw, args...).UpdatexByStruct(a, fields...); err != nil {
 		return
 	}
-	err = DBI.FireUpdate("updated", a, editColumns, mw, args...)
+	err = a.base.FireUpdate(factory.EventUpdated, a, editColumns, mw, args...)
 	return
 }
 
@@ -523,13 +452,13 @@ func (a *NgingForeverProcess) UpdateFields(mw func(db.Result) db.Result, kvset m
 	for column := range kvset {
 		editColumns = append(editColumns, column)
 	}
-	if err = DBI.FireUpdate("updating", &m, editColumns, mw, args...); err != nil {
+	if err = a.base.FireUpdate(factory.EventUpdating, &m, editColumns, mw, args...); err != nil {
 		return
 	}
 	if err = a.Param(mw, args...).SetSend(kvset).Update(); err != nil {
 		return
 	}
-	return DBI.FireUpdate("updated", &m, editColumns, mw, args...)
+	return a.base.FireUpdate(factory.EventUpdated, &m, editColumns, mw, args...)
 }
 
 func (a *NgingForeverProcess) UpdatexFields(mw func(db.Result) db.Result, kvset map[string]interface{}, args ...interface{}) (affected int64, err error) {
@@ -558,13 +487,13 @@ func (a *NgingForeverProcess) UpdatexFields(mw func(db.Result) db.Result, kvset 
 	for column := range kvset {
 		editColumns = append(editColumns, column)
 	}
-	if err = DBI.FireUpdate("updating", &m, editColumns, mw, args...); err != nil {
+	if err = a.base.FireUpdate(factory.EventUpdating, &m, editColumns, mw, args...); err != nil {
 		return
 	}
 	if affected, err = a.Param(mw, args...).SetSend(kvset).Updatex(); err != nil {
 		return
 	}
-	err = DBI.FireUpdate("updated", &m, editColumns, mw, args...)
+	err = a.base.FireUpdate(factory.EventUpdated, &m, editColumns, mw, args...)
 	return
 }
 
@@ -574,13 +503,13 @@ func (a *NgingForeverProcess) UpdateValues(mw func(db.Result) db.Result, keysVal
 	}
 	m := *a
 	m.FromRow(keysValues.Map())
-	if err = DBI.FireUpdate("updating", &m, keysValues.Keys(), mw, args...); err != nil {
+	if err = a.base.FireUpdate(factory.EventUpdating, &m, keysValues.Keys(), mw, args...); err != nil {
 		return
 	}
 	if err = a.Param(mw, args...).SetSend(keysValues).Update(); err != nil {
 		return
 	}
-	return DBI.FireUpdate("updated", &m, keysValues.Keys(), mw, args...)
+	return a.base.FireUpdate(factory.EventUpdated, &m, keysValues.Keys(), mw, args...)
 }
 
 func (a *NgingForeverProcess) Upsert(mw func(db.Result) db.Result, args ...interface{}) (pk interface{}, err error) {
@@ -598,7 +527,7 @@ func (a *NgingForeverProcess) Upsert(mw func(db.Result) db.Result, args ...inter
 		if !a.base.Eventable() {
 			return nil
 		}
-		return DBI.Fire("updating", a, mw, args...)
+		return a.base.Fire(factory.EventUpdating, a, mw, args...)
 	}, func() error {
 		a.Created = uint(time.Now().Unix())
 		a.Id = 0
@@ -614,7 +543,7 @@ func (a *NgingForeverProcess) Upsert(mw func(db.Result) db.Result, args ...inter
 		if !a.base.Eventable() {
 			return nil
 		}
-		return DBI.Fire("creating", a, nil)
+		return a.base.Fire(factory.EventCreating, a, nil)
 	})
 	if err == nil && pk != nil {
 		if v, y := pk.(uint); y {
@@ -625,9 +554,9 @@ func (a *NgingForeverProcess) Upsert(mw func(db.Result) db.Result, args ...inter
 	}
 	if err == nil && a.base.Eventable() {
 		if pk == nil {
-			err = DBI.Fire("updated", a, mw, args...)
+			err = a.base.Fire(factory.EventUpdated, a, mw, args...)
 		} else {
-			err = DBI.Fire("created", a, nil)
+			err = a.base.Fire(factory.EventCreated, a, nil)
 		}
 	}
 	return
@@ -638,13 +567,13 @@ func (a *NgingForeverProcess) Delete(mw func(db.Result) db.Result, args ...inter
 	if !a.base.Eventable() {
 		return a.Param(mw, args...).Delete()
 	}
-	if err = DBI.Fire("deleting", a, mw, args...); err != nil {
+	if err = a.base.Fire(factory.EventDeleting, a, mw, args...); err != nil {
 		return
 	}
 	if err = a.Param(mw, args...).Delete(); err != nil {
 		return
 	}
-	return DBI.Fire("deleted", a, mw, args...)
+	return a.base.Fire(factory.EventDeleted, a, mw, args...)
 }
 
 func (a *NgingForeverProcess) Deletex(mw func(db.Result) db.Result, args ...interface{}) (affected int64, err error) {
@@ -652,13 +581,13 @@ func (a *NgingForeverProcess) Deletex(mw func(db.Result) db.Result, args ...inte
 	if !a.base.Eventable() {
 		return a.Param(mw, args...).Deletex()
 	}
-	if err = DBI.Fire("deleting", a, mw, args...); err != nil {
+	if err = a.base.Fire(factory.EventDeleting, a, mw, args...); err != nil {
 		return
 	}
 	if affected, err = a.Param(mw, args...).Deletex(); err != nil {
 		return
 	}
-	err = DBI.Fire("deleted", a, mw, args...)
+	err = a.base.Fire(factory.EventDeleted, a, mw, args...)
 	return
 }
 
@@ -792,6 +721,12 @@ func (a *NgingForeverProcess) AsMap(onlyFields ...string) param.Store {
 		}
 	}
 	return r
+}
+
+func (a *NgingForeverProcess) Clone() *NgingForeverProcess {
+	cloned := NgingForeverProcess{Id: a.Id, Uid: a.Uid, Name: a.Name, Command: a.Command, Workdir: a.Workdir, Env: a.Env, Args: a.Args, Pidfile: a.Pidfile, Logfile: a.Logfile, Errfile: a.Errfile, LogCharset: a.LogCharset, Respawn: a.Respawn, Delay: a.Delay, Ping: a.Ping, Pid: a.Pid, Status: a.Status, Debug: a.Debug, Disabled: a.Disabled, Created: a.Created, Updated: a.Updated, Error: a.Error, Lastrun: a.Lastrun, Description: a.Description, User: a.User, Options: a.Options, EnableNotify: a.EnableNotify, NotifyEmail: a.NotifyEmail}
+	cloned.CtxFrom(a)
+	return &cloned
 }
 
 func (a *NgingForeverProcess) FromRow(row map[string]interface{}) {
@@ -1200,12 +1135,13 @@ func (a *NgingForeverProcess) ListPageByOffsetAs(recv interface{}, cond *db.Comp
 }
 
 func (a *NgingForeverProcess) BatchValidate(kvset map[string]interface{}) error {
-	if kvset == nil {
-		kvset = a.AsRow()
-	}
-	return DBI.Fields.BatchValidate(a.Short_(), kvset)
+	return a.base.BatchValidate(a, kvset)
 }
 
-func (a *NgingForeverProcess) Validate(field string, value interface{}) error {
-	return DBI.Fields.Validate(a.Short_(), field, value)
+func (a *NgingForeverProcess) Validate(column string, value interface{}) error {
+	return a.base.Validate(a, column, value)
+}
+
+func (a *NgingForeverProcess) TrimOverflowText(column string, value string) string {
+	return a.base.TrimOverflowText(a, column, value)
 }

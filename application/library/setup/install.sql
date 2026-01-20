@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 9.0.1, for macos12.7 (x86_64)
+-- MySQL dump 10.13  Distrib 8.4.6, for Linux (x86_64)
 --
 -- Host: 127.0.0.1    Database: nging
 -- ------------------------------------------------------
--- Server version	9.0.1
+-- Server version	8.4.6
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -33,7 +33,7 @@ CREATE TABLE `nging_command` (
   `updated` int unsigned NOT NULL DEFAULT '0' COMMENT '修改时间',
   `disabled` enum('Y','N') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'N' COMMENT '是否禁用',
   `remote` enum('Y','N','A') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'N' COMMENT '是否(Y/N)执行远程SSH命令(A表示两者同时支持)',
-  `ssh_account_id` varchar(255) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT 'SSH账号ID(多个用逗号分隔)',
+  `ssh_account_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT 'SSH账号ID(多个用逗号分隔)',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='快捷命令';
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -87,4 +87,4 @@ CREATE TABLE `nging_forever_process` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-11-10 14:30:00
+-- Dump completed on 2026-01-20  9:22:03
