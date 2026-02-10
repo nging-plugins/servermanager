@@ -16,15 +16,15 @@
 				<h3>{{"快捷命令列表"|$.T}}</h3>
 			</div>
 			<div class="content">
-				<div class="table-responsive">
+				<div class="table-responsive" data-pattern="priority-columns">
 				<table class="table no-border hover">
 					<thead class="no-border">
 						<tr>
-							<th style="width:80px"><strong>ID</strong></th>
+							<th data-priority="1" style="width:80px"><strong>ID</strong></th>
 							<th><strong>{{"名称"|$.T}}</strong></th>
-							<th><strong>{{"命令"|$.T}}</strong></th>
-							<th style="width:100px"><strong>{{"类型"|$.T}}</strong></th>
-							<th><strong>{{"说明"|$.T}}</strong></th>
+							<th data-priority="1"><strong>{{"命令"|$.T}}</strong></th>
+							<th data-priority="1" style="width:100px"><strong>{{"类型"|$.T}}</strong></th>
+							<th data-priority="6"><strong>{{"说明"|$.T}}</strong></th>
 							<th style="width:65px"><strong>{{"状态"|$.T}}</strong></th>
 							<th style="width:110px" class="text-center"><strong>{{"操作"|$.T}}</strong></th>
 						</tr>
@@ -58,7 +58,7 @@
 							<a data-toggle="tooltip" title="{{`定时执行`|$.T}}" class="label label-success" href="{{BackendURL}}/task/add?command={{`>command:`}}{{$v.Id}}&name={{$.T `执行快捷命令:%v` $v.Name}}"><i class="fa fa-clock-o"></i></a>
 							<a class="label label-danger" href="{{BackendURL}}/server/cmd?id={{$v.Id}}" data-toggle="tooltip" title="{{`执行`|$.T}}"><i class="fa fa-play"></i></a>
 							<a class="label label-default" href="{{BackendURL}}/server/command_add?copyId={{$v.Id}}" title="{{`复制`|$.T}}"><i class="fa fa-copy"></i></a>
-							<a class="label label-success" href="{{BackendURL}}/server/command_edit?id={{$v.Id}}"><i class="fa fa-pencil"></i></a> 
+							<br /><a class="label label-success" href="{{BackendURL}}/server/command_edit?id={{$v.Id}}"><i class="fa fa-pencil"></i></a>
 							<a class="label label-danger" href="{{BackendURL}}/server/command_delete?id={{$v.Id}}" onclick="return confirm('{{`真的要删除吗？`|$.T}}');"><i class="fa fa-times"></i></a>
 								</span>
 							</td>

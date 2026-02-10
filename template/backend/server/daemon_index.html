@@ -1,12 +1,12 @@
-{{Extend "layout"}} 
+{{Extend "layout"}}
 {{Block "title"}}
 {{- "进程值守"|$.T -}}
-{{/Block}} 
+{{/Block}}
 
-{{Block "breadcrumb"}} 
+{{Block "breadcrumb"}}
 {{Super}}
 <li class="active">{{"进程值守"|$.T}}</li>
-{{/Block}} 
+{{/Block}}
 
 {{Block "main"}}
 <div class="row">
@@ -24,30 +24,30 @@
 				<h3>{{"配置列表"|$.T}}</h3>
 			</div>
 			<div class="content">
-				<div class="table-responsive">
+				<div class="table-responsive" data-pattern="priority-columns">
 					<table class="table no-border hover">
 						<thead class="no-border">
 							<tr>
-								<th style="width:60px">
+								<th data-priority="1" style="width:60px">
 									<strong>ID</strong>
 								</th>
 								<th style="width:80px;">
 									<strong>{{"启用状态"|$.T}}</strong>
 								</th>
-								<th style="width:80px"><strong>{{"运行状态"|$.T}}</strong></th>
+								<th data-priority="1" style="width:80px"><strong>{{"运行状态"|$.T}}</strong></th>
 								<th>
 									<strong>{{"名称"|$.T}}</strong>
 								</th>
-								<th>
+								<th data-priority="4">
 									<strong>{{"命令"|$.T}}</strong>
 								</th>
-								<th>
+								<th data-priority="5">
 									<strong>{{"工作目录"|$.T}}</strong>
 								</th>
-								<th style="width:130px">
+								<th data-priority="6" style="width:130px">
 									<strong>{{"编辑时间"|$.T}}</strong>
 								</th>
-								<th style="width:80px"><strong>{{"日志"|$.T}}</strong></th>
+								<th data-priority="1" style="width:80px"><strong>{{"日志"|$.T}}</strong></th>
 								<th style="width:110px" class="text-center">
 									<strong>{{"操作"|$.T}}</strong>
 								</th>
