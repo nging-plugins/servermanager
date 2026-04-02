@@ -23,7 +23,7 @@ import (
 
 	"github.com/coscms/webcore/library/common"
 	"github.com/coscms/webcore/library/dashboard"
-	"github.com/coscms/webcore/library/nlog/logcategory"
+	"github.com/coscms/webcore/middleware"
 
 	"github.com/nging-plugins/servermanager/application/registry"
 )
@@ -31,7 +31,7 @@ import (
 var querySystemServiceList func(ctx echo.Context) error
 
 func Service(ctx echo.Context) error {
-	logCategories := logcategory.LogList(ctx)
+	logCategories := middleware.LogList(ctx)
 	ctx.Set(`logWithCategory`, logCategories.WithCategory)
 	ctx.Set(`logCategories`, logCategories.Categories)
 	ctx.SetFunc(`ServiceControls`, func() dashboard.Buttons {
