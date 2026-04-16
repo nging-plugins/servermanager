@@ -3,6 +3,7 @@ package servermanager
 import (
 	"github.com/coscms/webcore/library/cron"
 	"github.com/coscms/webcore/library/module"
+	"github.com/webx-top/echo"
 
 	"github.com/nging-plugins/servermanager/application/handler"
 	"github.com/nging-plugins/servermanager/application/library/setup"
@@ -27,7 +28,7 @@ var Module = module.Module{
 		{
 			Name:         `command`,
 			Example:      ">command:commandId",
-			Description:  ``,
+			Description:  echo.T(`快捷命令`),
 			RunnerGetter: handler.CommandJob,
 		},
 	},
