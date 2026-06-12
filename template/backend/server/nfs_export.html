@@ -36,9 +36,9 @@
 								<td><code>{{$v.Path}}</code></td>
 								<td>
 									{{- range $i,$c := $v.Clients -}}
-									<span class="label label-primary">{{$c.Host}}</span>{{" "|$.T}}
+									<span class="label label-primary">{{$c.Host}}</span>
 									{{- if $c.Options -}}
-									<small class="text-muted">({{$c.Options|Join ","}})</small>
+									<small class="text-muted">({{Join $c.Options ","}})</small>
 									{{- end -}}
 									<br />
 									{{- else -}}
