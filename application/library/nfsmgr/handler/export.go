@@ -80,7 +80,7 @@ func NFSExportAdd(ctx echo.Context) error {
 		if err == nil {
 			client.ReloadExports(ctx)
 			common.SendOk(ctx, ctx.T(`操作成功`))
-			return ctx.Redirect(backend.URLFor(`/server/nfs_export`))
+			return ctx.Redirect(backend.URLFor(`/server/nfs/export`))
 		}
 	}
 
@@ -125,7 +125,7 @@ func NFSExportEdit(ctx echo.Context) error {
 		if err == nil {
 			client.ReloadExports(ctx)
 			common.SendOk(ctx, ctx.T(`修改成功`))
-			return ctx.Redirect(backend.URLFor(`/server/nfs_export`))
+			return ctx.Redirect(backend.URLFor(`/server/nfs/export`))
 		}
 	} else {
 		echo.StructToForm(ctx, entry, ``, echo.LowerCaseFirstLetter)
@@ -200,7 +200,7 @@ func NFSExportDelete(ctx echo.Context) error {
 		client.ReloadExports(ctx)
 		common.SendOk(ctx, ctx.T(`删除成功`))
 	}
-	return ctx.Redirect(backend.URLFor(`/server/nfs_export`))
+	return ctx.Redirect(backend.URLFor(`/server/nfs/export`))
 }
 
 // NFSExportReload reloads NFS exports via exportfs -r.

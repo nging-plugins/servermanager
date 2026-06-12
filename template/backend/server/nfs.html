@@ -90,10 +90,10 @@
 <div class="row">
 	<div class="col-md-12">
 		{{- if $.Stored.existsExportFS }}
-		<a href="{{BackendURL}}/server/nfs_export" class="btn btn-primary"><i class="fa fa-list"></i> {{"导出管理"|$.T}}</a>
+		<a href="{{BackendURL}}/server/nfs/export" class="btn btn-primary"><i class="fa fa-list"></i> {{"导出管理"|$.T}}</a>
 		{{- end }}
-		<a href="{{BackendURL}}/server/nfs_mount" class="btn btn-info"><i class="fa fa-hdd-o"></i> {{"挂载管理"|$.T}}</a>
-		<a href="{{BackendURL}}/server/nfs_quota" class="btn btn-warning"><i class="fa fa-database"></i> {{"磁盘配额"|$.T}}</a>
+		<a href="{{BackendURL}}/server/nfs/mount" class="btn btn-info"><i class="fa fa-hdd-o"></i> {{"挂载管理"|$.T}}</a>
+		<a href="{{BackendURL}}/server/nfs/quota" class="btn btn-warning"><i class="fa fa-database"></i> {{"磁盘配额"|$.T}}</a>
 	</div>
 </div>
 {{/Block}}

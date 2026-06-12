@@ -71,7 +71,7 @@ func NFSMountAdd(ctx echo.Context) error {
 		if err == nil {
 			nfsmgr.AddFstabEntry(entry)
 			common.SendOk(ctx, ctx.T(`挂载成功`))
-			return ctx.Redirect(backend.URLFor(`/server/nfs_mount`))
+			return ctx.Redirect(backend.URLFor(`/server/nfs/mount`))
 		}
 	}
 

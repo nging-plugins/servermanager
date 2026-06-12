@@ -10,10 +10,10 @@
 	<div class="col-md-12">
 		<div class="block-flat no-padding">
 			<div class="header">
-				<a href="{{BackendURL}}/server/nfs_export_add" class="btn btn-success pull-right">
+				<a href="{{BackendURL}}/server/nfs/export_add" class="btn btn-success pull-right">
 					<i class="fa fa-plus"></i> {{"添加导出"|$.T}}
 				</a>
-				<a href="javascript:;" data-ajax-accept="json" data-ajax-method="post" data-ajax-reload="1" data-ajax-url="{{BackendURL}}/server/nfs_export_reload" class="btn btn-warning pull-right">
+				<a href="javascript:;" data-ajax-accept="json" data-ajax-method="post" data-ajax-reload="1" data-ajax-url="{{BackendURL}}/server/nfs/export_reload" class="btn btn-warning pull-right">
 					<i class="fa fa-refresh"></i> {{"重新加载"|$.T}}
 				</a>
 				<h3>{{"导出列表"|$.T}}</h3>
@@ -46,8 +46,8 @@
 									{{- end -}}
 								</td>
 								<td class="label-group">
-									<a class="label label-success" href="{{BackendURL}}/server/nfs_export_edit?path={{$v.Path|urlquery}}" title="{{`编辑`|$.T}}" data-toggle="tooltip"><i class="fa fa-pencil"></i></a>
-									<a class="label label-danger" href="{{BackendURL}}/server/nfs_export_delete?path={{$v.Path|urlquery}}" onclick="return confirm('{{`真的要删除吗？`|$.T}}');" title="{{`删除`|$.T}}" data-toggle="tooltip"><i class="fa fa-times"></i></a>
+									<a class="label label-success" href="{{BackendURL}}/server/nfs/export_edit?path={{$v.Path|urlquery}}" title="{{`编辑`|$.T}}" data-toggle="tooltip"><i class="fa fa-pencil"></i></a>
+									<a class="label label-danger" href="{{BackendURL}}/server/nfs/export_delete?path={{$v.Path|urlquery}}" onclick="return confirm('{{`真的要删除吗？`|$.T}}');" title="{{`删除`|$.T}}" data-toggle="tooltip"><i class="fa fa-times"></i></a>
 								</td>
 							</tr>
 							{{- else -}}

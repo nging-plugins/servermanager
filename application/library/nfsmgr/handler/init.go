@@ -50,22 +50,22 @@ func registerIndex(g echo.RouteRegister) {
 
 func registerExportRoute(g echo.RouteRegister) {
 	// Export management
-	g.Route(`GET`, `/nfs_export`, NFSExportList)
-	g.Route(`GET,POST`, `/nfs_export_add`, NFSExportAdd)
-	g.Route(`GET,POST`, `/nfs_export_edit`, NFSExportEdit)
-	g.Route(`GET,POST`, `/nfs_export_delete`, NFSExportDelete)
-	g.Route(`POST`, `/nfs_export_reload`, NFSExportReload)
+	g.Route(`GET`, `/nfs/export`, NFSExportList)
+	g.Route(`GET,POST`, `/nfs/export_add`, NFSExportAdd)
+	g.Route(`GET,POST`, `/nfs/export_edit`, NFSExportEdit)
+	g.Route(`GET,POST`, `/nfs/export_delete`, NFSExportDelete)
+	g.Route(`POST`, `/nfs/export_reload`, NFSExportReload)
 }
 
 func registerMountQuotaRoute(g echo.RouteRegister) {
 	// Mount management
-	g.Route(`GET`, `/nfs_mount`, NFSMountList)
-	g.Route(`GET,POST`, `/nfs_mount_add`, NFSMountAdd)
-	g.Route(`POST`, `/nfs_mount_umount`, NFSMountUmount)
+	g.Route(`GET`, `/nfs/mount`, NFSMountList)
+	g.Route(`GET,POST`, `/nfs/mount_add`, NFSMountAdd)
+	g.Route(`POST`, `/nfs/mount_umount`, NFSMountUmount)
 	// Quota management
-	g.Route(`GET`, `/nfs_quota`, NFSQuota)
-	g.Route(`GET,POST`, `/nfs_quota_set`, NFSQuotaSet)
-	g.Route(`GET,POST`, `/nfs_quota_delete`, NFSQuotaDelete)
+	g.Route(`GET`, `/nfs/quota`, NFSQuota)
+	g.Route(`GET,POST`, `/nfs/quota_set`, NFSQuotaSet)
+	g.Route(`GET,POST`, `/nfs/quota_delete`, NFSQuotaDelete)
 }
 
 // NFSIndex shows the NFS management overview page.

@@ -30,34 +30,29 @@ var usermgrLeftNavigate = &navigate.Item{
 	Icon:    "users",
 	Children: &navigate.List{
 		{
-			Display: true,
-			Name:    echo.T("用户列表"),
-			Action:  "system_user",
-		},
-		{
 			Display: false,
 			Name:    echo.T("添加用户"),
-			Action:  "system_user_add",
+			Action:  "add",
 		},
 		{
 			Display: false,
 			Name:    echo.T("编辑用户"),
-			Action:  "system_user_edit",
+			Action:  "edit",
 		},
 		{
 			Display: false,
 			Name:    echo.T("删除用户"),
-			Action:  "system_user_delete",
+			Action:  "delete",
 		},
 		{
 			Display: false,
 			Name:    echo.T("锁定用户"),
-			Action:  "system_user_lock",
+			Action:  "lock",
 		},
 		{
 			Display: false,
 			Name:    echo.T("解锁用户"),
-			Action:  "system_user_unlock",
+			Action:  "unlock",
 		},
 	},
 }

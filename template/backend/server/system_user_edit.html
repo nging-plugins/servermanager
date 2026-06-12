@@ -1,12 +1,12 @@
 {{Extend "layout"}}
-{{Block "title"}}{{if HasSuffix $.URL.Path "_add"}}{{"添加用户"|$.T}}{{else}}{{"编辑用户"|$.T}}{{end}}{{/Block}}
+{{Block "title"}}{{if HasSuffix $.URL.Path "/add"}}{{"添加用户"|$.T}}{{else}}{{"编辑用户"|$.T}}{{end}}{{/Block}}
 {{Block "breadcrumb"}}
 {{Super}}
 <li><a href="{{BackendURL}}/server/system_user">{{"系统用户"|$.T}}</a></li>
-<li class="active">{{if HasSuffix $.URL.Path "_add"}}{{"添加用户"|$.T}}{{else}}{{"编辑用户"|$.T}}{{end}}</li>
+<li class="active">{{if HasSuffix $.URL.Path "/add"}}{{"添加用户"|$.T}}{{else}}{{"编辑用户"|$.T}}{{end}}</li>
 {{/Block}}
 {{Block "main"}}
-{{$addingMode:=HasSuffix $.URL.Path "_add"}}
+{{$addingMode:=HasSuffix $.URL.Path "/add"}}
 <div class="row">
 	<div class="col-md-12">
 		<div class="block-flat no-padding">

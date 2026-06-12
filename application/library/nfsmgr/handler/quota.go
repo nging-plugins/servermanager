@@ -66,7 +66,7 @@ func NFSQuotaSet(ctx echo.Context) error {
 		err = client.SetQuota(ctx, limit)
 		if err == nil {
 			common.SendOk(ctx, ctx.T(`限额设置成功`))
-			return ctx.Redirect(backend.URLFor(`/server/nfs_quota`))
+			return ctx.Redirect(backend.URLFor(`/server/nfs/quota`))
 		}
 	}
 
@@ -97,7 +97,7 @@ func NFSQuotaDelete(ctx echo.Context) error {
 	if err == nil {
 		common.SendOk(ctx, ctx.T(`配额已清除`))
 	}
-	return ctx.Redirect(backend.URLFor(`/server/nfs_quota`))
+	return ctx.Redirect(backend.URLFor(`/server/nfs/quota`))
 }
 
 func validateQuotaForm(ctx echo.Context, limit *nfsmgr.QuotaLimit) error {

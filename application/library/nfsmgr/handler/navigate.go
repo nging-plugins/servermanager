@@ -31,58 +31,58 @@ var nfsLeftNavigate = &navigate.Item{
 	Children: &navigate.List{
 		{
 			Display: true,
-			Name:    echo.T("NFS概况"),
-			Action:  "nfs",
-		},
-		{
-			Display: true,
 			Name:    echo.T("导出管理"),
-			Action:  "nfs_export",
+			Action:  "export",
 		},
 		{
 			Display: false,
 			Name:    echo.T("添加导出"),
-			Action:  "nfs_export_add",
+			Action:  "export_add",
 		},
 		{
 			Display: false,
 			Name:    echo.T("编辑导出"),
-			Action:  "nfs_export_edit",
+			Action:  "export_edit",
 		},
 		{
 			Display: false,
 			Name:    echo.T("删除导出"),
-			Action:  "nfs_export_delete",
+			Action:  "export_delete",
 		},
 		{
 			Display: false,
 			Name:    echo.T("重新加载导出"),
-			Action:  "nfs_export_reload",
+			Action:  "export_reload",
 		},
 		{
 			Display: true,
 			Name:    echo.T("挂载管理"),
-			Action:  "nfs_mount",
+			Action:  "mount",
 		},
 		{
 			Display: false,
 			Name:    echo.T("挂载NFS"),
-			Action:  "nfs_mount_add",
+			Action:  "mount_add",
 		},
 		{
 			Display: false,
 			Name:    echo.T("卸载"),
-			Action:  "nfs_mount_umount",
+			Action:  "mount_umount",
 		},
 		{
 			Display: true,
 			Name:    echo.T("磁盘配额"),
-			Action:  "nfs_quota",
+			Action:  "quota",
 		},
 		{
 			Display: false,
 			Name:    echo.T("设置限额"),
-			Action:  "nfs_quota_set",
+			Action:  "quota_set",
+		},
+		{
+			Display: false,
+			Name:    echo.T("清除限额"),
+			Action:  "quota_delete",
 		},
 	},
 }

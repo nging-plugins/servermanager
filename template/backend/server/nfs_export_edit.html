@@ -4,7 +4,7 @@
 {{Block "breadcrumb"}}
 {{Super}}
 <li><a href="{{BackendURL}}/server/nfs">{{"NFS管理"|$.T}}</a></li>
-<li><a href="{{BackendURL}}/server/nfs_export">{{"导出管理"|$.T}}</a></li>
+<li><a href="{{BackendURL}}/server/nfs/export">{{"导出管理"|$.T}}</a></li>
 <li class="active">{{if HasSuffix $.URL.Path "_add"}}{{"添加导出"|$.T}}{{else}}{{"编辑导出"|$.T}}{{end}}</li>
 {{/Block}}
 {{Block "main"}}

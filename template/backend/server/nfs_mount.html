@@ -10,7 +10,7 @@
 	<div class="col-md-12">
 		<div class="block-flat no-padding">
 			<div class="header">
-				<a href="{{BackendURL}}/server/nfs_mount_add" class="btn btn-success pull-right">
+				<a href="{{BackendURL}}/server/nfs/mount_add" class="btn btn-success pull-right">
 					<i class="fa fa-plus"></i> {{"挂载NFS"|$.T}}
 				</a>
 				<h3>{{"NFS挂载列表"|$.T}}</h3>
@@ -39,7 +39,7 @@
 								<td>{{if $v.ReadOnly}}<span class="label label-danger">{{"只读"|$.T}}</span>{{else}}<span class="label label-success">{{"读写"|$.T}}</span>{{end}}</td>
 								<td><small class="text-muted">{{Join $v.Options ","}}</small></td>
 								<td class="label-group">
-									<a class="label label-danger" href="javascript:;" data-ajax-accept="json" data-ajax-url="{{BackendURL}}/server/nfs_mount_umount" data-ajax-method="post" data-ajax-reload="1" data-ajax-params='{"mountPoint":"{{$v.MountPoint}}"}' onclick="return confirm('{{`确定要卸载`|$.T}} {{$v.MountPoint}}?');" title="{{`卸载`|$.T}}" data-toggle="tooltip"><i class="fa fa-eject"></i></a>
+									<a class="label label-danger" href="javascript:;" data-ajax-accept="json" data-ajax-url="{{BackendURL}}/server/nfs/mount_umount" data-ajax-method="post" data-ajax-reload="1" data-ajax-params='{"mountPoint":"{{$v.MountPoint}}"}' onclick="return confirm('{{`确定要卸载`|$.T}} {{$v.MountPoint}}?');" title="{{`卸载`|$.T}}" data-toggle="tooltip"><i class="fa fa-eject"></i></a>
 								</td>
 							</tr>
 							{{- else -}}

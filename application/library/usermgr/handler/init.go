@@ -33,9 +33,9 @@ func init() {
 
 func registerUserRoute(g echo.RouteRegister) {
 	g.Route(`GET`, `/system_user`, SystemUserList)
-	g.Route(`GET,POST`, `/system_user_add`, SystemUserAdd)
-	g.Route(`GET,POST`, `/system_user_edit`, SystemUserEdit)
-	g.Route(`POST`, `/system_user_delete`, SystemUserDelete)
-	g.Route(`POST`, `/system_user_lock`, SystemUserLock)
-	g.Route(`POST`, `/system_user_unlock`, SystemUserUnlock)
+	g.Route(`GET,POST`, `/system_user/add`, SystemUserAdd)
+	g.Route(`GET,POST`, `/system_user/edit`, SystemUserEdit)
+	g.Route(`POST`, `/system_user/delete`, SystemUserDelete)
+	g.Route(`POST`, `/system_user/lock`, SystemUserLock)
+	g.Route(`POST`, `/system_user/unlock`, SystemUserUnlock)
 }

@@ -10,7 +10,7 @@
 	<div class="col-md-12">
 		<div class="block-flat no-padding">
 			<div class="header">
-				<a href="{{BackendURL}}/server/nfs_quota_set" class="btn btn-success pull-right">
+				<a href="{{BackendURL}}/server/nfs/quota_set" class="btn btn-success pull-right">
 					<i class="fa fa-edit"></i> {{"设置限额"|$.T}}
 				</a>
 				<h3>{{"磁盘配额信息"|$.T}}</h3>
@@ -71,10 +71,10 @@
 										<td>{{if $v.InodeSoft}}{{$v.InodeSoft}}{{else}}-{{end}}</td>
 										<td>{{if $v.InodeHard}}{{$v.InodeHard}}{{else}}-{{end}}</td>
 										<td class="label-group">
-											<a href="{{BackendURL}}/server/nfs_quota_set?user={{$v.User}}&mountPoint={{$report.Device}}" class="label label-success" data-toggle="tooltip" title="{{`修改`|$.T}}">
+											<a href="{{BackendURL}}/server/nfs/quota_set?user={{$v.User}}&mountPoint={{$report.Device}}" class="label label-success" data-toggle="tooltip" title="{{`修改`|$.T}}">
 												<i class="fa fa-pencil"></i>
 											</a>
-											<a href="javascript:;" class="label label-danger" data-toggle="tooltip" title="{{`清除`|$.T}}" onclick="return confirm('{{$.T `确定要清除 %s 的配额限制吗？` $v.User}}')" href='{{BackendURL}}/server/nfs_quota_delete?user={{$v.User}}&mountPoint={{$report.Device}}'>
+											<a href="javascript:;" class="label label-danger" data-toggle="tooltip" title="{{`清除`|$.T}}" onclick="return confirm('{{$.T `确定要清除 %s 的配额限制吗？` $v.User}}')" href='{{BackendURL}}/server/nfs/quota_delete?user={{$v.User}}&mountPoint={{$report.Device}}'>
 												<i class="fa fa-trash-o"></i>
 											</a>
 										</td>
