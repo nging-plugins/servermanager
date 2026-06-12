@@ -57,27 +57,27 @@
 							{{- $mo := $.Form "_mountOpts"}}
 							<div class="checkbox checkbox-inline checkbox-primary">
 								<input type="checkbox" name="mountOpts" id="mountOpts-rw" value="rw"{{if Contains $mo `rw`}} checked{{end}}> 
-								<label class="mountOpts-rw">rw <small>{{"读写权限（推荐）"|$.T}}</small></label>
+								<label for="mountOpts-rw">rw <small>{{"读写权限（推荐）"|$.T}}</small></label>
 							</div>
 							<div class="checkbox checkbox-inline checkbox-primary">
 								<input type="checkbox" name="mountOpts" id="mountOpts-hard" value="hard"{{if Contains $mo `hard`}} checked{{end}}> 
-								<label class="mountOpts-hard">hard <small>{{"硬挂载（推荐）：卡住时重试不中断"|$.T}}</small></label>
+								<label for="mountOpts-hard">hard <small>{{"硬挂载（推荐）：卡住时重试不中断"|$.T}}</small></label>
 							</div>
 							<div class="checkbox checkbox-inline checkbox-primary">
 								<input type="checkbox" name="mountOpts" id="mountOpts-soft" value="soft"{{if Contains $mo `soft`}} checked{{end}}> 
-								<label class="mountOpts-soft">soft <small>{{"软挂载：超时后返回错误"|$.T}}</small></label>
+								<label for="mountOpts-soft">soft <small>{{"软挂载：超时后返回错误"|$.T}}</small></label>
 							</div>
 							<div class="checkbox checkbox-inline checkbox-primary">
 								<input type="checkbox" name="mountOpts" id="mountOpts-intr" value="intr"{{if Contains $mo `intr`}} checked{{end}}> 
-								<label class="mountOpts-intr">intr <small>{{"可中断（推荐）：允许中断卡住的挂载"|$.T}}</small></label>
+								<label for="mountOpts-intr">intr <small>{{"可中断（推荐）：允许中断卡住的挂载"|$.T}}</small></label>
 							</div>
 							<div class="checkbox checkbox-inline checkbox-primary">
 								<input type="checkbox" name="mountOpts" id="mountOpts-noexec" value="noexec"{{if Contains $mo `noexec`}} checked{{end}}> 
-								<label class="mountOpts-noexec">noexec <small>{{"禁止执行：可提升安全性"|$.T}}</small></label>
+								<label for="mountOpts-noexec">noexec <small>{{"禁止执行：可提升安全性"|$.T}}</small></label>
 							</div>
 							<div class="checkbox checkbox-inline checkbox-primary">
 								<input type="checkbox" name="mountOpts" id="mountOpts-nosuid" value="nosuid"{{if Contains $mo `nosuid`}} checked{{end}}> 
-								<label class="mountOpts-nosuid">nosuid <small>{{"禁止suid：可提升安全性"|$.T}}</small></label>
+								<label for="mountOpts-nosuid">nosuid <small>{{"禁止suid：可提升安全性"|$.T}}</small></label>
 							</div>
 							<div class="row">
 								<div class="col-sm-12">
