@@ -28,7 +28,7 @@
 								<th><strong>{{"Shell"|$.T}}</strong></th>
 								<th style="width:100px"><strong>{{"状态"|$.T}}</strong></th>
 								<th><strong>{{"组"|$.T}}</strong></th>
-								<th style="width:150px" class="text-center"><strong>{{"操作"|$.T}}</strong></th>
+								<th style="width:110px" class="text-center"><strong>{{"操作"|$.T}}</strong></th>
 							</tr>
 						</thead>
 						<tbody class="no-border-y">
@@ -60,11 +60,11 @@
 								</td>
 								<td class="label-group">
 									<a class="label label-success" href="{{BackendURL}}/server/system_user_edit?username={{$v.Username|urlquery}}" title="{{`编辑`|$.T}}" data-toggle="tooltip"><i class="fa fa-pencil"></i></a>
-									{{- if $v.Locked -}}
+									{{- if $v.Locked }}
 									<a class="label label-warning" href="javascript:;" data-ajax-accept="json" data-ajax-url="{{BackendURL}}/server/system_user_unlock?username={{$v.Username|urlquery}}" title="{{`解锁`|$.T}}" data-toggle="tooltip"><i class="fa fa-unlock"></i></a>
-									{{- else -}}
+									{{- else }}
 									<a class="label label-warning" href="javascript:;" data-ajax-accept="json" data-ajax-url="{{BackendURL}}/server/system_user_lock?username={{$v.Username|urlquery}}" title="{{`锁定`|$.T}}" data-toggle="tooltip"><i class="fa fa-lock"></i></a>
-									{{- end -}}
+									{{- end }}
 									<a class="label label-danger" href="javascript:;" onclick="deleteUser('{{$v.Username}}')" title="{{`删除`|$.T}}" data-toggle="tooltip"><i class="fa fa-times"></i></a>
 								</td>
 							</tr>

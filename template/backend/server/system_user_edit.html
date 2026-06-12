@@ -18,13 +18,14 @@
 					<div class="form-group">
 						<label class="col-sm-2 control-label">{{"用户名"|$.T}}</label>
 						<div class="col-sm-8">
-							{{if $addingMode}}
-							<input type="text" class="form-control" required name="username" value="{{$.Form "username"}}" placeholder="{{`例如`|$.T}}: johndoe" />
+							{{- $username := $.Form `username` -}}
+							{{- if $addingMode}}
+							<input type="text" class="form-control" required name="username" value="{{$username}}" placeholder="{{`例如`|$.T}}: johndoe" />
 							<div class="help-block">{{"系统用户登录名，只能包含字母、数字、下划线"|$.T}}</div>
-							{{else}}
-							<input type="text" class="form-control" readonly value="{{$.Form "username"}}" />
-							<input type="hidden" name="username" value="{{$.Form "username"}}">
-							{{end}}
+							{{- else}}
+							<input type="text" class="form-control" readonly value="{{$username}}" />
+							<input type="hidden" name="username" value="{{$username}}">
+							{{- end}}
 						</div>
 					</div>
 					{{if $addingMode}}
@@ -58,34 +59,35 @@
 					<div class="form-group">
 						<label class="col-sm-2 control-label">{{"全名"|$.T}}</label>
 						<div class="col-sm-8">
-							<input type="text" class="form-control" name="comment" value="{{$.Form "comment"}}" placeholder="{{`用户全名或描述`|$.T}}" />
+							<input type="text" class="form-control" name="comment" value="{{$.Form `comment`}}" placeholder="{{`用户全名或描述`|$.T}}" />
 							<div class="help-block">{{"用户的全名或描述信息（GECOS字段）"|$.T}}</div>
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-sm-2 control-label">{{"Shell"|$.T}}</label>
 						<div class="col-sm-8">
+							{{- $shell := $.Form "shell" -}}
 							<select class="form-control" name="shell" id="shell-select">
-								{{- range $k,$v := $.Stored.shells}}
-								<option value="{{$v}}"{{if eq $.Form "shell" $v}} selected{{end}}>{{$v}}</option>
+								{{- range $k,$v := $.Stored.shells }}
+								<option value="{{$v}}"{{if eq $shell $v}} selected{{end}}>{{$v}}</option>
 								{{- end}}
 								<option value="other" id="shell-other-option">{{"其他..."|$.T}}</option>
 							</select>
-							<input type="text" class="form-control" id="shell-custom" name="shell_custom" value="{{$.Form "shell_custom"}}" style="margin-top:5px;display:none" placeholder="{{`输入自定义Shell路径`|$.T}}" />
+							<input type="text" class="form-control" id="shell-custom" name="shell_custom" value="{{$.Form `shell_custom`}}" style="margin-top:5px;display:none" placeholder="{{`输入自定义Shell路径`|$.T}}" />
 							<div class="help-block">{{"用户的登录Shell"|$.T}}</div>
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-sm-2 control-label">{{"Home目录"|$.T}}</label>
 						<div class="col-sm-8">
-							<input type="text" class="form-control" name="homeDir" value="{{$.Form "homeDir"}}" placeholder="{{`例如`|$.T}}: /home/johndoe" />
+							<input type="text" class="form-control" name="homeDir" value="{{$.Form `homeDir`}}" placeholder="{{`例如`|$.T}}: /home/johndoe" />
 							<div class="help-block">{{"用户的主目录，留空则使用默认值"|$.T}}</div>
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-sm-2 control-label">{{"附加组"|$.T}}</label>
 						<div class="col-sm-8">
-							<input type="text" class="form-control" name="groups" value="{{$.Form "groups"}}" placeholder="{{`例如`|$.T}}: docker,www-data" />
+							<input type="text" class="form-control" name="groups" value="{{$.Form `groups`}}" placeholder="{{`例如`|$.T}}: docker,www-data" />
 							<div class="help-block">{{"用户所属的附加组，多个组用逗号分隔"|$.T}}</div>
 						</div>
 					</div>
