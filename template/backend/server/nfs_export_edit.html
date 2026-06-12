@@ -64,7 +64,7 @@
 						<label class="col-sm-2 control-label">{{"客户端"|$.T}}</label>
 						<div class="col-sm-8" id="client-list">
 {{- range $k,$v := $.Stored.clientList}}
-							<div class="client-entry row" style="margin-bottom:10px">
+							<div class="client-entry row no-margin-top" style="margin-bottom:10px">
 								<div class="col-sm-5">
 									<input type="text" class="form-control" name="clientHost" value="{{$v.Host}}" placeholder="{{`例如`|$.T}}: 192.168.1.0/24" />
 									<div class="help-block">{{"客户端IP/网段，如 192.168.1.0/24 或 *.example.com"|$.T}}</div>
@@ -78,7 +78,7 @@
 								</div>
 							</div>
 {{- end -}}
-							<div class="client-entry row" style="margin-bottom:10px">
+							<div class="client-entry row" style="margin-bottom:15px">
 								<div class="col-sm-5">
 									<input type="text" class="form-control" name="clientHost" value="" placeholder="{{`例如`|$.T}}: 192.168.1.0/24" />
 									<div class="help-block">{{"客户端IP/网段，如 192.168.1.0/24 或 *.example.com"|$.T}}</div>
@@ -118,7 +118,7 @@
 {{Block "footer"}}
 <script>
 function addClientEntry(){
-	var entry = '<div class="client-entry row" style="margin-bottom:10px">'+
+	var entry = '<div class="client-entry row no-margin-top" style="margin-bottom:15px">'+
 		'<div class="col-sm-5"><input type="text" class="form-control" name="clientHost" value="" placeholder="{{`例如`|$.T}}: 192.168.1.0/24" /><div class="help-block">{{"客户端IP/网段，如 192.168.1.0/24 或 *.example.com"|$.T}}</div></div>'+
 		'<div class="col-sm-5"><input type="text" class="form-control" name="clientOptions" value="" placeholder="{{`例如`|$.T}}: rw" /><div class="help-block">{{"客户端的专用选项，优先级高于通用选项。例如: rw,no_root_squash"|$.T}}</div></div>'+
 		'<div class="col-sm-2"><button type="button" class="btn btn-danger" onclick="$(this).closest(\'.client-entry\').remove()"><i class="fa fa-times"></i></button></div>'+

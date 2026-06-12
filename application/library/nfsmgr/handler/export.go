@@ -19,6 +19,7 @@
 package handler
 
 import (
+	"slices"
 	"strings"
 
 	"github.com/webx-top/echo"
@@ -129,18 +130,28 @@ func NFSExportEdit(ctx echo.Context) error {
 		}
 	} else {
 		echo.StructToForm(ctx, entry, ``, echo.LowerCaseFirstLetter)
-		ctx.Set(`clientList`, entry.Clients)
 		ctx.Request().Form().Set(`ident`, ident)
 		// Reconstruct form fields from options common to all clients
 		if len(entry.Clients) > 0 {
 			optCount := map[string]int{}
-			for _, c := range entry.Clients {
+			cliIndex := map[string]map[int][]int{}
+			for ci, c := range entry.Clients {
 				seen := map[string]bool{}
-				for _, o := range c.Options {
+				for oi, o := range c.Options {
 					o = strings.TrimSpace(o)
-					if o != "" && !seen[o] {
+					if len(o) == 0 {
+						continue
+					}
+					if !seen[o] {
 						seen[o] = true
 						optCount[o]++
+					}
+					if _, ok := cliIndex[o]; !ok {
+						cliIndex[o] = map[int][]int{
+							ci: []int{oi},
+						}
+					} else {
+						cliIndex[o][ci] = append(cliIndex[o][ci], oi)
 					}
 				}
 			}
@@ -152,6 +163,11 @@ func NFSExportEdit(ctx echo.Context) error {
 					} else {
 						textOpts = append(textOpts, o)
 					}
+					for ci, indexes := range cliIndex[o] {
+						for oi := range indexes {
+							entry.Clients[ci].Options = slices.Delete(entry.Clients[ci].Options, oi, oi+1)
+						}
+					}
 				}
 			}
 			if len(checkboxOpts) > 0 {
@@ -161,6 +177,7 @@ func NFSExportEdit(ctx echo.Context) error {
 				ctx.Request().Form().Set(`options`, strings.Join(textOpts, `,`))
 			}
 		}
+		ctx.Set(`clientList`, entry.Clients)
 	}
 
 END:
