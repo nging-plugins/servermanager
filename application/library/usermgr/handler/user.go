@@ -38,17 +38,14 @@ func SystemUserAdd(ctx echo.Context) error {
 	if ctx.IsPost() {
 		shell := resolveShell(ctx)
 		u := &usermgr.User{
-			Username: ctx.Form(`username`),
-			Comment:  ctx.Form(`comment`),
+			Username: ctx.Formx(`username`).String(),
+			Comment:  ctx.Formx(`comment`).String(),
 			Shell:    shell,
-			HomeDir:  ctx.Form(`homeDir`),
+			HomeDir:  ctx.Formx(`homeDir`).String(),
+			Groups:   ctx.Formx(`groups`).Split(`,`).Filter().Unique().String(),
 		}
-		groupsStr := ctx.Form(`groups`)
-		if groupsStr != `` {
-			u.Groups = strings.Split(groupsStr, `,`)
-		}
-		password := ctx.Form(`password`)
-		confirmPwd := ctx.Form(`confirmPassword`)
+		password := ctx.Formx(`password`).String()
+		confirmPwd := ctx.Formx(`confirmPassword`).String()
 		if err = validateUserAddForm(ctx, u, password, confirmPwd); err != nil {
 			goto END
 		}
@@ -85,16 +82,13 @@ func SystemUserEdit(ctx echo.Context) error {
 	if ctx.IsPost() {
 		shell := resolveShell(ctx)
 		u := &usermgr.User{
-			Comment: ctx.Form(`comment`),
+			Comment: ctx.Formx(`comment`).String(),
 			Shell:   shell,
-			HomeDir: ctx.Form(`homeDir`),
+			HomeDir: ctx.Formx(`homeDir`).String(),
+			Groups:  ctx.Formx(`groups`).Split(`,`).Filter().Unique().String(),
 		}
-		groupsStr := ctx.Form(`groups`)
-		if groupsStr != `` {
-			u.Groups = strings.Split(groupsStr, `,`)
-		}
-		password := ctx.Form(`password`)
-		confirmPwd := ctx.Form(`confirmPassword`)
+		password := ctx.Formx(`password`).String()
+		confirmPwd := ctx.Formx(`confirmPassword`).String()
 		if password != `` && password != confirmPwd {
 			err = ctx.NewError(code.InvalidParameter, ctx.T(`两次输入的密码不一致`)).SetZone(`confirmPassword`)
 			goto END
