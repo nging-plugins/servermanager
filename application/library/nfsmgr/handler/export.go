@@ -94,7 +94,7 @@ END:
 
 // NFSExportEdit handles editing an NFS export entry.
 func NFSExportEdit(ctx echo.Context) error {
-	ident := ctx.Form(`ident`)
+	ident := ctx.FormAny(`ident`, `path`)
 	client, err := nfsmgr.NewClient()
 	if err != nil {
 		return err
@@ -111,7 +111,7 @@ func NFSExportEdit(ctx echo.Context) error {
 		}
 	}
 	if foundIdx < 0 {
-		return ctx.NewError(code.InvalidParameter, ctx.T(`导出配置不存在`))
+		return ctx.NewError(code.InvalidParameter, `导出配置不存在: %s`, ident)
 	}
 	entry := entries[foundIdx]
 
@@ -190,7 +190,7 @@ func NFSExportDelete(ctx echo.Context) error {
 		}
 	}
 	if foundIdx < 0 {
-		return ctx.NewError(code.InvalidParameter, ctx.T(`导出配置不存在`))
+		return ctx.NewError(code.InvalidParameter, `导出配置不存在: %s`, path)
 	}
 	entries = append(entries[:foundIdx], entries[foundIdx+1:]...)
 	err = client.WriteExports(ctx, entries)
