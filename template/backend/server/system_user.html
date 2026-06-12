@@ -42,14 +42,14 @@
 								<td><code>{{$v.HomeDir}}</code></td>
 								<td><code>{{$v.Shell}}</code></td>
 								<td>
-									{{- if $v.Locked -}}
+									{{- if $v.Locked }}
 									<span class="label label-danger">{{"已锁定"|$.T}}</span>
-									{{- else -}}
+									{{- else }}
 									<span class="label label-success">{{"正常"|$.T}}</span>
-									{{- end -}}
-									{{- if $v.System -}}
+									{{- end }}
+									{{- if $v.System }}
 									<span class="label label-default">{{"系统"|$.T}}</span>
-									{{- end -}}
+									{{- end }}
 								</td>
 								<td>
 									{{- range $i,$g := $v.Groups }}
