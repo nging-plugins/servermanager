@@ -13,7 +13,7 @@
 				<a href="{{BackendURL}}/server/nfs_export_add" class="btn btn-success pull-right">
 					<i class="fa fa-plus"></i> {{"添加导出"|$.T}}
 				</a>
-				<a href="javascript:;" data-ajax-accept="json" data-ajax-url="{{BackendURL}}/server/nfs_export_reload" class="btn btn-warning pull-right">
+				<a href="javascript:;" data-ajax-accept="json" data-ajax-method="post" data-ajax-reload="1" data-ajax-url="{{BackendURL}}/server/nfs_export_reload" class="btn btn-warning pull-right">
 					<i class="fa fa-refresh"></i> {{"重新加载"|$.T}}
 				</a>
 				<h3>{{"导出列表"|$.T}}</h3>

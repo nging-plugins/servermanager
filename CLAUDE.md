@@ -6,6 +6,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 A plugin module for the [Nging](https://github.com/admpub/nging) webmaster toolbox, registered as module ID `server`. Adds server management capabilities to the Nging backend (based on `github.com/coscms/webcore`).
 
+## API Conventions
+
+### JSON Response Codes
+- `Code == 1` — 成功
+- `Code < 1` — 失败
+
 ## Build Commands
 
 ```bash

@@ -65,7 +65,8 @@ func NFSExportAdd(ctx echo.Context) error {
 		if err = validateExportForm(ctx, entry); err != nil {
 			goto END
 		}
-		client, err := nfsmgr.NewClient()
+		var client nfsmgr.Client
+		client, err = nfsmgr.NewClient()
 		if err != nil {
 			goto END
 		}
@@ -94,7 +95,6 @@ END:
 // NFSExportEdit handles editing an NFS export entry.
 func NFSExportEdit(ctx echo.Context) error {
 	ident := ctx.Form(`ident`)
-	var err error
 	client, err := nfsmgr.NewClient()
 	if err != nil {
 		return err
@@ -176,11 +176,11 @@ func NFSExportDelete(ctx echo.Context) error {
 	path := ctx.Form(`path`)
 	client, err := nfsmgr.NewClient()
 	if err != nil {
-		return ctx.JSON(ctx.Data().SetError(err))
+		return err
 	}
 	entries, err := client.ListExports(ctx)
 	if err != nil {
-		return ctx.JSON(ctx.Data().SetError(err))
+		return err
 	}
 	var foundIdx int = -1
 	for i, e := range entries {
@@ -190,15 +190,16 @@ func NFSExportDelete(ctx echo.Context) error {
 		}
 	}
 	if foundIdx < 0 {
-		return ctx.JSON(ctx.Data().SetError(ctx.NewError(code.InvalidParameter, ctx.T(`导出配置不存在`))))
+		return ctx.NewError(code.InvalidParameter, ctx.T(`导出配置不存在`))
 	}
 	entries = append(entries[:foundIdx], entries[foundIdx+1:]...)
 	err = client.WriteExports(ctx, entries)
 	if err != nil {
-		return ctx.JSON(ctx.Data().SetError(err))
+		common.SendErr(ctx, err)
+	} else {
+		client.ReloadExports(ctx)
+		common.SendOk(ctx, ctx.T(`删除成功`))
 	}
-	client.ReloadExports(ctx)
-	common.SendOk(ctx, ctx.T(`删除成功`))
 	return ctx.Redirect(backend.URLFor(`/server/nfs_export`))
 }
 
