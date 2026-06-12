@@ -40,6 +40,7 @@ func NFSMountList(ctx echo.Context) error {
 	if err != nil {
 		return err
 	}
+	ctx.Set(`activeURL`, `/server/nfs`)
 	ctx.Set(`listData`, mounts)
 	return ctx.Render(`server/nfs_mount`, common.Err(ctx, err))
 }
@@ -79,7 +80,7 @@ END:
 		ctx.Request().Form().Set(`_mountOpts`, strings.Join(ctx.FormValues(`mountOpts`), `,`))
 		ctx.Request().Form().Set(`_quotaOpts`, strings.Join(ctx.FormValues(`quotaOpts`), `,`))
 	}
-	ctx.Set(`activeURL`, `/server/nfs_mount`)
+	ctx.Set(`activeURL`, `/server/nfs`)
 	return ctx.Render(`server/nfs_mount_add`, common.Err(ctx, err))
 }
 

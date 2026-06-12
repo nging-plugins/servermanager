@@ -43,6 +43,7 @@ func NFSQuota(ctx echo.Context) error {
 		return ctx.Render(`server/nfs_quota`, common.Err(ctx, err))
 	}
 	ctx.Set(`listData`, reports)
+	ctx.Set(`activeURL`, `/server/nfs`)
 	return ctx.Render(`server/nfs_quota`, common.Err(ctx, nil))
 }
 
@@ -70,7 +71,7 @@ func NFSQuotaSet(ctx echo.Context) error {
 	}
 
 END:
-	ctx.Set(`activeURL`, `/server/nfs_quota`)
+	ctx.Set(`activeURL`, `/server/nfs`)
 	return ctx.Render(`server/nfs_quota_set`, common.Err(ctx, err))
 }
 

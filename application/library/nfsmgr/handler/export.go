@@ -51,6 +51,7 @@ func NFSExportList(ctx echo.Context) error {
 		return err
 	}
 	ctx.Set(`listData`, entries)
+	ctx.Set(`activeURL`, `/server/nfs`)
 	return ctx.Render(`server/nfs_export`, common.Err(ctx, err))
 }
 
@@ -86,7 +87,7 @@ END:
 	if ctx.IsPost() {
 		ctx.Request().Form().Set(`_exportOpts`, strings.Join(ctx.FormValues(`exportOpts`), `,`))
 	}
-	ctx.Set(`activeURL`, `/server/nfs_export`)
+	ctx.Set(`activeURL`, `/server/nfs`)
 	return ctx.Render(`server/nfs_export_edit`, common.Err(ctx, err))
 }
 
@@ -166,7 +167,7 @@ END:
 	if ctx.IsPost() {
 		ctx.Request().Form().Set(`_exportOpts`, strings.Join(ctx.FormValues(`exportOpts`), `,`))
 	}
-	ctx.Set(`activeURL`, `/server/nfs_export`)
+	ctx.Set(`activeURL`, `/server/nfs`)
 	return ctx.Render(`server/nfs_export_edit`, common.Err(ctx, err))
 }
 
