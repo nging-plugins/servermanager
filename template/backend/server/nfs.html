@@ -34,7 +34,13 @@
 					</div>
 				</div>
 				{{- else -}}
-				<div class="alert alert-danger">{{"无法获取NFS服务状态"|$.T}}</div>
+				<div class="alert alert-danger">
+					{{- if not $.Stored.existsExportFS -}}
+					{{"没有安装NFS服务。可以执行命令来安装："|$.T}}<code>apt-get install nfs-kernel-server</code>
+					{{- else -}}
+					{{"无法获取NFS服务状态"|$.T}}
+					{{- end -}}
+				</div>
 				{{- end -}}
 			</div>
 		</div>

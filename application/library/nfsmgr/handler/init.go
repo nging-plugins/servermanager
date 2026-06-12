@@ -84,6 +84,7 @@ func NFSIndex(ctx echo.Context) error {
 		}
 		mounts, err = client.ListMounts(ctx)
 	}
+	ctx.Set(`existsExportFS`, existsExportFS)
 	ctx.Set(`nfsStatus`, status)
 	ctx.Set(`mountList`, mounts)
 	return ctx.Render(`server/nfs`, err)
