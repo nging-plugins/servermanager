@@ -96,12 +96,21 @@ func (c *linuxClient) ListMounts(ctx context.Context) ([]*MountEntry, error) {
 			server = spec
 		}
 
+		readOnly := false
+		for _, opt := range opts {
+			if opt == "ro" {
+				readOnly = true
+			} else if opt == "rw" {
+				readOnly = false
+			}
+		}
 		mounts = append(mounts, &MountEntry{
 			Server:     server,
 			Remote:     remote,
 			MountPoint: mountPoint,
 			Type:       fsType,
 			Options:    opts,
+			ReadOnly:   readOnly,
 		})
 	}
 	return mounts, scanner.Err()

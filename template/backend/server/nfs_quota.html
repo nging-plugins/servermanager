@@ -1,0 +1,94 @@
+{{Extend "layout"}}
+{{Block "title"}}{{"磁盘配额"|$.T}}{{/Block}}
+{{Block "breadcrumb"}}
+{{Super}}
+<li><a href="{{BackendURL}}/server/nfs">{{"NFS管理"|$.T}}</a></li>
+<li class="active">{{"磁盘配额"|$.T}}</li>
+{{/Block}}
+{{Block "main"}}
+<div class="row">
+	<div class="col-md-12">
+		<div class="block-flat no-padding">
+			<div class="header">
+				<a href="{{BackendURL}}/server/nfs_quota_set" class="btn btn-success pull-right">
+					<i class="fa fa-edit"></i> {{"设置限额"|$.T}}
+				</a>
+				<h3>{{"磁盘配额信息"|$.T}}</h3>
+			</div>
+			<div class="content">
+				{{- if $.Stored.listData}}
+				{{- range $dev,$report := $.Stored.listData}}
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<strong>{{"设备"|$.T}}: </strong><code>{{$report.Device}}</code>
+						<span class="pull-right text-muted">{{len $report.Entries}} {{"个用户"|$.T}}</span>
+					</div>
+					<div class="panel-body">
+						<div class="table-responsive">
+							<table class="table no-border hover">
+								<thead class="no-border">
+									<tr>
+										<th><strong>{{"用户"|$.T}}</strong></th>
+										<th><strong>{{"状态"|$.T}}</strong></th>
+										<th><strong>{{"空间使用"|$.T}}</strong></th>
+										<th><strong>{{"已用"|$.T}}</strong></th>
+										<th><strong>{{"可用"|$.T}}</strong></th>
+										<th><strong>{{"文件数使用"|$.T}}</strong></th>
+										<th><strong>{{"软限制"|$.T}}</strong></th>
+										<th><strong>{{"硬限制"|$.T}}</strong></th>
+									</tr>
+								</thead>
+								<tbody class="no-border-y">
+									{{- range $k,$v := $report.Entries}}
+									<tr>
+										<td>{{$v.User}}</td>
+										<td>{{$v.Status}}</td>
+										<td style="min-width:150px">
+											{{- if $v.BlockHard}}
+											<div class="progress progress-striped" style="margin-bottom:0">
+												<div class="progress-bar progress-bar-{{if ge $v.BlockPercent 90}}danger{{else if ge $v.BlockPercent 75}}warning{{else}}success{{end}}" style="width:{{$v.BlockPercent}}%">
+													{{$v.BlockPercent}}%
+												</div>
+											</div>
+											{{- else}}
+											<span class="text-muted">-</span>
+											{{- end}}
+										</td>
+										<td>{{if $v.BlockHard}}{{$v.BlockUsed}}{{else}}-{{end}}</td>
+										<td>{{if $v.BlockHard}}{{$v.BlockAvail}}{{else}}-{{end}}</td>
+										<td>
+											{{- if $v.InodeHard}}
+											<div class="progress progress-striped" style="margin-bottom:0">
+												<div class="progress-bar progress-bar-{{if ge $v.InodePercent 90}}danger{{else if ge $v.InodePercent 75}}warning{{else}}success{{end}}" style="width:{{$v.InodePercent}}%">
+													{{$v.InodePercent}}%
+												</div>
+											</div>
+											{{- else}}
+											<span class="text-muted">-</span>
+											{{- end}}
+										</td>
+										<td>{{if $v.InodeSoft}}{{$v.InodeSoft}}{{else}}-{{end}}</td>
+										<td>{{if $v.InodeHard}}{{$v.InodeHard}}{{else}}-{{end}}</td>
+									</tr>
+									{{- else -}}
+									<tr>
+										<td colspan="8" class="text-center text-muted">{{"无配额数据"|$.T}}</td>
+									</tr>
+									{{- end -}}
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				{{- end -}}
+				{{- else -}}
+				<div class="alert alert-info">
+					<i class="fa fa-info-circle"></i>
+					{{"未检测到磁盘配额信息。可能需要安装 quota 包并启用文件系统配额。"|$.T}}
+				</div>
+				{{- end -}}
+			</div>
+		</div>
+	</div>
+</div>
+{{/Block}}

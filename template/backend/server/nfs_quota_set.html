@@ -1,0 +1,85 @@
+{{Extend "layout"}}
+{{Block "title"}}{{"设置磁盘限额"|$.T}}{{/Block}}
+{{Block "breadcrumb"}}
+{{Super}}
+<li><a href="{{BackendURL}}/server/nfs">{{"NFS管理"|$.T}}</a></li>
+<li><a href="{{BackendURL}}/server/nfs_quota">{{"磁盘配额"|$.T}}</a></li>
+<li class="active">{{"设置磁盘限额"|$.T}}</li>
+{{/Block}}
+{{Block "main"}}
+<div class="row">
+	<div class="col-md-12">
+		<div class="block-flat no-padding">
+			<div class="header">
+				<h3>{{"设置磁盘限额"|$.T}}</h3>
+			</div>
+			<div class="content">
+				<form class="form-horizontal group-border-dashed" method="POST" action="">
+					<div class="form-group">
+						<label class="col-sm-2 control-label">{{"用户名"|$.T}}</label>
+						<div class="col-sm-8">
+							<input type="text" class="form-control" required name="user" value="{{$.Form `user`}}" placeholder="{{`例如`|$.T}}: www" />
+							<div class="help-block">{{"要限制的Linux用户名"|$.T}}</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">{{"挂载点"|$.T}}</label>
+						<div class="col-sm-8">
+							<input type="text" class="form-control" required name="mountPoint" value="{{$.Form `mountPoint`}}" placeholder="{{`例如`|$.T}}: /data" />
+							<div class="help-block">{{"要限制的目录所在的挂载点或设备路径"|$.T}}</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">{{"空间软限制"|$.T}}</label>
+						<div class="col-sm-8">
+							<input type="number" class="form-control" name="blockSoft" value="{{$.Form `blockSoft`}}" placeholder="0" />
+							<div class="help-block">{{"超过此值开始警告，单位: 块（1块=1KB）。填0不限制。换算参考: 1G=1048576, 10G=10485760, 100G=104857600"|$.T}}</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">{{"空间硬限制"|$.T}}</label>
+						<div class="col-sm-8">
+							<input type="number" class="form-control" name="blockHard" value="{{$.Form `blockHard`}}" placeholder="0" />
+							<div class="help-block">{{"强制上限，不可超过。填0不限制。单位: 块（1块=1KB）。建议硬限制=软限制 或 略大于软限制"|$.T}}</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">{{"文件数软限制"|$.T}}</label>
+						<div class="col-sm-8">
+							<input type="number" class="form-control" name="inodeSoft" value="{{$.Form `inodeSoft`}}" placeholder="0" />
+							<div class="help-block">{{"超过此值开始警告。填0不限制。文件数量限制（Inode），大量小文件场景需要关注"|$.T}}</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">{{"文件数硬限制"|$.T}}</label>
+						<div class="col-sm-8">
+							<input type="number" class="form-control" name="inodeHard" value="{{$.Form `inodeHard`}}" placeholder="0" />
+							<div class="help-block">{{"文件数量强制上限。填0不限制。仅在需要限制文件数量时设置（如邮件队列、缓存目录）"|$.T}}</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">{{"使用提示"|$.T}}</label>
+						<div class="col-sm-8">
+							<div class="help-block" style="color:#666">
+								<p><strong>{{"典型场景"|$.T}}:</strong></p>
+								<ul>
+									<li>{{"仅限制磁盘空间: 只填 空间软限制 + 空间硬限制，文件数限制留0"|$.T}}</li>
+									<li>{{"限制网站目录: 用户www，挂载点/data，空间硬限制10485760（即10G）"|$.T}}</li>
+									<li>{{"软限制 < 硬限制: 用户在软限制和硬限制之间有宽限期，可临时超出"|$.T}}</li>
+									<li>{{"软限制 = 硬限制: 用户到达后立即无法写入"|$.T}}</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div class="form-group form-submit-group">
+						<div class="col-sm-9 col-sm-offset-2">
+							<button type="submit" class="btn btn-primary btn-lg"><i class="fa fa-save"></i> {{"保存"|$.T}}</button>
+							<button type="reset" class="btn btn-default btn-lg"><i class="fa fa-refresh"></i> {{"重置"|$.T}}</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+{{/Block}}

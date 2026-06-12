@@ -56,20 +56,34 @@ func writeExportsFile(entries []*ExportEntry) error {
 }
 
 // parseExports parses /etc/exports format text into ExportEntry slice.
+// Preceding comment lines are associated with each entry via ExportEntry.Comment.
 func parseExports(text string) ([]*ExportEntry, error) {
 	var entries []*ExportEntry
 	lines := strings.Split(text, "\n")
 	var buf strings.Builder
+	var pendingComment string
 
 	for _, raw := range lines {
 		line := strings.TrimSpace(raw)
-		// Strip comments
+
+		// Extract trailing comment
+		var lineComment string
 		if commentIdx := strings.IndexByte(line, '#'); commentIdx >= 0 {
+			lineComment = strings.TrimSpace(line[commentIdx+1:])
 			line = strings.TrimSpace(line[:commentIdx])
 		}
+
 		if line == "" {
+			// Pure comment line (or empty) — accumulate
+			if lineComment != "" {
+				if pendingComment != "" {
+					pendingComment += "\n"
+				}
+				pendingComment += lineComment
+			}
 			continue
 		}
+
 		// Continuation line: ends with backslash
 		if rest, ok := strings.CutSuffix(line, `\`); ok {
 			buf.WriteString(rest)
@@ -82,6 +96,10 @@ func parseExports(text string) ([]*ExportEntry, error) {
 
 		entry := parseExportLine(full)
 		if entry != nil {
+			if pendingComment != "" {
+				entry.Comment = pendingComment
+				pendingComment = ""
+			}
 			entries = append(entries, entry)
 		}
 	}

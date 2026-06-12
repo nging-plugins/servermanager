@@ -19,19 +19,21 @@
 						<label class="col-sm-2 control-label">{{"服务器地址"|$.T}}</label>
 						<div class="col-sm-8">
 							<input type="text" class="form-control" required name="server" value="{{$.Form `server`}}" placeholder="{{`例如`|$.T}}: 192.168.1.100" />
+							<div class="help-block">{{"NFS服务器的IP地址或域名"|$.T}}</div>
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-sm-2 control-label">{{"远程路径"|$.T}}</label>
 						<div class="col-sm-8">
 							<input type="text" class="form-control" required name="remote" value="{{$.Form `remote`}}" placeholder="{{`例如`|$.T}}: /exported/data" />
+							<div class="help-block">{{"服务器上导出的目录路径"|$.T}}</div>
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-sm-2 control-label">{{"本地挂载点"|$.T}}</label>
 						<div class="col-sm-8">
 							<input type="text" class="form-control" required name="mountPoint" value="{{$.Form `mountPoint`}}" placeholder="{{`例如`|$.T}}: /mnt/data" />
-							<div class="help-block">{{"本地已存在的目录"|$.T}}</div>
+							<div class="help-block">{{"本机已存在的空目录，挂载后访问此目录即访问远程共享"|$.T}}</div>
 						</div>
 					</div>
 					<div class="form-group">
@@ -42,15 +44,56 @@
 								<input type="radio" value="nfs" name="type" id="type-nfs"{{if eq $v `nfs`}} checked{{end}}> <label for="type-nfs">NFSv3</label>
 							</div>
 							<div class="radio radio-primary radio-inline">
-								<input type="radio" value="nfs4" name="type" id="type-nfs4"{{if or (eq $v `nfs4`) (eq $v ``)}} checked{{end}}> <label for="type-nfs4">NFSv4</label>
+								<input type="radio" value="nfs4" name="type" id="type-nfs4"{{if or (eq $v `nfs4`) (eq $v ``)}} checked{{end}}> <label for="type-nfs4">NFSv4 <small>{{"推荐"|$.T}}</small></label>
 							</div>
+							<div class="help-block">{{"NFSv4 兼容性更好、安全性更高，首选"|$.T}}</div>
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-sm-2 control-label">{{"挂载选项"|$.T}}</label>
 						<div class="col-sm-8">
-							<input type="text" class="form-control" name="options" value="{{$.Form `options`}}" placeholder="{{`例如`|$.T}}: rw,hard,intr,timeo=600" />
-							<div class="help-block">{{"多个选项用逗号分隔"|$.T}}</div>
+							<div class="row" style="margin-bottom:5px">
+								<div class="col-sm-12">
+	{{- $mo := $.Form "_mountOpts"}}
+									<label class="checkbox checkbox-inline checkbox-primary">
+										<input type="checkbox" name="mountOpts" value="rw"{{if Contains $mo "rw"}} checked{{end}}> rw <small>{{"读写权限（推荐）"|$.T}}</small>
+									</label>
+									<label class="checkbox checkbox-inline checkbox-primary">
+										<input type="checkbox" name="mountOpts" value="hard"{{if Contains $mo "hard"}} checked{{end}}> hard <small>{{"硬挂载（推荐）：卡住时重试不中断"|$.T}}</small>
+									</label>
+									<label class="checkbox checkbox-inline checkbox-primary">
+										<input type="checkbox" name="mountOpts" value="soft"{{if Contains $mo "soft"}} checked{{end}}> soft <small>{{"软挂载：超时后返回错误"|$.T}}</small>
+									</label>
+									<label class="checkbox checkbox-inline checkbox-primary">
+										<input type="checkbox" name="mountOpts" value="intr"{{if Contains $mo "intr"}} checked{{end}}> intr <small>{{"可中断（推荐）：允许中断卡住的挂载"|$.T}}</small>
+									</label>
+									<label class="checkbox checkbox-inline checkbox-primary">
+										<input type="checkbox" name="mountOpts" value="noexec"{{if Contains $mo "noexec"}} checked{{end}}> noexec <small>{{"禁止执行：可提升安全性"|$.T}}</small>
+									</label>
+									<label class="checkbox checkbox-inline checkbox-primary">
+										<input type="checkbox" name="mountOpts" value="nosuid"{{if Contains $mo "nosuid"}} checked{{end}}> nosuid <small>{{"禁止suid：可提升安全性"|$.T}}</small>
+									</label>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-12">
+									<input type="text" class="form-control" name="options" value="{{$.Form `options`}}" placeholder="{{`其他选项(逗号分隔)`|$.T}}" />
+									<div class="help-block">{{"已勾选的选项自动生效，如需其他选项在此补充，多个用逗号分隔"|$.T}} {{"例如"|$.T}}: vers=4.2,sec=krb5,timeo=600</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">{{"磁盘限额"|$.T}}</label>
+						<div class="col-sm-8">
+	{{- $qo := $.Form "_quotaOpts"}}
+							<div class="checkbox checkbox-primary checkbox-inline">
+								<input type="checkbox" value="usrquota" name="quotaOpts" id="quota-usrquota"{{if Contains $qo "usrquota"}} checked{{end}}> <label for="quota-usrquota">{{"用户限额(usrquota)"|$.T}}</label>
+							</div>
+							<div class="checkbox checkbox-primary checkbox-inline">
+								<input type="checkbox" value="grpquota" name="quotaOpts" id="quota-grpquota"{{if Contains $qo "grpquota"}} checked{{end}}> <label for="quota-grpquota">{{"组限额(grpquota)"|$.T}}</label>
+							</div>
+							<div class="help-block">{{"选择后自动附加到挂载选项中。需文件系统开启配额功能"|$.T}}</div>
 						</div>
 					</div>
 					<div class="form-group form-submit-group">

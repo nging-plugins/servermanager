@@ -34,11 +34,11 @@ import (
 func NFSMountList(ctx echo.Context) error {
 	client, err := nfsmgr.NewClient()
 	if err != nil {
-		return ctx.Data().SetError(err).JSON()
+		return err
 	}
 	mounts, err := client.ListMounts(ctx)
 	if err != nil {
-		return ctx.Data().SetError(err).JSON()
+		return err
 	}
 	ctx.Set(`listData`, mounts)
 	return ctx.Render(`server/nfs_mount`, common.Err(ctx, err))
@@ -60,10 +60,7 @@ func NFSMountAdd(ctx echo.Context) error {
 		if err = validateMountForm(ctx, entry); err != nil {
 			goto END
 		}
-		opts := ctx.Form(`options`)
-		if len(opts) > 0 {
-			entry.Options = strings.Split(opts, ",")
-		}
+		entry.Options = mountOptions(ctx)
 		client, clientErr := nfsmgr.NewClient()
 		if clientErr != nil {
 			err = clientErr
@@ -71,12 +68,17 @@ func NFSMountAdd(ctx echo.Context) error {
 		}
 		err = client.Mount(ctx, entry)
 		if err == nil {
+			nfsmgr.AddFstabEntry(entry)
 			common.SendOk(ctx, ctx.T(`挂载成功`))
 			return ctx.Redirect(backend.URLFor(`/server/nfs_mount`))
 		}
 	}
 
 END:
+	if ctx.IsPost() {
+		ctx.Request().Form().Set(`_mountOpts`, strings.Join(ctx.FormValues(`mountOpts`), `,`))
+		ctx.Request().Form().Set(`_quotaOpts`, strings.Join(ctx.FormValues(`quotaOpts`), `,`))
+	}
 	ctx.Set(`activeURL`, `/server/nfs_mount`)
 	return ctx.Render(`server/nfs_mount_add`, common.Err(ctx, err))
 }
@@ -92,6 +94,9 @@ func NFSMountUmount(ctx echo.Context) error {
 		return ctx.JSON(ctx.Data().SetError(err))
 	}
 	err = client.Unmount(ctx, mountPoint)
+	if err == nil {
+		nfsmgr.RemoveFstabEntry(mountPoint)
+	}
 	data := ctx.Data()
 	if err != nil {
 		data.SetError(err)
@@ -112,4 +117,35 @@ func validateMountForm(ctx echo.Context, entry *nfsmgr.MountEntry) error {
 		return ctx.NewError(code.InvalidParameter, ctx.T(`本地挂载点不能为空`)).SetZone(`mountPoint`)
 	}
 	return nil
+}
+
+// mountOptions collects mount options from checkboxes, text field, and quota checkboxes.
+func mountOptions(ctx echo.Context) []string {
+	seen := map[string]bool{}
+	var opts []string
+	for _, o := range ctx.FormValues(`mountOpts`) {
+		o = strings.TrimSpace(o)
+		if o != "" && !seen[o] {
+			seen[o] = true
+			opts = append(opts, o)
+		}
+	}
+	if v := ctx.Form(`options`); len(v) > 0 {
+		for _, o := range strings.Split(v, ",") {
+			o = strings.TrimSpace(o)
+			if o == "" || seen[o] {
+				continue
+			}
+			seen[o] = true
+			opts = append(opts, o)
+		}
+	}
+	for _, q := range ctx.FormValues(`quotaOpts`) {
+		q = strings.TrimSpace(q)
+		if q != "" && !seen[q] {
+			seen[q] = true
+			opts = append(opts, q)
+		}
+	}
+	return opts
 }

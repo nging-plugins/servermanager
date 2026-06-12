@@ -49,6 +49,7 @@ type MountEntry struct {
 	MountPoint string   `json:"mountPoint"` // Local mount point
 	Type       string   `json:"type"`       // "nfs" or "nfs4"
 	Options    []string `json:"options"`    // Mount options
+	ReadOnly   bool     `json:"readOnly"`   // Whether mount is read-only
 }
 
 // NFSStatus represents the NFS server service status.
@@ -73,4 +74,78 @@ type Client interface {
 
 	// Server status
 	ServerStatus(ctx context.Context) (*NFSStatus, error)
+
+	// Quota management
+	ListQuota(ctx context.Context) ([]*QuotaReport, error)
+	SetQuota(ctx context.Context, limit *QuotaLimit) error
+}
+
+// QuotaEntry represents a single user quota entry from repquota.
+type QuotaEntry struct {
+	User       string `json:"user"`
+	BlockUsed  uint64 `json:"blockUsed"`
+	BlockSoft  uint64 `json:"blockSoft"`
+	BlockHard  uint64 `json:"blockHard"`
+	BlockGrace string `json:"blockGrace,omitempty"`
+	InodeUsed  uint64 `json:"inodeUsed"`
+	InodeSoft  uint64 `json:"inodeSoft"`
+	InodeHard  uint64 `json:"inodeHard"`
+	InodeGrace string `json:"inodeGrace,omitempty"`
+	Status     string `json:"status"`
+}
+
+// QuotaReport contains quota info for one device.
+type QuotaReport struct {
+	Device      string        `json:"device"`
+	Entries     []*QuotaEntry `json:"entries"`
+}
+
+// BlockPercent returns usage percentage of hard block limit (0-100).
+func (e *QuotaEntry) BlockPercent() int {
+	if e.BlockHard == 0 {
+		return 0
+	}
+	pct := int(e.BlockUsed * 100 / e.BlockHard)
+	if pct > 100 {
+		return 100
+	}
+	return pct
+}
+
+// BlockAvail returns available blocks before hitting hard limit.
+func (e *QuotaEntry) BlockAvail() uint64 {
+	if e.BlockHard == 0 || e.BlockUsed >= e.BlockHard {
+		return 0
+	}
+	return e.BlockHard - e.BlockUsed
+}
+
+// InodePercent returns usage percentage of hard inode limit (0-100).
+func (e *QuotaEntry) InodePercent() int {
+	if e.InodeHard == 0 {
+		return 0
+	}
+	pct := int(e.InodeUsed * 100 / e.InodeHard)
+	if pct > 100 {
+		return 100
+	}
+	return pct
+}
+
+// InodeAvail returns available inodes before hitting hard limit.
+func (e *QuotaEntry) InodeAvail() uint64 {
+	if e.InodeHard == 0 || e.InodeUsed >= e.InodeHard {
+		return 0
+	}
+	return e.InodeHard - e.InodeUsed
+}
+
+// QuotaLimit defines quota limits to apply via setquota.
+type QuotaLimit struct {
+	User       string `json:"user"`       // Username
+	MountPoint string `json:"mountPoint"` // Mount point or device path
+	BlockSoft  uint64 `json:"blockSoft"`  // Soft limit for blocks (1KB units, 0=unlimited)
+	BlockHard  uint64 `json:"blockHard"`  // Hard limit for blocks
+	InodeSoft  uint64 `json:"inodeSoft"`  // Soft limit for inodes
+	InodeHard  uint64 `json:"inodeHard"`  // Hard limit for inodes
 }

@@ -74,5 +74,15 @@ var nfsLeftNavigate = &navigate.Item{
 			Name:    echo.T("卸载"),
 			Action:  "nfs_mount_umount",
 		},
+		{
+			Display: true,
+			Name:    echo.T("磁盘配额"),
+			Action:  "nfs_quota",
+		},
+		{
+			Display: false,
+			Name:    echo.T("设置限额"),
+			Action:  "nfs_quota_set",
+		},
 	},
 }

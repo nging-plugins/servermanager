@@ -30,15 +30,25 @@ import (
 	nfsmgr "github.com/nging-plugins/servermanager/application/library/nfsmgr"
 )
 
+// Known checkbox option values for export options
+var knownExportOpts = map[string]bool{
+	`rw`:               true,
+	`sync`:             true,
+	`no_subtree_check`: true,
+	`no_root_squash`:   true,
+	`no_all_squash`:    true,
+	`insecure`:         true,
+}
+
 // NFSExportList shows the NFS exports list page.
 func NFSExportList(ctx echo.Context) error {
 	client, err := nfsmgr.NewClient()
 	if err != nil {
-		return ctx.Data().SetError(err).JSON()
+		return err
 	}
 	entries, err := client.ListExports(ctx)
 	if err != nil {
-		return ctx.Data().SetError(err).JSON()
+		return err
 	}
 	ctx.Set(`listData`, entries)
 	return ctx.Render(`server/nfs_export`, common.Err(ctx, err))
@@ -73,33 +83,43 @@ func NFSExportAdd(ctx echo.Context) error {
 	}
 
 END:
+	if ctx.IsPost() {
+		ctx.Request().Form().Set(`_exportOpts`, strings.Join(ctx.FormValues(`exportOpts`), `,`))
+	}
 	ctx.Set(`activeURL`, `/server/nfs_export`)
 	return ctx.Render(`server/nfs_export_edit`, common.Err(ctx, err))
 }
 
 // NFSExportEdit handles editing an NFS export entry.
 func NFSExportEdit(ctx echo.Context) error {
-	idx := ctx.Formx(`index`).Int()
+	ident := ctx.Form(`ident`)
 	var err error
 	client, err := nfsmgr.NewClient()
 	if err != nil {
-		return ctx.Data().SetError(err).JSON()
+		return err
 	}
 	entries, err := client.ListExports(ctx)
 	if err != nil {
-		return ctx.Data().SetError(err).JSON()
+		return err
 	}
-	if idx < 0 || idx >= len(entries) {
-		return ctx.JSON(ctx.Data().SetError(ctx.NewError(code.InvalidParameter, ctx.T(`无效的索引`))))
+	var foundIdx int = -1
+	for i, e := range entries {
+		if e.Path == ident {
+			foundIdx = i
+			break
+		}
 	}
-	entry := entries[idx]
+	if foundIdx < 0 {
+		return ctx.NewError(code.InvalidParameter, ctx.T(`导出配置不存在`))
+	}
+	entry := entries[foundIdx]
 
 	if ctx.IsPost() {
 		entry.Path = ctx.Form(`path`)
 		if err = validateExportForm(ctx, entry); err != nil {
 			goto END
 		}
-		entries[idx] = entry
+		entries[foundIdx] = entry
 		err = client.WriteExports(ctx, entries)
 		if err == nil {
 			client.ReloadExports(ctx)
@@ -109,17 +129,50 @@ func NFSExportEdit(ctx echo.Context) error {
 	} else {
 		echo.StructToForm(ctx, entry, ``, echo.LowerCaseFirstLetter)
 		ctx.Set(`clientList`, entry.Clients)
-		ctx.Request().Form().Set(`index`, echo.String(idx))
+		ctx.Request().Form().Set(`ident`, ident)
+		// Reconstruct form fields from options common to all clients
+		if len(entry.Clients) > 0 {
+			optCount := map[string]int{}
+			for _, c := range entry.Clients {
+				seen := map[string]bool{}
+				for _, o := range c.Options {
+					o = strings.TrimSpace(o)
+					if o != "" && !seen[o] {
+						seen[o] = true
+						optCount[o]++
+					}
+				}
+			}
+			var checkboxOpts, textOpts []string
+			for o, n := range optCount {
+				if n == len(entry.Clients) {
+					if knownExportOpts[o] {
+						checkboxOpts = append(checkboxOpts, o)
+					} else {
+						textOpts = append(textOpts, o)
+					}
+				}
+			}
+			if len(checkboxOpts) > 0 {
+				ctx.Request().Form().Set(`_exportOpts`, strings.Join(checkboxOpts, `,`))
+			}
+			if len(textOpts) > 0 {
+				ctx.Request().Form().Set(`options`, strings.Join(textOpts, `,`))
+			}
+		}
 	}
 
 END:
+	if ctx.IsPost() {
+		ctx.Request().Form().Set(`_exportOpts`, strings.Join(ctx.FormValues(`exportOpts`), `,`))
+	}
 	ctx.Set(`activeURL`, `/server/nfs_export`)
 	return ctx.Render(`server/nfs_export_edit`, common.Err(ctx, err))
 }
 
 // NFSExportDelete handles deleting an NFS export entry.
 func NFSExportDelete(ctx echo.Context) error {
-	idx := ctx.Formx(`index`).Int()
+	path := ctx.Form(`path`)
 	client, err := nfsmgr.NewClient()
 	if err != nil {
 		return ctx.JSON(ctx.Data().SetError(err))
@@ -128,10 +181,17 @@ func NFSExportDelete(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(ctx.Data().SetError(err))
 	}
-	if idx < 0 || idx >= len(entries) {
-		return ctx.JSON(ctx.Data().SetError(ctx.NewError(code.InvalidParameter, ctx.T(`无效的索引`))))
+	var foundIdx int = -1
+	for i, e := range entries {
+		if e.Path == path {
+			foundIdx = i
+			break
+		}
 	}
-	entries = append(entries[:idx], entries[idx+1:]...)
+	if foundIdx < 0 {
+		return ctx.JSON(ctx.Data().SetError(ctx.NewError(code.InvalidParameter, ctx.T(`导出配置不存在`))))
+	}
+	entries = append(entries[:foundIdx], entries[foundIdx+1:]...)
 	err = client.WriteExports(ctx, entries)
 	if err != nil {
 		return ctx.JSON(ctx.Data().SetError(err))
@@ -180,13 +240,26 @@ func validateExportForm(ctx echo.Context, entry *nfsmgr.ExportEntry) error {
 		return ctx.NewError(code.InvalidParameter, ctx.T(`至少需要一个客户端`)).SetZone(`clientHost`)
 	}
 
-	// Parse common options
-	commonOpts := ctx.Form(`options`)
+	// Collect common options from checkboxes + text field
+	seen := map[string]bool{}
+	var commonOpts []string
+	for _, o := range ctx.FormValues(`exportOpts`) {
+		o = strings.TrimSpace(o)
+		if o != "" && !seen[o] {
+			seen[o] = true
+			commonOpts = append(commonOpts, o)
+		}
+	}
+	for _, o := range splitOptions(ctx.Form(`options`)) {
+		if !seen[o] {
+			seen[o] = true
+			commonOpts = append(commonOpts, o)
+		}
+	}
 	if len(commonOpts) > 0 {
 		// Common options are applied to all clients
-		opts := splitOptions(commonOpts)
 		for i := range entry.Clients {
-			entry.Clients[i].Options = append(opts, entry.Clients[i].Options...)
+			entry.Clients[i].Options = append(commonOpts, entry.Clients[i].Options...)
 		}
 	}
 	return nil

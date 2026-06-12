@@ -30,15 +30,16 @@ import (
 )
 
 func init() {
-	// Only register if NFS tools are installed
-	if _, err := exec.LookPath(`exportfs`); err != nil {
-		return
-	}
-	handler.AddRouteRegister(registerNFSRoute)
 	handler.LeftNavigate.Children.Add(-1, nfsLeftNavigate)
+	// Mount + Quota routes don't need exportfs
+	handler.AddRouteRegister(registerMountQuotaRoute)
+	// Export routes require exportfs
+	if _, err := exec.LookPath(`exportfs`); err == nil {
+		handler.AddRouteRegister(registerExportRoute)
+	}
 }
 
-func registerNFSRoute(g echo.RouteRegister) {
+func registerExportRoute(g echo.RouteRegister) {
 	// NFS overview
 	g.Route(`GET`, `/nfs`, NFSIndex)
 	// Export management
@@ -47,17 +48,23 @@ func registerNFSRoute(g echo.RouteRegister) {
 	g.Route(`GET,POST`, `/nfs_export_edit`, NFSExportEdit)
 	g.Route(`GET,POST`, `/nfs_export_delete`, NFSExportDelete)
 	g.Route(`POST`, `/nfs_export_reload`, NFSExportReload)
+}
+
+func registerMountQuotaRoute(g echo.RouteRegister) {
 	// Mount management
 	g.Route(`GET`, `/nfs_mount`, NFSMountList)
 	g.Route(`GET,POST`, `/nfs_mount_add`, NFSMountAdd)
 	g.Route(`POST`, `/nfs_mount_umount`, NFSMountUmount)
+	// Quota management
+	g.Route(`GET`, `/nfs_quota`, NFSQuota)
+	g.Route(`GET,POST`, `/nfs_quota_set`, NFSQuotaSet)
 }
 
 // NFSIndex shows the NFS management overview page.
 func NFSIndex(ctx echo.Context) error {
 	client, err := nfsmgr.NewClient()
 	if err != nil {
-		return ctx.Data().SetError(err).JSON()
+		return err
 	}
 	status, err := client.ServerStatus(ctx)
 	if err == nil {
