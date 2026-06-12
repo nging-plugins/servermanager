@@ -29,19 +29,26 @@ import (
 	nfsmgr "github.com/nging-plugins/servermanager/application/library/nfsmgr"
 )
 
+var existsExportFS bool
+
 func init() {
 	handler.LeftNavigate.Children.Add(-1, nfsLeftNavigate)
+	handler.AddRouteRegister(registerIndex)
 	// Mount + Quota routes don't need exportfs
 	handler.AddRouteRegister(registerMountQuotaRoute)
 	// Export routes require exportfs
 	if _, err := exec.LookPath(`exportfs`); err == nil {
+		existsExportFS = true
 		handler.AddRouteRegister(registerExportRoute)
 	}
 }
 
-func registerExportRoute(g echo.RouteRegister) {
+func registerIndex(g echo.RouteRegister) {
 	// NFS overview
 	g.Route(`GET`, `/nfs`, NFSIndex)
+}
+
+func registerExportRoute(g echo.RouteRegister) {
 	// Export management
 	g.Route(`GET`, `/nfs_export`, NFSExportList)
 	g.Route(`GET,POST`, `/nfs_export_add`, NFSExportAdd)
@@ -62,17 +69,22 @@ func registerMountQuotaRoute(g echo.RouteRegister) {
 
 // NFSIndex shows the NFS management overview page.
 func NFSIndex(ctx echo.Context) error {
-	client, err := nfsmgr.NewClient()
-	if err != nil {
-		return err
+	var err error
+	var status *nfsmgr.NFSStatus
+	var mounts []*nfsmgr.MountEntry
+	if existsExportFS {
+		var client nfsmgr.Client
+		client, err = nfsmgr.NewClient()
+		if err != nil {
+			return err
+		}
+		status, err = client.ServerStatus(ctx)
+		if err != nil {
+			ctx.Logger().Errorf(`failed to query NFS status: %v`, err)
+		}
+		mounts, err = client.ListMounts(ctx)
 	}
-	status, err := client.ServerStatus(ctx)
-	if err == nil {
-		ctx.Set(`nfsStatus`, status)
-	}
-	mounts, err := client.ListMounts(ctx)
-	if err == nil {
-		ctx.Set(`mountList`, mounts)
-	}
+	ctx.Set(`nfsStatus`, status)
+	ctx.Set(`mountList`, mounts)
 	return ctx.Render(`server/nfs`, err)
 }
