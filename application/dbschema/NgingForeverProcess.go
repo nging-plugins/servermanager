@@ -334,6 +334,91 @@ func (a *NgingForeverProcess) Update(mw func(db.Result) db.Result, args ...inter
 	return a.base.Fire(factory.EventUpdated, a, mw, args...)
 }
 
+func (a *NgingForeverProcess) GetDiffColumns(old *NgingForeverProcess) (changedCols []interface{}) {
+	if old.Id != a.Id {
+		changedCols = append(changedCols, `id`)
+	}
+	if old.Uid != a.Uid {
+		changedCols = append(changedCols, `uid`)
+	}
+	if old.Name != a.Name {
+		changedCols = append(changedCols, `name`)
+	}
+	if old.Command != a.Command {
+		changedCols = append(changedCols, `command`)
+	}
+	if old.Workdir != a.Workdir {
+		changedCols = append(changedCols, `workdir`)
+	}
+	if old.Env != a.Env {
+		changedCols = append(changedCols, `env`)
+	}
+	if old.Args != a.Args {
+		changedCols = append(changedCols, `args`)
+	}
+	if old.Pidfile != a.Pidfile {
+		changedCols = append(changedCols, `pidfile`)
+	}
+	if old.Logfile != a.Logfile {
+		changedCols = append(changedCols, `logfile`)
+	}
+	if old.Errfile != a.Errfile {
+		changedCols = append(changedCols, `errfile`)
+	}
+	if old.LogCharset != a.LogCharset {
+		changedCols = append(changedCols, `log_charset`)
+	}
+	if old.Respawn != a.Respawn {
+		changedCols = append(changedCols, `respawn`)
+	}
+	if old.Delay != a.Delay {
+		changedCols = append(changedCols, `delay`)
+	}
+	if old.Ping != a.Ping {
+		changedCols = append(changedCols, `ping`)
+	}
+	if old.Pid != a.Pid {
+		changedCols = append(changedCols, `pid`)
+	}
+	if old.Status != a.Status {
+		changedCols = append(changedCols, `status`)
+	}
+	if old.Debug != a.Debug {
+		changedCols = append(changedCols, `debug`)
+	}
+	if old.Disabled != a.Disabled {
+		changedCols = append(changedCols, `disabled`)
+	}
+	if old.Created != a.Created {
+		changedCols = append(changedCols, `created`)
+	}
+	if old.Updated != a.Updated {
+		changedCols = append(changedCols, `updated`)
+	}
+	if old.Error != a.Error {
+		changedCols = append(changedCols, `error`)
+	}
+	if old.Lastrun != a.Lastrun {
+		changedCols = append(changedCols, `lastrun`)
+	}
+	if old.Description != a.Description {
+		changedCols = append(changedCols, `description`)
+	}
+	if old.User != a.User {
+		changedCols = append(changedCols, `user`)
+	}
+	if old.Options != a.Options {
+		changedCols = append(changedCols, `options`)
+	}
+	if old.EnableNotify != a.EnableNotify {
+		changedCols = append(changedCols, `enable_notify`)
+	}
+	if old.NotifyEmail != a.NotifyEmail {
+		changedCols = append(changedCols, `notify_email`)
+	}
+	return
+}
+
 func (a *NgingForeverProcess) Updatex(mw func(db.Result) db.Result, args ...interface{}) (affected int64, err error) {
 	a.Updated = uint(time.Now().Unix())
 	if len(a.Status) == 0 {
@@ -356,6 +441,34 @@ func (a *NgingForeverProcess) Updatex(mw func(db.Result) db.Result, args ...inte
 	}
 	err = a.base.Fire(factory.EventUpdated, a, mw, args...)
 	return
+}
+
+func (a *NgingForeverProcess) Save(old *NgingForeverProcess, args ...interface{}) (affected int64, err error) {
+	a.Updated = uint(time.Now().Unix())
+	if len(a.Status) == 0 {
+		a.Status = "idle"
+	}
+	if len(a.Debug) == 0 {
+		a.Debug = "N"
+	}
+	if len(a.Disabled) == 0 {
+		a.Disabled = "N"
+	}
+	if old == nil {
+		old = NewNgingForeverProcess(a.Context())
+		old.CtxFrom(a)
+		if err = old.Get(nil, args...); err != nil {
+			return
+		}
+	}
+	changedCols := a.GetDiffColumns(old)
+	if len(changedCols) == 0 {
+		return
+	}
+	mw := func(r db.Result) db.Result {
+		return r.Select(changedCols...).Limit(1)
+	}
+	return a.Updatex(mw, args...)
 }
 
 func (a *NgingForeverProcess) UpdateByFields(mw func(db.Result) db.Result, fields []string, args ...interface{}) (err error) {

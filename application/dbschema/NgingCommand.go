@@ -312,6 +312,43 @@ func (a *NgingCommand) Update(mw func(db.Result) db.Result, args ...interface{})
 	return a.base.Fire(factory.EventUpdated, a, mw, args...)
 }
 
+func (a *NgingCommand) GetDiffColumns(old *NgingCommand) (changedCols []interface{}) {
+	if old.Id != a.Id {
+		changedCols = append(changedCols, `id`)
+	}
+	if old.Name != a.Name {
+		changedCols = append(changedCols, `name`)
+	}
+	if old.Description != a.Description {
+		changedCols = append(changedCols, `description`)
+	}
+	if old.Command != a.Command {
+		changedCols = append(changedCols, `command`)
+	}
+	if old.WorkDirectory != a.WorkDirectory {
+		changedCols = append(changedCols, `work_directory`)
+	}
+	if old.Env != a.Env {
+		changedCols = append(changedCols, `env`)
+	}
+	if old.Created != a.Created {
+		changedCols = append(changedCols, `created`)
+	}
+	if old.Updated != a.Updated {
+		changedCols = append(changedCols, `updated`)
+	}
+	if old.Disabled != a.Disabled {
+		changedCols = append(changedCols, `disabled`)
+	}
+	if old.Remote != a.Remote {
+		changedCols = append(changedCols, `remote`)
+	}
+	if old.SshAccountId != a.SshAccountId {
+		changedCols = append(changedCols, `ssh_account_id`)
+	}
+	return
+}
+
 func (a *NgingCommand) Updatex(mw func(db.Result) db.Result, args ...interface{}) (affected int64, err error) {
 	a.Updated = uint(time.Now().Unix())
 	if len(a.Disabled) == 0 {
@@ -331,6 +368,31 @@ func (a *NgingCommand) Updatex(mw func(db.Result) db.Result, args ...interface{}
 	}
 	err = a.base.Fire(factory.EventUpdated, a, mw, args...)
 	return
+}
+
+func (a *NgingCommand) Save(old *NgingCommand, args ...interface{}) (affected int64, err error) {
+	a.Updated = uint(time.Now().Unix())
+	if len(a.Disabled) == 0 {
+		a.Disabled = "N"
+	}
+	if len(a.Remote) == 0 {
+		a.Remote = "N"
+	}
+	if old == nil {
+		old = NewNgingCommand(a.Context())
+		old.CtxFrom(a)
+		if err = old.Get(nil, args...); err != nil {
+			return
+		}
+	}
+	changedCols := a.GetDiffColumns(old)
+	if len(changedCols) == 0 {
+		return
+	}
+	mw := func(r db.Result) db.Result {
+		return r.Select(changedCols...).Limit(1)
+	}
+	return a.Updatex(mw, args...)
 }
 
 func (a *NgingCommand) UpdateByFields(mw func(db.Result) db.Result, fields []string, args ...interface{}) (err error) {
