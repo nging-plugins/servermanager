@@ -1,0 +1,88 @@
+{{Extend "layout"}}
+{{Block "title"}}{{"NFS管理"|$.T}}{{/Block}}
+{{Block "breadcrumb"}}
+{{Super}}
+<li class="active">{{"NFS管理"|$.T}}</li>
+{{/Block}}
+{{Block "main"}}
+<div class="row">
+	<div class="col-md-12">
+		<div class="block-flat no-padding">
+			<div class="header">
+				<h3>{{"NFS服务状态"|$.T}}</h3>
+			</div>
+			<div class="content">
+				{{- with $.Stored.nfsStatus}}
+				<div class="row">
+					<div class="col-md-3 col-sm-6">
+						<div class="box-info text-center">
+							<h2>{{.Active}}</h2>
+							<span class="text-muted">{{"运行状态"|$.T}}</span>
+						</div>
+					</div>
+					<div class="col-md-3 col-sm-6">
+						<div class="box-info text-center">
+							<h2>{{if .Enabled}}{{"是"|$.T}}{{else}}{{"否"|$.T}}{{end}}</h2>
+							<span class="text-muted">{{"开机启动"|$.T}}</span>
+						</div>
+					</div>
+					<div class="col-md-3 col-sm-6">
+						<div class="box-info text-center">
+							<h2>{{.SubState}}</h2>
+							<span class="text-muted">{{"子状态"|$.T}}</span>
+						</div>
+					</div>
+				</div>
+				{{- else -}}
+				<div class="alert alert-danger">{{"无法获取NFS服务状态"|$.T}}</div>
+				{{- end -}}
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-12">
+		<div class="block-flat no-padding">
+			<div class="header">
+				<h3>{{"已挂载的NFS共享"|$.T}}</h3>
+			</div>
+			<div class="content">
+				<div class="table-responsive">
+					<table class="table no-border hover">
+						<thead class="no-border">
+							<tr>
+								<th><strong>{{"服务器"|$.T}}</strong></th>
+								<th><strong>{{"远程路径"|$.T}}</strong></th>
+								<th><strong>{{"挂载点"|$.T}}</strong></th>
+								<th><strong>{{"类型"|$.T}}</strong></th>
+							</tr>
+						</thead>
+						<tbody class="no-border-y">
+							{{- range $k,$v := $.Stored.mountList}}
+							<tr>
+								<td>{{$v.Server}}</td>
+								<td>{{$v.Remote}}</td>
+								<td>{{$v.MountPoint}}</td>
+								<td>{{$v.Type}}</td>
+							</tr>
+							{{- else -}}
+							<tr>
+								<td colspan="4" class="text-center text-muted">{{"暂无挂载"|$.T}}</td>
+							</tr>
+							{{- end -}}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-12">
+		<a href="{{BackendURL}}/server/nfs_export" class="btn btn-primary"><i class="fa fa-list"></i> {{"导出管理"|$.T}}</a>
+		<a href="{{BackendURL}}/server/nfs_mount" class="btn btn-info"><i class="fa fa-hdd-o"></i> {{"挂载管理"|$.T}}</a>
+	</div>
+</div>
+{{/Block}}

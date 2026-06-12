@@ -1,0 +1,67 @@
+{{Extend "layout"}}
+{{Block "title"}}{{"挂载NFS共享"|$.T}}{{/Block}}
+{{Block "breadcrumb"}}
+{{Super}}
+<li><a href="{{BackendURL}}/server/nfs">{{"NFS管理"|$.T}}</a></li>
+<li><a href="{{BackendURL}}/server/nfs_mount">{{"挂载管理"|$.T}}</a></li>
+<li class="active">{{"挂载NFS共享"|$.T}}</li>
+{{/Block}}
+{{Block "main"}}
+<div class="row">
+	<div class="col-md-12">
+		<div class="block-flat no-padding">
+			<div class="header">
+				<h3>{{"挂载NFS共享"|$.T}}</h3>
+			</div>
+			<div class="content">
+				<form class="form-horizontal group-border-dashed" method="POST" action="">
+					<div class="form-group">
+						<label class="col-sm-2 control-label">{{"服务器地址"|$.T}}</label>
+						<div class="col-sm-8">
+							<input type="text" class="form-control" required name="server" value="{{$.Form `server`}}" placeholder="{{`例如`|$.T}}: 192.168.1.100" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">{{"远程路径"|$.T}}</label>
+						<div class="col-sm-8">
+							<input type="text" class="form-control" required name="remote" value="{{$.Form `remote`}}" placeholder="{{`例如`|$.T}}: /exported/data" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">{{"本地挂载点"|$.T}}</label>
+						<div class="col-sm-8">
+							<input type="text" class="form-control" required name="mountPoint" value="{{$.Form `mountPoint`}}" placeholder="{{`例如`|$.T}}: /mnt/data" />
+							<div class="help-block">{{"本地已存在的目录"|$.T}}</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">{{"NFS版本"|$.T}}</label>
+						<div class="col-sm-8">
+							{{$v := $.Form "type" "nfs4"}}
+							<div class="radio radio-primary radio-inline">
+								<input type="radio" value="nfs" name="type" id="type-nfs"{{if eq $v `nfs`}} checked{{end}}> <label for="type-nfs">NFSv3</label>
+							</div>
+							<div class="radio radio-primary radio-inline">
+								<input type="radio" value="nfs4" name="type" id="type-nfs4"{{if or (eq $v `nfs4`) (eq $v ``)}} checked{{end}}> <label for="type-nfs4">NFSv4</label>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">{{"挂载选项"|$.T}}</label>
+						<div class="col-sm-8">
+							<input type="text" class="form-control" name="options" value="{{$.Form `options`}}" placeholder="{{`例如`|$.T}}: rw,hard,intr,timeo=600" />
+							<div class="help-block">{{"多个选项用逗号分隔"|$.T}}</div>
+						</div>
+					</div>
+					<div class="form-group form-submit-group">
+						<div class="col-sm-9 col-sm-offset-2">
+							<button type="submit" class="btn btn-primary btn-lg"><i class="fa fa-save"></i> {{"挂载"|$.T}}</button>
+							<button type="reset" class="btn btn-default btn-lg"><i class="fa fa-refresh"></i> {{"重置"|$.T}}</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+{{/Block}}

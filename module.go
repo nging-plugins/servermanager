@@ -10,6 +10,7 @@ import (
 
 	// initialize
 	_ "github.com/nging-plugins/servermanager/application/library/servicemgr/initialize"
+	_ "github.com/nging-plugins/servermanager/application/library/nfsmgr/initialize"
 )
 
 const ID = `server`
