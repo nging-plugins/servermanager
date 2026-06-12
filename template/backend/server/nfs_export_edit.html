@@ -27,32 +27,30 @@
 					<div class="form-group">
 						<label class="col-sm-2 control-label">{{"通用选项"|$.T}}</label>
 						<div class="col-sm-8">
-							<div class="form-control-static">
 							{{- $eo := $.Form "_exportOpts"}}
-								<div class="checkbox checkbox-inline checkbox-primary">
-									<input type="checkbox" name="exportOpts" id="exportOpts-rw" value="rw"{{if Contains $eo `rw`}} checked{{end}}> 
-									<label for="exportOpts-rw">rw <small>{{"读写（推荐）"|$.T}}</small></label>
-								</div>
-								<div class="checkbox checkbox-inline checkbox-primary">
-									<input type="checkbox" name="exportOpts" id="exportOpts-sync" value="sync"{{if Contains $eo `sync`}} checked{{end}}> 
-									<label for="exportOpts-sync">sync <small>{{"同步写入（推荐）"|$.T}}</small></label>
-								</div>
-								<div class="checkbox checkbox-inline checkbox-primary">
-									<input type="checkbox" name="exportOpts" id="exportOpts-no_subtree_check" value="no_subtree_check"{{if Contains $eo `no_subtree_check`}} checked{{end}}> 
-									<label for="exportOpts-no_subtree_check">no_subtree_check <small>{{"不检测子目录（推荐）"|$.T}}</small></label>
-								</div>
-								<div class="checkbox checkbox-inline checkbox-primary">
-									<input type="checkbox" name="exportOpts" id="exportOpts-no_root_squash" value="no_root_squash"{{if Contains $eo `no_root_squash`}} checked{{end}}> 
-									<label for="exportOpts-no_root_squash">no_root_squash <small>{{"保留root权限（仅信任网络使用）"|$.T}}</small></label>
-								</div>
-								<div class="checkbox checkbox-inline checkbox-primary">
-									<input type="checkbox" name="exportOpts" id="exportOpts-no_all_squash" value="no_all_squash"{{if Contains $eo `no_all_squash`}} checked{{end}}> 
-									<label for="exportOpts-no_all_squash">no_all_squash <small>{{"保留用户权限"|$.T}}</small></label>
-								</div>
-								<div class="checkbox checkbox-inline checkbox-primary">
-									<input type="checkbox" name="exportOpts" id="exportOpts-insecure" value="insecure"{{if Contains $eo `insecure`}} checked{{end}}> 
-									<label for="exportOpts-insecure">insecure <small>{{"允许客户端使用>1024端口"|$.T}}</small></label>
-								</div>
+							<div class="checkbox checkbox-inline checkbox-primary">
+								<input type="checkbox" name="exportOpts" id="exportOpts-rw" value="rw"{{if Contains $eo `rw`}} checked{{end}}> 
+								<label for="exportOpts-rw">rw <small>{{"读写（推荐）"|$.T}}</small></label>
+							</div>
+							<div class="checkbox checkbox-inline checkbox-primary">
+								<input type="checkbox" name="exportOpts" id="exportOpts-sync" value="sync"{{if Contains $eo `sync`}} checked{{end}}> 
+								<label for="exportOpts-sync">sync <small>{{"同步写入（推荐）"|$.T}}</small></label>
+							</div>
+							<div class="checkbox checkbox-inline checkbox-primary">
+								<input type="checkbox" name="exportOpts" id="exportOpts-no_subtree_check" value="no_subtree_check"{{if Contains $eo `no_subtree_check`}} checked{{end}}> 
+								<label for="exportOpts-no_subtree_check">no_subtree_check <small>{{"不检测子目录（推荐）"|$.T}}</small></label>
+							</div>
+							<div class="checkbox checkbox-inline checkbox-primary">
+								<input type="checkbox" name="exportOpts" id="exportOpts-no_root_squash" value="no_root_squash"{{if Contains $eo `no_root_squash`}} checked{{end}}> 
+								<label for="exportOpts-no_root_squash">no_root_squash <small>{{"保留root权限（仅信任网络使用）"|$.T}}</small></label>
+							</div>
+							<div class="checkbox checkbox-inline checkbox-primary">
+								<input type="checkbox" name="exportOpts" id="exportOpts-no_all_squash" value="no_all_squash"{{if Contains $eo `no_all_squash`}} checked{{end}}> 
+								<label for="exportOpts-no_all_squash">no_all_squash <small>{{"保留用户权限"|$.T}}</small></label>
+							</div>
+							<div class="checkbox checkbox-inline checkbox-primary">
+								<input type="checkbox" name="exportOpts" id="exportOpts-insecure" value="insecure"{{if Contains $eo `insecure`}} checked{{end}}> 
+								<label for="exportOpts-insecure">insecure <small>{{"允许客户端使用>1024端口"|$.T}}</small></label>
 							</div>
 							<div class="row">
 								<div class="col-sm-12">

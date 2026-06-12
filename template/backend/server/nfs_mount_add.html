@@ -41,10 +41,12 @@
 						<div class="col-sm-8">
 							{{$v := $.Form "type" "nfs4"}}
 							<div class="radio radio-primary radio-inline">
-								<input type="radio" value="nfs" name="type" id="type-nfs"{{if eq $v `nfs`}} checked{{end}}> <label for="type-nfs">NFSv3</label>
+								<input type="radio" value="nfs" name="type" id="type-nfs"{{if eq $v `nfs`}} checked{{end}}> 
+								<label for="type-nfs">NFSv3</label>
 							</div>
 							<div class="radio radio-primary radio-inline">
-								<input type="radio" value="nfs4" name="type" id="type-nfs4"{{if or (eq $v `nfs4`) (eq $v ``)}} checked{{end}}> <label for="type-nfs4">NFSv4 <small>{{"推荐"|$.T}}</small></label>
+								<input type="radio" value="nfs4" name="type" id="type-nfs4"{{if or (eq $v `nfs4`) (eq $v ``)}} checked{{end}}> 
+								<label for="type-nfs4">NFSv4 <small>{{"推荐"|$.T}}</small></label>
 							</div>
 							<div class="help-block">{{"NFSv4 兼容性更好、安全性更高，首选"|$.T}}</div>
 						</div>
@@ -52,28 +54,30 @@
 					<div class="form-group">
 						<label class="col-sm-2 control-label">{{"挂载选项"|$.T}}</label>
 						<div class="col-sm-8">
-							<div class="row" style="margin-bottom:5px">
-								<div class="col-sm-12">
-	{{- $mo := $.Form "_mountOpts"}}
-									<label class="checkbox checkbox-inline checkbox-primary">
-										<input type="checkbox" name="mountOpts" value="rw"{{if Contains $mo "rw"}} checked{{end}}> rw <small>{{"读写权限（推荐）"|$.T}}</small>
-									</label>
-									<label class="checkbox checkbox-inline checkbox-primary">
-										<input type="checkbox" name="mountOpts" value="hard"{{if Contains $mo "hard"}} checked{{end}}> hard <small>{{"硬挂载（推荐）：卡住时重试不中断"|$.T}}</small>
-									</label>
-									<label class="checkbox checkbox-inline checkbox-primary">
-										<input type="checkbox" name="mountOpts" value="soft"{{if Contains $mo "soft"}} checked{{end}}> soft <small>{{"软挂载：超时后返回错误"|$.T}}</small>
-									</label>
-									<label class="checkbox checkbox-inline checkbox-primary">
-										<input type="checkbox" name="mountOpts" value="intr"{{if Contains $mo "intr"}} checked{{end}}> intr <small>{{"可中断（推荐）：允许中断卡住的挂载"|$.T}}</small>
-									</label>
-									<label class="checkbox checkbox-inline checkbox-primary">
-										<input type="checkbox" name="mountOpts" value="noexec"{{if Contains $mo "noexec"}} checked{{end}}> noexec <small>{{"禁止执行：可提升安全性"|$.T}}</small>
-									</label>
-									<label class="checkbox checkbox-inline checkbox-primary">
-										<input type="checkbox" name="mountOpts" value="nosuid"{{if Contains $mo "nosuid"}} checked{{end}}> nosuid <small>{{"禁止suid：可提升安全性"|$.T}}</small>
-									</label>
-								</div>
+							{{- $mo := $.Form "_mountOpts"}}
+							<div class="checkbox checkbox-inline checkbox-primary">
+								<input type="checkbox" name="mountOpts" id="mountOpts-rw" value="rw"{{if Contains $mo `rw`}} checked{{end}}> 
+								<label class="mountOpts-rw">rw <small>{{"读写权限（推荐）"|$.T}}</small></label>
+							</div>
+							<div class="checkbox checkbox-inline checkbox-primary">
+								<input type="checkbox" name="mountOpts" id="mountOpts-hard" value="hard"{{if Contains $mo `hard`}} checked{{end}}> 
+								<label class="mountOpts-hard">hard <small>{{"硬挂载（推荐）：卡住时重试不中断"|$.T}}</small></label>
+							</div>
+							<div class="checkbox checkbox-inline checkbox-primary">
+								<input type="checkbox" name="mountOpts" id="mountOpts-soft" value="soft"{{if Contains $mo `soft`}} checked{{end}}> 
+								<label class="mountOpts-soft">soft <small>{{"软挂载：超时后返回错误"|$.T}}</small></label>
+							</div>
+							<div class="checkbox checkbox-inline checkbox-primary">
+								<input type="checkbox" name="mountOpts" id="mountOpts-intr" value="intr"{{if Contains $mo `intr`}} checked{{end}}> 
+								<label class="mountOpts-intr">intr <small>{{"可中断（推荐）：允许中断卡住的挂载"|$.T}}</small></label>
+							</div>
+							<div class="checkbox checkbox-inline checkbox-primary">
+								<input type="checkbox" name="mountOpts" id="mountOpts-noexec" value="noexec"{{if Contains $mo `noexec`}} checked{{end}}> 
+								<label class="mountOpts-noexec">noexec <small>{{"禁止执行：可提升安全性"|$.T}}</small></label>
+							</div>
+							<div class="checkbox checkbox-inline checkbox-primary">
+								<input type="checkbox" name="mountOpts" id="mountOpts-nosuid" value="nosuid"{{if Contains $mo `nosuid`}} checked{{end}}> 
+								<label class="mountOpts-nosuid">nosuid <small>{{"禁止suid：可提升安全性"|$.T}}</small></label>
 							</div>
 							<div class="row">
 								<div class="col-sm-12">
@@ -86,12 +90,14 @@
 					<div class="form-group">
 						<label class="col-sm-2 control-label">{{"磁盘限额"|$.T}}</label>
 						<div class="col-sm-8">
-	{{- $qo := $.Form "_quotaOpts"}}
+							{{- $qo := $.Form "_quotaOpts"}}
 							<div class="checkbox checkbox-primary checkbox-inline">
-								<input type="checkbox" value="usrquota" name="quotaOpts" id="quota-usrquota"{{if Contains $qo "usrquota"}} checked{{end}}> <label for="quota-usrquota">{{"用户限额(usrquota)"|$.T}}</label>
+								<input type="checkbox" value="usrquota" name="quotaOpts" id="quota-usrquota"{{if Contains $qo `usrquota`}} checked{{end}}> 
+								<label for="quota-usrquota">{{"用户限额(usrquota)"|$.T}}</label>
 							</div>
 							<div class="checkbox checkbox-primary checkbox-inline">
-								<input type="checkbox" value="grpquota" name="quotaOpts" id="quota-grpquota"{{if Contains $qo "grpquota"}} checked{{end}}> <label for="quota-grpquota">{{"组限额(grpquota)"|$.T}}</label>
+								<input type="checkbox" value="grpquota" name="quotaOpts" id="quota-grpquota"{{if Contains $qo `grpquota`}} checked{{end}}> 
+								<label for="quota-grpquota">{{"组限额(grpquota)"|$.T}}</label>
 							</div>
 							<div class="help-block">{{"选择后自动附加到挂载选项中。需文件系统开启配额功能"|$.T}}</div>
 						</div>
