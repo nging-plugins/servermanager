@@ -70,7 +70,7 @@
 									<div class="help-block">{{"客户端IP/网段，如 192.168.1.0/24 或 *.example.com"|$.T}}</div>
 								</div>
 								<div class="col-sm-5">
-									<input type="text" class="form-control" name="clientOptions" value="{{$v.Options|Join `,`}}" placeholder="{{`例如`|$.T}}: rw" />
+									<input type="text" class="form-control" name="clientOptions" value="{{Join $v.Options `,`}}" placeholder="{{`例如`|$.T}}: rw" />
 									<div class="help-block">{{"客户端的专用选项，优先级高于通用选项。例如: rw,no_root_squash"|$.T}}</div>
 								</div>
 								<div class="col-sm-2">
