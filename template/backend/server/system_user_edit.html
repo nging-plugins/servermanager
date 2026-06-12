@@ -1,0 +1,132 @@
+{{Extend "layout"}}
+{{Block "title"}}{{if HasSuffix $.URL.Path "_add"}}{{"添加用户"|$.T}}{{else}}{{"编辑用户"|$.T}}{{end}}{{/Block}}
+{{Block "breadcrumb"}}
+{{Super}}
+<li><a href="{{BackendURL}}/server/system_user">{{"系统用户"|$.T}}</a></li>
+<li class="active">{{if HasSuffix $.URL.Path "_add"}}{{"添加用户"|$.T}}{{else}}{{"编辑用户"|$.T}}{{end}}</li>
+{{/Block}}
+{{Block "main"}}
+{{$addingMode:=HasSuffix $.URL.Path "_add"}}
+<div class="row">
+	<div class="col-md-12">
+		<div class="block-flat no-padding">
+			<div class="header">
+				<h3>{{if $addingMode}}{{"添加系统用户"|$.T}}{{else}}{{"编辑系统用户"|$.T}}{{end}}</h3>
+			</div>
+			<div class="content">
+				<form class="form-horizontal group-border-dashed" method="POST" action="">
+					<div class="form-group">
+						<label class="col-sm-2 control-label">{{"用户名"|$.T}}</label>
+						<div class="col-sm-8">
+							{{if $addingMode}}
+							<input type="text" class="form-control" required name="username" value="{{$.Form "username"}}" placeholder="{{`例如`|$.T}}: johndoe" />
+							<div class="help-block">{{"系统用户登录名，只能包含字母、数字、下划线"|$.T}}</div>
+							{{else}}
+							<input type="text" class="form-control" readonly value="{{$.Form "username"}}" />
+							<input type="hidden" name="username" value="{{$.Form "username"}}">
+							{{end}}
+						</div>
+					</div>
+					{{if $addingMode}}
+					<div class="form-group">
+						<label class="col-sm-2 control-label">{{"密码"|$.T}}</label>
+						<div class="col-sm-8">
+							<input type="password" class="form-control" required name="password" value="" autocomplete="new-password" placeholder="{{`设置登录密码`|$.T}}" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">{{"确认密码"|$.T}}</label>
+						<div class="col-sm-8">
+							<input type="password" class="form-control" required name="confirmPassword" value="" autocomplete="new-password" placeholder="{{`再次输入密码`|$.T}}" />
+						</div>
+					</div>
+					{{else}}
+					<div class="form-group">
+						<label class="col-sm-2 control-label">{{"密码"|$.T}}</label>
+						<div class="col-sm-8">
+							<input type="password" class="form-control" name="password" value="" autocomplete="new-password" placeholder="{{`留空则不修改密码`|$.T}}" />
+							<div class="help-block">{{"如需修改密码请在此输入新密码，留空则不修改"|$.T}}</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">{{"确认密码"|$.T}}</label>
+						<div class="col-sm-8">
+							<input type="password" class="form-control" name="confirmPassword" value="" autocomplete="new-password" placeholder="{{`再次输入新密码`|$.T}}" />
+						</div>
+					</div>
+					{{end}}
+					<div class="form-group">
+						<label class="col-sm-2 control-label">{{"全名"|$.T}}</label>
+						<div class="col-sm-8">
+							<input type="text" class="form-control" name="comment" value="{{$.Form "comment"}}" placeholder="{{`用户全名或描述`|$.T}}" />
+							<div class="help-block">{{"用户的全名或描述信息（GECOS字段）"|$.T}}</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">{{"Shell"|$.T}}</label>
+						<div class="col-sm-8">
+							<select class="form-control" name="shell" id="shell-select">
+								{{- range $k,$v := $.Stored.shells}}
+								<option value="{{$v}}"{{if eq $.Form "shell" $v}} selected{{end}}>{{$v}}</option>
+								{{- end}}
+								<option value="other" id="shell-other-option">{{"其他..."|$.T}}</option>
+							</select>
+							<input type="text" class="form-control" id="shell-custom" name="shell_custom" value="{{$.Form "shell_custom"}}" style="margin-top:5px;display:none" placeholder="{{`输入自定义Shell路径`|$.T}}" />
+							<div class="help-block">{{"用户的登录Shell"|$.T}}</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">{{"Home目录"|$.T}}</label>
+						<div class="col-sm-8">
+							<input type="text" class="form-control" name="homeDir" value="{{$.Form "homeDir"}}" placeholder="{{`例如`|$.T}}: /home/johndoe" />
+							<div class="help-block">{{"用户的主目录，留空则使用默认值"|$.T}}</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">{{"附加组"|$.T}}</label>
+						<div class="col-sm-8">
+							<input type="text" class="form-control" name="groups" value="{{$.Form "groups"}}" placeholder="{{`例如`|$.T}}: docker,www-data" />
+							<div class="help-block">{{"用户所属的附加组，多个组用逗号分隔"|$.T}}</div>
+						</div>
+					</div>
+					<div class="form-group form-submit-group">
+						<div class="col-sm-9 col-sm-offset-2">
+							<button type="submit" class="btn btn-primary btn-lg"><i class="fa fa-save"></i> {{"保存"|$.T}}</button>
+							<button type="reset" class="btn btn-default btn-lg"><i class="fa fa-refresh"></i> {{"重置"|$.T}}</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+{{/Block}}
+{{Block "footer"}}
+<script>
+$(function(){
+	// Check if current shell is in the available list
+	var curShell = '{{$.Form "_shell"}}';
+	var found = false;
+	$('#shell-select option').each(function(){
+		if($(this).val() == curShell && $(this).val() != 'other'){
+			$(this).prop('selected', true);
+			found = true;
+			return false;
+		}
+	});
+	if(!found && curShell != ''){
+		// Custom shell not in list
+		$('#shell-other-option').prop('selected', true);
+		$('#shell-custom').val(curShell).show();
+	}
+
+	$('#shell-select').on('change', function(){
+		if($(this).val()=='other'){
+			$('#shell-custom').show();
+		}else{
+			$('#shell-custom').hide();
+		}
+	});
+});
+</script>
+{{/Block}}
