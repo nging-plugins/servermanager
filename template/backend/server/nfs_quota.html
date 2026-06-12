@@ -36,6 +36,7 @@
 										<th><strong>{{"文件数使用"|$.T}}</strong></th>
 										<th><strong>{{"软限制"|$.T}}</strong></th>
 										<th><strong>{{"硬限制"|$.T}}</strong></th>
+										<th style="width:90px"><strong>{{"操作"|$.T}}</strong></th>
 									</tr>
 								</thead>
 								<tbody class="no-border-y">
@@ -69,10 +70,18 @@
 										</td>
 										<td>{{if $v.InodeSoft}}{{$v.InodeSoft}}{{else}}-{{end}}</td>
 										<td>{{if $v.InodeHard}}{{$v.InodeHard}}{{else}}-{{end}}</td>
+										<td class="label-group">
+											<a href="{{BackendURL}}/server/nfs_quota_set?user={{$v.User}}&mountPoint={{$report.Device}}" class="label label-success" data-toggle="tooltip" title="{{`修改`|$.T}}">
+												<i class="fa fa-pencil"></i>
+											</a>
+											<a href="javascript:;" class="label label-danger" data-toggle="tooltip" title="{{`清除`|$.T}}" onclick="return confirm('{{$.T `确定要清除 %s 的配额限制吗？` $v.User}}')" href='{{BackendURL}}/server/nfs_quota_delete?user={{$v.User}}&mountPoint={{$report.Device}}'>
+												<i class="fa fa-trash-o"></i>
+											</a>
+										</td>
 									</tr>
 									{{- else -}}
 									<tr>
-										<td colspan="8" class="text-center text-muted">{{"无配额数据"|$.T}}</td>
+										<td colspan="9" class="text-center text-muted">{{"无配额数据"|$.T}}</td>
 									</tr>
 									{{- end -}}
 								</tbody>

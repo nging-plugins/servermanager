@@ -75,6 +75,31 @@ END:
 	return ctx.Render(`server/nfs_quota_set`, common.Err(ctx, err))
 }
 
+// NFSQuotaDelete clears disk quota limits for a user.
+func NFSQuotaDelete(ctx echo.Context) error {
+	user := ctx.Form(`user`)
+	mountPoint := ctx.Form(`mountPoint`)
+	if len(user) == 0 {
+		return ctx.NewError(code.InvalidParameter, ctx.T(`用户名不能为空`))
+	}
+	if len(mountPoint) == 0 {
+		return ctx.NewError(code.InvalidParameter, ctx.T(`挂载点不能为空`))
+	}
+	limit := &nfsmgr.QuotaLimit{
+		User:       user,
+		MountPoint: mountPoint,
+	}
+	client, err := nfsmgr.NewClient()
+	if err != nil {
+		return err
+	}
+	err = client.SetQuota(ctx, limit)
+	if err == nil {
+		common.SendOk(ctx, ctx.T(`配额已清除`))
+	}
+	return ctx.Redirect(backend.URLFor(`/server/nfs_quota`))
+}
+
 func validateQuotaForm(ctx echo.Context, limit *nfsmgr.QuotaLimit) error {
 	if len(limit.User) == 0 {
 		return ctx.NewError(code.InvalidParameter, ctx.T(`用户名不能为空`)).SetZone(`user`)

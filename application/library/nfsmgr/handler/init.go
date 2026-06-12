@@ -65,6 +65,7 @@ func registerMountQuotaRoute(g echo.RouteRegister) {
 	// Quota management
 	g.Route(`GET`, `/nfs_quota`, NFSQuota)
 	g.Route(`GET,POST`, `/nfs_quota_set`, NFSQuotaSet)
+	g.Route(`GET,POST`, `/nfs_quota_delete`, NFSQuotaDelete)
 }
 
 // NFSIndex shows the NFS management overview page.
