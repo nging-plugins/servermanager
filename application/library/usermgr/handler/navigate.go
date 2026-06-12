@@ -23,36 +23,36 @@ import (
 	"github.com/webx-top/echo"
 )
 
-var usermgrLeftNavigate = &navigate.Item{
-	Display: true,
-	Name:    echo.T("系统用户"),
-	Action:  "system_user",
-	Icon:    "users",
-	Children: &navigate.List{
-		{
-			Display: false,
-			Name:    echo.T("添加用户"),
-			Action:  "add",
-		},
-		{
-			Display: false,
-			Name:    echo.T("编辑用户"),
-			Action:  "edit",
-		},
-		{
-			Display: false,
-			Name:    echo.T("删除用户"),
-			Action:  "delete",
-		},
-		{
-			Display: false,
-			Name:    echo.T("锁定用户"),
-			Action:  "lock",
-		},
-		{
-			Display: false,
-			Name:    echo.T("解锁用户"),
-			Action:  "unlock",
-		},
+var usermgrLeftNavigate = navigate.List{
+	{
+		Display: true,
+		Name:    echo.T("系统用户"),
+		Action:  "system_user",
+		Icon:    "users",
+	},
+	{
+		Display: false,
+		Name:    echo.T("添加用户"),
+		Action:  "system_user/add",
+	},
+	{
+		Display: false,
+		Name:    echo.T("编辑用户"),
+		Action:  "system_user/edit",
+	},
+	{
+		Display: false,
+		Name:    echo.T("删除用户"),
+		Action:  "system_user/delete",
+	},
+	{
+		Display: false,
+		Name:    echo.T("锁定用户"),
+		Action:  "system_user/lock",
+	},
+	{
+		Display: false,
+		Name:    echo.T("解锁用户"),
+		Action:  "system_user/unlock",
 	},
 }

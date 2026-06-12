@@ -32,7 +32,7 @@ import (
 var existsExportFS bool
 
 func init() {
-	handler.LeftNavigate.Children.Add(-1, nfsLeftNavigate)
+	handler.LeftNavigate.Children.Add(-1, nfsLeftNavigate...)
 	handler.AddRouteRegister(registerIndex)
 	// Mount + Quota routes don't need exportfs
 	handler.AddRouteRegister(registerMountQuotaRoute)

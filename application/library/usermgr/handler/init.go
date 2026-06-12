@@ -27,7 +27,7 @@ import (
 )
 
 func init() {
-	handler.LeftNavigate.Children.Add(-1, usermgrLeftNavigate)
+	handler.LeftNavigate.Children.Add(-1, usermgrLeftNavigate...)
 	handler.AddRouteRegister(registerUserRoute)
 }
 

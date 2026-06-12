@@ -23,66 +23,66 @@ import (
 	"github.com/webx-top/echo"
 )
 
-var nfsLeftNavigate = &navigate.Item{
-	Display: true,
-	Name:    echo.T("NFS管理"),
-	Action:  "nfs",
-	Icon:    "hdd-o",
-	Children: &navigate.List{
-		{
-			Display: true,
-			Name:    echo.T("导出管理"),
-			Action:  "export",
-		},
-		{
-			Display: false,
-			Name:    echo.T("添加导出"),
-			Action:  "export_add",
-		},
-		{
-			Display: false,
-			Name:    echo.T("编辑导出"),
-			Action:  "export_edit",
-		},
-		{
-			Display: false,
-			Name:    echo.T("删除导出"),
-			Action:  "export_delete",
-		},
-		{
-			Display: false,
-			Name:    echo.T("重新加载导出"),
-			Action:  "export_reload",
-		},
-		{
-			Display: true,
-			Name:    echo.T("挂载管理"),
-			Action:  "mount",
-		},
-		{
-			Display: false,
-			Name:    echo.T("挂载NFS"),
-			Action:  "mount_add",
-		},
-		{
-			Display: false,
-			Name:    echo.T("卸载"),
-			Action:  "mount_umount",
-		},
-		{
-			Display: true,
-			Name:    echo.T("磁盘配额"),
-			Action:  "quota",
-		},
-		{
-			Display: false,
-			Name:    echo.T("设置限额"),
-			Action:  "quota_set",
-		},
-		{
-			Display: false,
-			Name:    echo.T("清除限额"),
-			Action:  "quota_delete",
-		},
+var nfsLeftNavigate = navigate.List{
+	{
+		Display: true,
+		Name:    echo.T("NFS管理"),
+		Action:  "nfs",
+		Icon:    "hdd-o",
+	},
+	{
+		Display: false,
+		Name:    echo.T("导出管理"),
+		Action:  "nfs/export",
+	},
+	{
+		Display: false,
+		Name:    echo.T("添加导出"),
+		Action:  "nfs/export_add",
+	},
+	{
+		Display: false,
+		Name:    echo.T("编辑导出"),
+		Action:  "nfs/export_edit",
+	},
+	{
+		Display: false,
+		Name:    echo.T("删除导出"),
+		Action:  "nfs/export_delete",
+	},
+	{
+		Display: false,
+		Name:    echo.T("重新加载导出"),
+		Action:  "nfs/export_reload",
+	},
+	{
+		Display: false,
+		Name:    echo.T("挂载管理"),
+		Action:  "nfs/mount",
+	},
+	{
+		Display: false,
+		Name:    echo.T("挂载NFS"),
+		Action:  "nfs/mount_add",
+	},
+	{
+		Display: false,
+		Name:    echo.T("卸载"),
+		Action:  "nfs/mount_umount",
+	},
+	{
+		Display: false,
+		Name:    echo.T("磁盘配额"),
+		Action:  "nfs/quota",
+	},
+	{
+		Display: false,
+		Name:    echo.T("设置限额"),
+		Action:  "nfs/quota_set",
+	},
+	{
+		Display: false,
+		Name:    echo.T("清除限额"),
+		Action:  "nfs/quota_delete",
 	},
 }
