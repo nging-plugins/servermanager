@@ -39,6 +39,8 @@ var knownExportOpts = map[string]bool{
 	`no_root_squash`:   true,
 	`no_all_squash`:    true,
 	`insecure`:         true,
+	`crossmnt`:         true,
+	`no_wdelay`:        true,
 }
 
 // NFSExportList shows the NFS exports list page.

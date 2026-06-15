@@ -52,6 +52,14 @@
 								<input type="checkbox" name="exportOpts" id="exportOpts-insecure" value="insecure"{{if Contains $eo `insecure`}} checked{{end}}> 
 								<label for="exportOpts-insecure">insecure <small>{{"允许客户端使用>1024端口"|$.T}}</small></label>
 							</div>
+							<div class="checkbox checkbox-inline checkbox-primary">
+								<input type="checkbox" name="exportOpts" id="exportOpts-crossmnt" value="crossmnt"{{if Contains $eo `crossmnt`}} checked{{end}}>
+								<label for="exportOpts-crossmnt">crossmnt <small>{{"允许客户端挂载子目录（导出父目录时使用）"|$.T}}</small></label>
+							</div>
+							<div class="checkbox checkbox-inline checkbox-primary">
+								<input type="checkbox" name="exportOpts" id="exportOpts-no_wdelay" value="no_wdelay"{{if Contains $eo `no_wdelay`}} checked{{end}}>
+								<label for="exportOpts-no_wdelay">no_wdelay <small>{{"不延迟写入，降低写延迟（推荐与sync配合）"|$.T}}</small></label>
+							</div>
 							<div class="row">
 								<div class="col-sm-12">
 									<input type="text" class="form-control" name="options" value="{{$.Form `options`}}" placeholder="{{`其他选项(逗号分隔)`|$.T}}" />
