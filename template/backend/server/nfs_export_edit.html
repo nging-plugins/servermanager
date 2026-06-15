@@ -8,7 +8,7 @@
 <li class="active">{{if HasSuffix $.URL.Path "_add"}}{{"添加导出"|$.T}}{{else}}{{"编辑导出"|$.T}}{{end}}</li>
 {{/Block}}
 {{Block "main"}}
-{{$addingMode:=HasSuffix $.URL.Path "_add"}}
+{{- $addingMode := HasSuffix $.URL.Path "_add" -}}
 <div class="row">
 	<div class="col-md-12">
 		<div class="block-flat no-padding">
@@ -78,19 +78,7 @@
 								</div>
 							</div>
 {{- end -}}
-							<div class="client-entry row no-margin-top" style="margin-bottom:15px">
-								<div class="col-sm-5">
-									<input type="text" class="form-control" name="clientHost" value="" placeholder="{{`例如`|$.T}}: 192.168.1.0/24" />
-									<div class="help-block">{{"客户端IP/网段，如 192.168.1.0/24 或 *.example.com"|$.T}}</div>
-								</div>
-								<div class="col-sm-5">
-									<input type="text" class="form-control" name="clientOptions" value="" placeholder="{{`例如`|$.T}}: rw" />
-									<div class="help-block">{{"客户端的专用选项，优先级高于通用选项。例如: rw,no_root_squash"|$.T}}</div>
-								</div>
-								<div class="col-sm-2">
-									<button type="button" class="btn btn-danger" onclick="$(this).closest('.client-entry').remove()"><i class="fa fa-times"></i></button>
-								</div>
-							</div>
+							{{Include "server/nfs_export_edit_client_entry" $}}
 						</div>
 					</div>
 					<div class="form-group">
@@ -100,9 +88,9 @@
 							<div class="help-block" style="margin-top:5px">{{"至少需要添加一个客户端（IP、网段或通配符域名）"|$.T}}</div>
 						</div>
 					</div>
-					{{if not $addingMode}}
+					{{- if not $addingMode }}
 					<input type="hidden" name="ident" value="{{$.Form `ident`}}">
-					{{end}}
+					{{- end }}
 					<div class="form-group form-submit-group">
 						<div class="col-sm-9 col-sm-offset-2">
 							<button type="submit" class="btn btn-primary btn-lg"><i class="fa fa-save"></i> {{"保存"|$.T}}</button>
@@ -116,13 +104,12 @@
 </div>
 {{/Block}}
 {{Block "footer"}}
+<script type="text/html" id="tpl-client-entry">
+{{Include "server/nfs_export_edit_client_entry" $}}
+</script>
 <script>
 function addClientEntry(){
-	var entry = '<div class="client-entry row no-margin-top" style="margin-bottom:15px">'+
-		'<div class="col-sm-5"><input type="text" class="form-control" name="clientHost" value="" placeholder="{{`例如`|$.T}}: 192.168.1.0/24" /><div class="help-block">{{"客户端IP/网段，如 192.168.1.0/24 或 *.example.com"|$.T}}</div></div>'+
-		'<div class="col-sm-5"><input type="text" class="form-control" name="clientOptions" value="" placeholder="{{`例如`|$.T}}: rw" /><div class="help-block">{{"客户端的专用选项，优先级高于通用选项。例如: rw,no_root_squash"|$.T}}</div></div>'+
-		'<div class="col-sm-2"><button type="button" class="btn btn-danger" onclick="$(this).closest(\'.client-entry\').remove()"><i class="fa fa-times"></i></button></div>'+
-		'</div>';
+	var entry = $('#tpl-client-entry').html();
 	$('#client-list').append(entry);
 }
 </script>
