@@ -82,6 +82,10 @@ Tables: `nging_command` (saved commands), `nging_forever_process` (daemon config
 
 ### Template Engine
 Uses `github.com/webx-top/echo/middleware/render/standard` (standard Go `html/template`).
+说明: https://raw.githubusercontent.com/webx-top/echo/refs/heads/master/middleware/render/standard/README.md
+
+### Custom Template Functions
+完整列表: https://raw.githubusercontent.com/webx-top/echo/refs/heads/master/middleware/tplfunc/TplFuncMap_Documentation.md
 
 ### Backend (Admin)
 - Base template: `github.com/admpub/nging/template/backend` (Bootstrap 3)
