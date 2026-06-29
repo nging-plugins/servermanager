@@ -34,7 +34,7 @@
 					</div>
 				</div>
 				{{- else -}}
-				<div class="alert alert-danger">
+				<div class="alert alert-danger no-margin">
 					{{- if not $.Stored.existsExportFS -}}
 					{{"没有安装NFS服务。可以执行命令来安装："|$.T}}<code>apt-get install nfs-kernel-server</code>
 					{{- else -}}
