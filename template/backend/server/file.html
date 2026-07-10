@@ -135,7 +135,7 @@
                                 {{- end }}
 
                                 {{- if call $.Func.Tailable $v.Name }}
-                                <a title="{{`查看`|$.T}}" class="label label-primary" href="javascript:;" data-url="{{BackendURL}}/server/file?path={{if $path}}{{$path}}/{{end}}{{$v.Name}}" onclick="App.logShow(this,true,'');" data-toggle="tooltip">
+                                <a title="{{`查看`|$.T}}" class="label label-primary" href="javascript:;" data-url="{{BackendURL}}/server/file?do=tail&path={{if $path}}{{$path}}/{{end}}{{$v.Name}}" onclick="App.logShow(this,true,'');" data-toggle="tooltip">
                                 <i class="fa fa-eye"></i>
                                 </a>
                                 {{- end }}
