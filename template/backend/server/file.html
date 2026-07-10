@@ -123,17 +123,26 @@
                                 <i class="fa fa-times"></i>
                                 </a>
                                 {{- if not $v.IsDir -}}
+
                                 {{- if call $.Func.Editable $v.Name -}}
                                 &nbsp;<a title="{{`编辑`|$.T}}" class="label label-success" href="javascript:;" data-url="{{BackendURL}}/server/file?do=edit&path={{if $path}}{{$path}}/{{end}}{{$v.Name}}" onclick="fileEdit(this,'{{$v.Name}}')" data-toggle="tooltip">
                                 <i class="fa fa-pencil"></i>
                                 </a>
                                 {{- end -}}
+
                                 {{- $mediaMime:= call $.Func.Playable $v.Name -}}
                                 {{- if $mediaMime -}}
                                 &nbsp;<a title="{{`播放`|$.T}}" class="label label-primary" href="javascript:;" playable data-mime="{{$mediaMime}}" data-name="{{$v.Name}}" data-url="{{BackendURL}}/server/file?path={{if $path}}{{$path}}/{{end}}{{$v.Name}}" onclick="filePlay(this)" data-toggle="tooltip">
                                 <i class="fa fa-play"></i>
                                 </a>
                                 {{- end -}}
+
+                                {{- if call $.Func.Tailable $v.Name -}}
+                                &nbsp;<a title="{{`查看`|$.T}}" class="label label-primary" href="javascript:;" data-url="{{BackendURL}}/server/file?path={{if $path}}{{$path}}/{{end}}{{$v.Name}}" onclick="App.logShow(this,true,'');" data-toggle="tooltip">
+                                <i class="fa fa-eye"></i>
+                                </a>
+                                {{- end -}}
+
                                 {{- end -}}
                             </td>
 						</tr>
@@ -149,6 +158,7 @@
 
 {{Block "footer"}}
 {{call $.Func.Modal "__TMPL__/filemanager/file_chmod.yaml"}}
+{{call $.Func.Modal "__TMPL__/server/log_show.yaml"}}
 {{Include "filemanager/file.script"}}
 <script>
 function uploadURL(currentPath){
