@@ -22,6 +22,7 @@ package usermgr
 import (
 	"context"
 	"errors"
+	"fmt"
 )
 
 var (
@@ -47,6 +48,27 @@ type User struct {
 // IsRoot returns true if this is the root user.
 func (u *User) IsRoot() bool {
 	return u.Username == "root" || u.UID == 0
+}
+
+// ValidatePassword validates a password before it is handed to system tools
+// such as chpasswd. chpasswd parses its stdin line by line as
+// "username:password" records, so a password containing a newline or carriage
+// return would let a caller inject additional records (e.g. an arbitrary
+// "root:..." line), and a colon would corrupt the record format. Rejecting
+// these characters mirrors the denylist used by validateUsername().
+func ValidatePassword(password string) error {
+	if password == "" {
+		return fmt.Errorf("%w: password cannot be empty", ErrInvalidInput)
+	}
+	if len(password) > 4096 {
+		return fmt.Errorf("%w: password too long (max 4096)", ErrInvalidInput)
+	}
+	for _, c := range password {
+		if c == ':' || c == '\n' || c == '\r' {
+			return fmt.Errorf("%w: invalid character in password", ErrInvalidInput)
+		}
+	}
+	return nil
 }
 
 // Client defines the interface for system user management.

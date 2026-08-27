@@ -177,8 +177,8 @@ func (c *linuxClient) Add(ctx context.Context, u *User, password string) error {
 	if err := validateUsername(u.Username); err != nil {
 		return err
 	}
-	if password == "" {
-		return fmt.Errorf("%w: password is required", ErrInvalidInput)
+	if err := ValidatePassword(password); err != nil {
+		return err
 	}
 	args := buildUserAddArgs(u)
 	cmdCtx, cancel := context.WithTimeout(ctx, userCmdTimeout)
@@ -214,6 +214,11 @@ func buildUserAddArgs(u *User) []string {
 func (c *linuxClient) Edit(ctx context.Context, username string, u *User, password string) error {
 	if err := validateUsername(username); err != nil {
 		return err
+	}
+	if password != "" {
+		if err := ValidatePassword(password); err != nil {
+			return err
+		}
 	}
 	args := buildUserModArgs(u)
 	if len(args) == 0 && password == "" {
@@ -295,6 +300,12 @@ func passwdCmd(ctx context.Context, flag string, username string) error {
 }
 
 func setPassword(ctx context.Context, username, password string) error {
+	if err := validateUsername(username); err != nil {
+		return err
+	}
+	if err := ValidatePassword(password); err != nil {
+		return err
+	}
 	cmdCtx, cancel := context.WithTimeout(ctx, userCmdTimeout)
 	defer cancel()
 	cmd := exec.CommandContext(cmdCtx, "chpasswd")

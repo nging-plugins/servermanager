@@ -88,10 +88,16 @@ func SystemUserEdit(ctx echo.Context) error {
 			Groups:  ctx.Formx(`groups`).Split(`,`).Filter().Unique().String(),
 		}
 		password := ctx.Formx(`password`).String()
-		confirmPwd := ctx.Formx(`confirmPassword`).String()
-		if password != `` && password != confirmPwd {
-			err = ctx.NewError(code.InvalidParameter, ctx.T(`两次输入的密码不一致`)).SetZone(`confirmPassword`)
-			goto END
+		if password != `` {
+			confirmPwd := ctx.Formx(`confirmPassword`).String()
+			if password != confirmPwd {
+				err = ctx.NewError(code.InvalidParameter, ctx.T(`两次输入的密码不一致`)).SetZone(`confirmPassword`)
+				goto END
+			}
+			if verr := usermgr.ValidatePassword(password); verr != nil {
+				err = ctx.NewError(code.InvalidParameter, ctx.T(`密码不能包含换行符、回车符或冒号`)).SetZone(`password`)
+				goto END
+			}
 		}
 		err = client.Edit(ctx, username, u, password)
 		if err == nil {
@@ -190,6 +196,9 @@ func validateUserAddForm(ctx echo.Context, u *usermgr.User, password, confirmPwd
 	}
 	if password != confirmPwd {
 		return ctx.NewError(code.InvalidParameter, ctx.T(`两次输入的密码不一致`)).SetZone(`confirmPassword`)
+	}
+	if err := usermgr.ValidatePassword(password); err != nil {
+		return ctx.NewError(code.InvalidParameter, ctx.T(`密码不能包含换行符、回车符或冒号`)).SetZone(`password`)
 	}
 	return nil
 }
